@@ -19,7 +19,7 @@ class GameLogger(metaclass=Singleton):
             if not os.path.exists(self.__log_folder):
                 os.makedirs(self.__log_folder)
             logging.basicConfig(
-                level=logging.INFO,  # Set the desired logging level (e.g., INFO, DEBUG, ERROR)
+                level=logging.DEBUG,  # Set the desired logging level (e.g., INFO, DEBUG, ERROR)
                 format="%(asctime)s [%(levelname)s]: %(message)s",
                 datefmt="%Y-%m-%d %H:%M:%S",
                 handlers=[
