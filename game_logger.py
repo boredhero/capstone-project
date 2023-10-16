@@ -20,8 +20,8 @@ class GameLogger(metaclass=Singleton):
                 os.makedirs(self.__log_folder)
             logging.basicConfig(
                 level=logging.DEBUG,  # Set the desired logging level (e.g., INFO, DEBUG, ERROR)
-                format="%(asctime)s [%(levelname)s]: %(message)s",
-                datefmt="%Y-%m-%d %H:%M:%S",
+                format="[%(asctime)s][%(levelname)s]%(message)s",
+                datefmt="%Y-%m-%d_%H:%M:%S",
                 handlers=[
                     logging.FileHandler(os.path.join(self.__log_folder, f"{self.__start_time_human_readable}.log")),
                     logging.StreamHandler(),  # Log to the console
@@ -32,14 +32,13 @@ class GameLogger(metaclass=Singleton):
         except Exception:
             print(f"[GameLogger Error] Error initializing GameLogger! :: \n{traceback.format_exc()}")
 
-    def __log(self, level: str, msg: str, name: str | None = None, print_formatting: bool = True, exception: Exception | None = None):
+    def __log(self, level: str, msg: str, name: str | None = None, exception: Exception | None = None):
         try:
             err = ""
             if exception is not None:
                 err = self.__format_exception(exception)
                 err = f"\n{err}"
             msg = str(msg)
-            ts = get_human_readable_time_with_timezone(now=True)
             match level:
                 case "CRIT":
                     log_str = f"[{name}] :: {msg}{err}"
@@ -58,10 +57,6 @@ class GameLogger(metaclass=Singleton):
                     self.__logger.info(log_str)
             if name is None:
                 name = "FGLogger"
-            if print_formatting is True:
-                print(f"[{ts}][{name}][{level}] :: {msg}{err}")
-            else:
-                print(msg)
         except Exception:
             print(f"[GameLogger Error] Error logging message: {msg}")
             print(traceback.format_exc())
@@ -77,38 +72,38 @@ class GameLogger(metaclass=Singleton):
             self.error("An unknown error occurred while formatting an exception!", name=__name__, exception=e) # This should be fine because we know e will be valid here!
             return ""
 
-    def critical(self, msg: str, name: str | None = None, print_formatting: bool = True, exception: Exception | None = None):
+    def critical(self, msg: str, name: str | None = None, exception: Exception | None = None):
         """GameLogger Level CRITICAL"""
         try:
-            self.__log("CRIT", msg, name=name, print_formatting=print_formatting, exception=exception)
+            self.__log("CRIT", msg, name=name, exception=exception)
         except Exception:
             print("Caught exception in CRITICAL")
 
-    def error(self, msg: str, name: str | None = None, print_formatting: bool = True, exception: Exception | None = None):
+    def error(self, msg: str, name: str | None = None, exception: Exception | None = None):
         """GameLogger Level ERROR"""
         try:
-            self.__log("ERROR", msg, name=name, print_formatting=print_formatting, exception=exception)
+            self.__log("ERROR", msg, name=name, exception=exception)
         except Exception:
             print("Caught exception in ERROR")
 
-    def warning(self, msg: str, name: str | None = None, print_formatting: bool = True, exception: Exception | None = None):
+    def warning(self, msg: str, name: str | None = None, exception: Exception | None = None):
         """GameLogger Level WARNING"""
         try:
-            self.__log("WARN", msg, name=name, print_formatting=print_formatting, exception=exception)
+            self.__log("WARN", msg, name=name, exception=exception)
         except Exception:
             print("Caught exception in WARNING")
 
-    def info(self, msg: str, name: str | None = None, print_formatting: bool = True, exception: Exception | None = None):
+    def info(self, msg: str, name: str | None = None, exception: Exception | None = None):
         """GameLogger Level INFO"""
         try:
-            self.__log("INFO", msg, name=name, print_formatting=print_formatting, exception=exception)
+            self.__log("INFO", msg, name=name, exception=exception)
         except Exception:
             print("Caught exception in INFO")
 
-    def debug(self, msg: str, name: str | None = None, print_formatting: bool = True, exception: Exception | None = None):
+    def debug(self, msg: str, name: str | None = None, exception: Exception | None = None):
         """GameLogger Level DEBUG"""
         try:
-            self.__log("DEBUG", msg, name=name, print_formatting=print_formatting, exception=exception)
+            self.__log("DEBUG", msg, name=name, exception=exception)
         except Exception:
             print("Caught exception in DEBUG")
 
@@ -118,6 +113,6 @@ class GameLogger(metaclass=Singleton):
         """
         if self.__start_logged is False:
             self.__logger.info("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+")
-            self.__logger.info(str(f"Starting {title} v{version}"))
+            self.__logger.info(str(f" Starting {title} v{version}"))
             self.__logger.info("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+")
             self.__start_logged = True
