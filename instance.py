@@ -1,5 +1,6 @@
 ## TODO: Rename this file if the working title changes from "Instance"
 from game_logger import GameLogger
+from config import GameConfig
 
 class InstanceMain():
 
@@ -8,6 +9,8 @@ class InstanceMain():
         Main class
         """
         self.__glogger = GameLogger()
+        self.__config = GameConfig()
+        self.__glogger.log_startup(self.__config.version, self.__config.title)
         self.__glogger.info("Test Info", name=__name__)
         self.__glogger.error("Test Error", name=__name__)
         self.__glogger.debug("Test Debug", name=__name__)

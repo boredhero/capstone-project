@@ -2,7 +2,7 @@
 import os, traceback
 from dotenv import load_dotenv
 
-class ConfigProvider():
+class GameConfig():
 
     def __init__(self):
         """
