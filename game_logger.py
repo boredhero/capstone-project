@@ -16,6 +16,8 @@ class GameLogger(metaclass=Singleton):
             self.__start_time = get_unix_timestamp()
             self.__start_time_human_readable = get_human_readable_time_with_timezone(unix_timestamp=self.__start_time)
             self.__log_folder = "logs"
+            if not os.path.exists(self.__log_folder):
+                os.makedirs(self.__log_folder)
             logging.basicConfig(
                 level=logging.INFO,  # Set the desired logging level (e.g., INFO, DEBUG, ERROR)
                 format="%(asctime)s [%(levelname)s]: %(message)s",
@@ -27,7 +29,6 @@ class GameLogger(metaclass=Singleton):
             )
             self.__logger = logging.getLogger()
             self.info("Successful Init GameLogger", name=__name__)
-
         except Exception:
             print(f"[GameLogger Error] Error initializing GameLogger! :: \n{traceback.format_exc()}")
 
@@ -40,20 +41,20 @@ class GameLogger(metaclass=Singleton):
             msg = str(msg)
             ts = get_human_readable_time_with_timezone(now=True)
             match level:
-                case "CRITICAL":
-                    log_str = f"[{name}][{level}] :: {msg}{err}"
+                case "CRIT":
+                    log_str = f"[{name}] :: {msg}{err}"
                     self.__logger.critical(log_str)
                 case "ERROR":
-                    log_str = f"[{name}][{level}] :: {msg}{err}"
+                    log_str = f"[{name}] :: {msg}{err}"
                     self.__logger.error(log_str)
-                case "WARNING":
-                    log_str = f"[{name}][{level}] :: {msg}{err}"
+                case "WARN":
+                    log_str = f"[{name}] :: {msg}{err}"
                     self.__logger.warning(log_str)
                 case "DEBUG":
-                    log_str = f"[{name}][{level}] :: {msg}{err}"
+                    log_str = f"[{name}] :: {msg}{err}"
                     self.__logger.debug(log_str)
                 case _:
-                    log_str = f"[{name}][{level}] :: {msg}{err}"
+                    log_str = f"[{name}] :: {msg}{err}"
                     self.__logger.info(log_str)
             if name is None:
                 name = "FGLogger"
@@ -79,7 +80,7 @@ class GameLogger(metaclass=Singleton):
     def critical(self, msg: str, name: str | None = None, print_formatting: bool = True, exception: Exception | None = None):
         """GameLogger Level CRITICAL"""
         try:
-            self.__log("CRITICAL", msg, name=name, print_formatting=print_formatting, exception=exception)
+            self.__log("CRIT", msg, name=name, print_formatting=print_formatting, exception=exception)
         except Exception:
             print("Caught exception in CRITICAL")
 
@@ -93,7 +94,7 @@ class GameLogger(metaclass=Singleton):
     def warning(self, msg: str, name: str | None = None, print_formatting: bool = True, exception: Exception | None = None):
         """GameLogger Level WARNING"""
         try:
-            self.__log("WARNING", msg, name=name, print_formatting=print_formatting, exception=exception)
+            self.__log("WARN", msg, name=name, print_formatting=print_formatting, exception=exception)
         except Exception:
             print("Caught exception in WARNING")
 
