@@ -1,6 +1,10 @@
 
 import os, traceback
+
+import yaml
 from dotenv import load_dotenv
+
+from misc import Singleton
 
 class GameConfig():
 
@@ -15,3 +19,60 @@ class GameConfig():
             self.title = self.__env.get("title")
         except Exception:
             print("Keys missing in .env config file", traceback.format_exc())
+
+class SettingsConfig(metaclass=Singleton):
+
+    def __init__(self):
+        """
+        Modifiable config
+        """
+        self.__config_name = "settings.yml"
+        self.__settings = {}
+        self.__load_settings()
+        self.screen_width = self.__settings.get("screen_width")
+        self.screen_height = self.__settings.get("screen_height")
+        self.max_fps = self.__settings.get("max_fps")
+
+    def __load_settings(self):
+        """
+        Load settings
+        """
+        exists = os.path.isfile(self.__config_name)
+        if exists is True:
+            try:
+                with open(self.__config_name, 'r') as file:
+                    self.__settings = yaml.unsafe_load(file) # pylint: disable=no-value-for-parameter
+            except Exception as e:
+                print("Settings failed to load initially, using defaults", e)
+                self.__settings = self.__get_default_settings()
+        else:
+            try:
+                with open(self.__config_name, 'w') as file:
+                    yaml.dump(self.__get_default_settings(), file)
+                    self.__settings = self.__get_default_settings()
+            except Exception as e:
+                print("Settings failed to load on write, using defaults", e)
+                self.__settings = self.__get_default_settings()
+
+    def get_settings_refresh(self):
+        """
+        Get the settings after reloading the config from disk (slower)
+        """
+        self.__load_settings()
+        return self.__settings
+
+    def get_settings_no_refresh(self):
+        """
+        Get the settings immediately without reloading the config from disk (faster)
+        """
+        return self.__settings
+
+    def __get_default_settings(self):
+        """
+        Default config to write if no config exists somehow
+        """
+        return {
+            "screen_width": 1920,
+            "screen_height": 1080,
+            "max_fps": 60
+        }

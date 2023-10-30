@@ -2,7 +2,7 @@
 import pygame
 
 from game_logger import GameLogger
-from config import GameConfig
+from config import GameConfig, SettingsConfig
 
 class InstanceMain():
 
@@ -12,9 +12,10 @@ class InstanceMain():
         """
         self.__glogger = GameLogger()
         self.__config = GameConfig()
+        self.__settings = SettingsConfig()
         self.__glogger.log_startup(self.__config.version, self.__config.title)
-        pygame.init()
-        self.__screen = pygame.display.set_mode((1280, 720))
+        self.__glogger.info(f"{self.__settings.max_fps} FPS {self.__settings.screen_width} x {self.__settings.screen_height}")
+        self.__screen = pygame.display.set_mode((self.__settings.screen_width, self.__settings.screen_height)) # Set the window dimensions
         self.__clock = pygame.time.Clock()
         self.__running = True
         while self.__running:
@@ -23,7 +24,7 @@ class InstanceMain():
                     self.__running = False
             self.__screen.fill("black")
             pygame.display.flip()
-            self.__clock.tick(60)
+            self.__clock.tick(self.__settings.max_fps) # Set the FPS
         self.graceful_exit()
 
     def get_screen(self):
