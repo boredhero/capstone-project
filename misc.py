@@ -1,5 +1,8 @@
-import time, pytz
+import time
 from datetime import datetime
+from enum import Enum
+
+import pytz
 
 class Singleton(type):
     _instances = {}
@@ -38,3 +41,10 @@ def get_human_readable_time_with_timezone(unix_timestamp=None, timezone="America
     dt = datetime.fromtimestamp(int(unix_timestamp))
     local_dt = local_tz.localize(dt, is_dst=None)
     return local_dt.strftime(time_string_format)
+
+class GameColors(Enum):
+    """
+    Tuple (r, g, b) definitions of colors for the game
+    """
+    BLACK = (0, 0, 0)
+    WHITE = (255, 255, 255)

@@ -3,6 +3,8 @@ import pygame
 
 from game_logger import GameLogger
 from config import GameConfig, SettingsConfig
+import ui
+from misc import GameColors
 
 class InstanceMain():
 
@@ -18,11 +20,15 @@ class InstanceMain():
         self.__screen = pygame.display.set_mode((self.__settings.screen_width, self.__settings.screen_height)) # Set the window dimensions
         self.__clock = pygame.time.Clock()
         self.__running = True
+        ## Title Screen ##
+        self.__titlescreen_ui = ui.TitleScreenUIElements()
         while self.__running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.__running = False
             self.__screen.fill("black")
+            self.__titlescreen_ui.update(pygame.mouse.get_pos())
+            self.__titlescreen_ui.draw(self.__screen)
             pygame.display.flip()
             self.__clock.tick(self.__settings.max_fps) # Set the FPS
         self.graceful_exit()
