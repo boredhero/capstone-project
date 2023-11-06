@@ -4,7 +4,6 @@ import pygame
 from game_logger import GameLogger
 from config import GameConfig, SettingsConfig
 import ui
-from misc import GameColors
 
 class InstanceMain():
 
@@ -23,11 +22,20 @@ class InstanceMain():
         ## Title Screen ##
         self.__titlescreen_ui = ui.TitleScreenUIElements()
         while self.__running:
+            mouse_up = False
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.__running = False
+                if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
+                    mouse_up = True
             self.__screen.fill("black")
-            self.__titlescreen_ui.update(pygame.mouse.get_pos())
+            ui_action = self.__titlescreen_ui.update(pygame.mouse.get_pos(), mouse_up)
+            if ui_action is not None:
+                match ui_action:
+                    case ui.GameState.EXIT:
+                        self.graceful_exit()
+                    case _:
+                        pass
             self.__titlescreen_ui.draw(self.__screen)
             pygame.display.flip()
             self.__clock.tick(self.__settings.max_fps) # Set the FPS
