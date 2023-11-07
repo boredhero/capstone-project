@@ -4,6 +4,7 @@ import pygame
 from game_logger import GameLogger
 from config import GameConfig, SettingsConfig
 import ui
+from settings_menu import SettingsMenu
 
 class InstanceMain():
 
