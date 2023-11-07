@@ -8,6 +8,7 @@ class SettingsMenu:
     def __init__(self):
         """
         SettingsMenu init
+        https://www.geeksforgeeks.org/create-settings-menu-in-python-pygame/
         """
         self.__glogger = GameLogger()
         self.resolution = [
