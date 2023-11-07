@@ -9,6 +9,7 @@ tinydb = "*"
 python-dotenv = "*"
 pytz = "*"
 pyyaml = "*"
+pygame-menu = "*"
 
 [dev-packages]
 
