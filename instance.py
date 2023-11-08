@@ -20,6 +20,7 @@ class InstanceMain():
         self.__screen = pygame.display.set_mode((self.__settings.screen_width, self.__settings.screen_height)) # Set the window dimensions
         self.__clock = pygame.time.Clock()
         self.__running = True
+        self.__pygame_init = pygame.init() #pylint: disable=unused-private-member
         ## Title Screen ##
         self.__titlescreen_ui = ui.TitleScreenUIElements()
         while self.__running:
@@ -35,6 +36,9 @@ class InstanceMain():
                 match ui_action:
                     case ui.GameState.EXIT:
                         self.graceful_exit()
+                    case ui.GameState.SETTINGS:
+                        self.__gamesettings = SettingsMenu(self.__screen)
+                        self.__gamesettings.log_game_settings()
                     case _:
                         pass
             self.__titlescreen_ui.draw(self.__screen)

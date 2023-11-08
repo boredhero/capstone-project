@@ -44,15 +44,15 @@ class SettingsConfig(metaclass=Singleton):
                     self.__settings = yaml.unsafe_load(file) # pylint: disable=no-value-for-parameter
             except Exception as e:
                 print("Settings failed to load initially, using defaults", e)
-                self.__settings = self.__get_default_settings()
+                self.__settings = self.get_default_settings()
         else:
             try:
                 with open(self.__config_name, 'w') as file:
-                    yaml.dump(self.__get_default_settings(), file)
-                    self.__settings = self.__get_default_settings()
+                    yaml.dump(self.get_default_settings(), file)
+                    self.__settings = self.get_default_settings()
             except Exception as e:
                 print("Settings failed to load on write, using defaults", e)
-                self.__settings = self.__get_default_settings()
+                self.__settings = self.get_default_settings()
 
     def get_settings_refresh(self):
         """
@@ -67,7 +67,7 @@ class SettingsConfig(metaclass=Singleton):
         """
         return self.__settings
 
-    def __get_default_settings(self):
+    def get_default_settings(self):
         """
         Default config to write if no config exists somehow
         """
@@ -76,3 +76,23 @@ class SettingsConfig(metaclass=Singleton):
             "screen_height": 1080,
             "max_fps": 60
         }
+
+    def write_settings_yml_file(self, contents: dict | None = None):
+        """
+        Write settings file to disc
+        NOTE: If contents are None, the default settings will be written to disk
+        """
+        if contents is None:
+            contents = self.get_default_settings()
+        try:
+            with open(self.__config_name, 'w') as file:
+                yaml.dump(contents, file)
+        except Exception as e:
+            print("Settings failed to write to disk", e)
+        self.refresh_from_disk()
+
+    def refresh_from_disk(self):
+        """
+        Re-Run __init__ on this Singleton class, thus changing the values to match those on disk
+        """
+        self.__init__() # pylint: disable=unnecessary-dunder-call
