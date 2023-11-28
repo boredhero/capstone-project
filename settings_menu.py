@@ -37,15 +37,15 @@ class SettingsMenu:
         self.settings._theme.widget_font_size = 25
         self.settings._theme.widget_font_color = GameColors.WHITE.value
         self.settings._theme.widget_alignment = pm.locals.ALIGN_LEFT
-        self.settings.add.dropselect(title="Screen Resolution: ", items=self.resolution, default=3, dropselect_id="screen_resolution", selection_box_height=6, open_middle=True)
-        self.settings.add.toggle_switch(title="Subtitles", default=False, toggleswitch_id="subtitles")
-        self.settings.add.text_input(title="Max FPS: ", default=60, textinput_id="max_fps", input_type=pm.locals.INPUT_INT, range_values=(30, 144), font_color=GameColors.WHITE.value, background_color=GameColors.BLACK.value)
-        self.settings.add.button(title="Save Settings", action=self.write_game_settings, font_color=GameColors.WHITE.value, background_color=GameColors.BLACK.value)
+        current_res = self.__get_current_resolution_index()
+        self.settings.add.dropselect(title="Screen Resolution: ", items=self.resolution, default=current_res, dropselect_id="screen_resolution", selection_box_height=6, open_middle=True)
+        self.settings.add.toggle_switch(title="Subtitles", default=self.__settingsconfig.subtitles, toggleswitch_id="subtitles")
+        self.settings.add.text_input(title="Max FPS: ", default=self.__settingsconfig.max_fps, textinput_id="max_fps", input_type=pm.locals.INPUT_INT, range_values=(30, 144), font_color=GameColors.WHITE.value, background_color=GameColors.BLACK.value)
+        self.settings.add.button(title="Save Settings and Restart to Apply", action=self.write_game_settings_and_quit, font_color=GameColors.WHITE.value, background_color=GameColors.BLACK.value)
         self.settings.add.button(title="Restore Defaults", action=self.__settingsconfig.write_settings_yml_file, font_color=GameColors.WHITE.value, background_color=GameColors.BLACK.value)
-        self.settings.add.button(title="Restart Game to Apply Settings", action=self.settings._exit, font_color=GameColors.WHITE.value, background_color=GameColors.BLACK.value)
         self.settings.mainloop(self.__screen)
 
-    def write_game_settings(self):
+    def write_game_settings_and_quit(self):
         """
         Log the game settings
         """
@@ -84,6 +84,7 @@ class SettingsMenu:
                     yaml.dump(wd, settings_file)
             except Exception as e:
                 print("Settings failed to write to disk", e)
+        self.settings._exit()
 
     def __get_settings_state_from_disk(self) -> dict:
         """
@@ -94,3 +95,23 @@ class SettingsMenu:
             "screen_height": self.__settingsconfig.screen_height,
             "max_fps": self.__settingsconfig.max_fps
         }
+
+    def __get_current_resolution_index(self) -> int:
+        """
+        Get the current resolution index
+        """
+        match self.__settingsconfig.screen_height:
+            case 2160:
+                return 0
+            case 1440:
+                return 1
+            case 1200:
+                return 2
+            case 1080:
+                return 3
+            case 720:
+                return 4
+            case 600:
+                return 5
+            case _:
+                return 3
