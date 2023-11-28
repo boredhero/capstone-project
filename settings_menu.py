@@ -1,5 +1,6 @@
 from typing import Any
 
+import yaml
 import pygame_menu as pm
 
 from ui import GameColors
@@ -36,33 +37,13 @@ class SettingsMenu:
         self.settings._theme.widget_font_size = 25
         self.settings._theme.widget_font_color = GameColors.WHITE.value
         self.settings._theme.widget_alignment = pm.locals.ALIGN_LEFT
-        self.settings.add.dropselect(title="BSR: ", items=self.resolution, default=3, dropselect_id="screen_resolution2", selection_box_height=6, open_middle=True)
-        self.settings.add.dropselect_multiple(title="Screen Resolution: ", items=self.resolution, open_middle=True, max_selected=1, selection_box_height=6, default=[3], dropselect_multiple_id="screen_resolution")
+        self.settings.add.dropselect(title="Screen Resolution: ", items=self.resolution, default=3, dropselect_id="screen_resolution", selection_box_height=6, open_middle=True)
         self.settings.add.toggle_switch(title="Subtitles", default=False, toggleswitch_id="subtitles")
-        self.settings.add.button(title="Print Settings", action=self.write_game_settings, font_color=GameColors.WHITE.value, background_color=GameColors.BLACK.value)
+        self.settings.add.text_input(title="Max FPS: ", default=60, textinput_id="max_fps", input_type=pm.locals.INPUT_INT, range_values=(30, 144), font_color=GameColors.WHITE.value, background_color=GameColors.BLACK.value)
+        self.settings.add.button(title="Save Settings", action=self.write_game_settings, font_color=GameColors.WHITE.value, background_color=GameColors.BLACK.value)
         self.settings.add.button(title="Restore Defaults", action=self.__settingsconfig.write_settings_yml_file, font_color=GameColors.WHITE.value, background_color=GameColors.BLACK.value)
-        self.settings.add.button(title="Restart Game to Save/Apply", action=self.settings._exit, align=pm.locals.ALIGN_CENTER)
+        self.settings.add.button(title="Restart Game to Apply Settings", action=self.settings._exit, font_color=GameColors.WHITE.value, background_color=GameColors.BLACK.value)
         self.settings.mainloop(self.__screen)
-
-    def get_current_resolution_index(self) -> int:
-        """
-        Get the current resolution index
-        """
-        match self.__settingsconfig.screen_height:
-            case 2160:
-                return 0
-            case 1440:
-                return 1
-            case 1200:
-                return 2
-            case 1080:
-                return 3
-            case 720:
-                return 4
-            case 600:
-                return 5
-            case _:
-                return 3
 
     def write_game_settings(self):
         """
@@ -72,19 +53,37 @@ class SettingsMenu:
         screen_width = None
         screen_height = None
         max_fps = None
+        subtitles = None
         settings_data = self.settings.get_input_data()
         for key, value in settings_data.items():
             match key:
                 case "screen_resolution":
-                    screen_width = value[0][0][0]
-                    self.__glogger.debug(f"screen_width_write: {screen_width}", name=__name__)
-                    screen_height = value[0][0][1]
-                    self.__glogger.debug(f"screen_height_write: {screen_height}", name=__name__)
+                    screen_res = value[0][0]
+                    if screen_res is not None:
+                        screen_width, screen_height = [int(value) for value in screen_res.split('x')]
+                    else:
+                        screen_width = self.__settingsconfig.screen_width
+                        screen_height = self.__settingsconfig.screen_height
+                case "subtitles":
+                    subtitles = value
+                    if subtitles is None:
+                        subtitles = self.__settingsconfig.subtitles
                 case "max_fps":
                     max_fps = value
                     if max_fps is None:
                         max_fps = self.__settingsconfig.max_fps
             self.__glogger.info(f"{key}\t:\t{value}", name=__name__)
+            wd = {
+                "screen_width": screen_width,
+                "screen_height": screen_height,
+                "max_fps": max_fps,
+                "subtitles": subtitles
+            }
+            try:
+                with open(self.__settingsconfig.config_name, 'w') as settings_file:
+                    yaml.dump(wd, settings_file)
+            except Exception as e:
+                print("Settings failed to write to disk", e)
 
     def __get_settings_state_from_disk(self) -> dict:
         """
@@ -95,12 +94,3 @@ class SettingsMenu:
             "screen_height": self.__settingsconfig.screen_height,
             "max_fps": self.__settingsconfig.max_fps
         }
-
-    def __get_default_setting_for(self, setting_name: str) -> Any | None:
-        """
-        Get the default settings
-        """
-        defaults = self.__settingsconfig.get_default_settings()
-        if setting_name in defaults:
-            return defaults[setting_name]
-        return None

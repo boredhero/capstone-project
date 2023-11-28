@@ -26,29 +26,30 @@ class SettingsConfig(metaclass=Singleton):
         """
         Modifiable config
         """
-        self.__config_name = "settings.yml"
+        self.config_name = "settings.yml"
         self.__settings = {}
         self.__load_settings()
         self.screen_width = self.__settings.get("screen_width")
         self.screen_height = self.__settings.get("screen_height")
         self.max_fps = self.__settings.get("max_fps")
+        self.subtitles = self.__settings.get("subtitles")
 
     def __load_settings(self):
         """
         Load settings
         """
-        exists = os.path.isfile(self.__config_name)
+        exists = os.path.isfile(self.config_name)
         if exists is True:
             try:
-                with open(self.__config_name, 'r') as file:
-                    self.__settings = yaml.unsafe_load(file) # pylint: disable=no-value-for-parameter
+                with open(self.config_name, 'r') as settings_file:
+                    self.__settings = yaml.unsafe_load(settings_file) # pylint: disable=no-value-for-parameter
             except Exception as e:
                 print("Settings failed to load initially, using defaults", e)
                 self.__settings = self.get_default_settings()
         else:
             try:
-                with open(self.__config_name, 'w') as file:
-                    yaml.dump(self.get_default_settings(), file)
+                with open(self.config_name, 'w') as settings_file:
+                    yaml.dump(self.get_default_settings(), settings_file)
                     self.__settings = self.get_default_settings()
             except Exception as e:
                 print("Settings failed to load on write, using defaults", e)
@@ -74,7 +75,8 @@ class SettingsConfig(metaclass=Singleton):
         return {
             "screen_width": 1920,
             "screen_height": 1080,
-            "max_fps": 60
+            "max_fps": 60,
+            "subtitles": True
         }
 
     def write_settings_yml_file(self, contents: dict | None = None):
@@ -85,8 +87,8 @@ class SettingsConfig(metaclass=Singleton):
         if contents is None:
             contents = self.get_default_settings()
         try:
-            with open(self.__config_name, 'w') as file:
-                yaml.dump(contents, file)
+            with open(self.config_name, 'w') as settings_file:
+                yaml.dump(contents, settings_file)
         except Exception as e:
             print("Settings failed to write to disk", e)
         self.refresh_from_disk()
