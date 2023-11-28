@@ -18,6 +18,7 @@ class InstanceMain():
         self.__glogger.log_startup(self.__config.version, self.__config.title)
         self.__glogger.info(f"{self.__settings.max_fps} FPS {self.__settings.screen_width} x {self.__settings.screen_height}")
         self.__screen = pygame.display.set_mode((self.__settings.screen_width, self.__settings.screen_height)) # Set the window dimensions
+        pygame.display.set_caption(f"{self.__config.title} v{self.__config.version}")
         self.__clock = pygame.time.Clock()
         self.__running = True
         self.__pygame_init = pygame.init() #pylint: disable=unused-private-member
