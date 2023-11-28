@@ -37,8 +37,7 @@ class InstanceMain():
                     case ui.GameState.EXIT:
                         self.graceful_exit()
                     case ui.GameState.SETTINGS:
-                        self.__gamesettings = SettingsMenu(self.__screen)
-                        self.__gamesettings.log_game_settings()
+                        self.__gamesettings = SettingsMenu(self.__screen) # pylint: disable=unused-private-member
                     case _:
                         pass
             self.__titlescreen_ui.draw(self.__screen)
