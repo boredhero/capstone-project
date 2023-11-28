@@ -40,10 +40,17 @@ class SettingsMenu:
         current_res = self.__get_current_resolution_index()
         self.settings.add.dropselect(title="Screen Resolution: ", items=self.resolution, default=current_res, dropselect_id="screen_resolution", selection_box_height=6, open_middle=True)
         self.settings.add.toggle_switch(title="Subtitles", default=self.__settingsconfig.subtitles, toggleswitch_id="subtitles")
-        self.settings.add.text_input(title="Max FPS: ", default=self.__settingsconfig.max_fps, textinput_id="max_fps", input_type=pm.locals.INPUT_INT, range_values=(30, 144), font_color=GameColors.WHITE.value, background_color=GameColors.BLACK.value)
+        self.settings.add.text_input(title="Max FPS: ", default=self.__settingsconfig.max_fps, textinput_id="max_fps", input_type=pm.locals.INPUT_INT, range_values=(30, 144))
         self.settings.add.button(title="Save Settings and Restart to Apply", action=self.write_game_settings_and_quit, font_color=GameColors.WHITE.value, background_color=GameColors.BLACK.value)
-        self.settings.add.button(title="Restore Defaults", action=self.__settingsconfig.write_settings_yml_file, font_color=GameColors.WHITE.value, background_color=GameColors.BLACK.value)
+        self.settings.add.button(title="Restore Defaults", action=self.write_default_settings_and_quit, font_color=GameColors.WHITE.value, background_color=GameColors.BLACK.value)
         self.settings.mainloop(self.__screen)
+
+    def write_default_settings_and_quit(self):
+        """
+        Write the default settings and quit
+        """
+        self.__settingsconfig.write_default_settings()
+        self.settings._exit() # pylint: disable=protected-access
 
     def write_game_settings_and_quit(self):
         """
@@ -70,6 +77,10 @@ class SettingsMenu:
                         subtitles = self.__settingsconfig.subtitles
                 case "max_fps":
                     max_fps = value
+                    if int(max_fps) < 30:
+                        max_fps = 30
+                    if int(max_fps) > 144:
+                        max_fps = 144
                     if max_fps is None:
                         max_fps = self.__settingsconfig.max_fps
             self.__glogger.info(f"{key}\t:\t{value}", name=__name__)
@@ -84,7 +95,7 @@ class SettingsMenu:
                     yaml.dump(wd, settings_file)
             except Exception as e:
                 print("Settings failed to write to disk", e)
-        self.settings._exit()
+        self.settings._exit() # pylint: disable=protected-access
 
     def __get_settings_state_from_disk(self) -> dict:
         """

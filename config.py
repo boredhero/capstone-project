@@ -79,7 +79,7 @@ class SettingsConfig(metaclass=Singleton):
             "subtitles": True
         }
 
-    def write_settings_yml_file(self, contents: dict | None = None):
+    def __write_settings_yml_file(self, contents: dict | None = None):
         """
         Write settings file to disc
         NOTE: If contents are None, the default settings will be written to disk
@@ -92,6 +92,12 @@ class SettingsConfig(metaclass=Singleton):
         except Exception as e:
             print("Settings failed to write to disk", e)
         self.refresh_from_disk()
+
+    def write_default_settings(self):
+        """
+        Write default settings to disk
+        """
+        self.__write_settings_yml_file()
 
     def refresh_from_disk(self):
         """

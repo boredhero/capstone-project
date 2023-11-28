@@ -1,4 +1,3 @@
-## TODO: Rename this file if the working title changes from "Instance"
 import pygame
 
 from game_logger import GameLogger
