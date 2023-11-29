@@ -33,6 +33,7 @@ class SettingsConfig(metaclass=Singleton):
         self.screen_height = self.__settings.get("screen_height")
         self.max_fps = self.__settings.get("max_fps")
         self.subtitles = self.__settings.get("subtitles")
+        self.debug = self.__settings.get("debug")
 
     def __load_settings(self):
         """
@@ -76,7 +77,8 @@ class SettingsConfig(metaclass=Singleton):
             "screen_width": 1920,
             "screen_height": 1080,
             "max_fps": 60,
-            "subtitles": True
+            "subtitles": True,
+            "debug": False
         }
 
     def __write_settings_yml_file(self, contents: dict | None = None):

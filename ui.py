@@ -12,6 +12,8 @@ class GameState(Enum):
     EXIT = -1
     SETTINGS = 0
     PLAY = 1
+    LOAD_SAVE = 2
+    CREDITS = 3
 
 def create_surface_with_text(text: str, font_size: int, text_rgb: Tuple, bg_rgb: Tuple):
     """
@@ -108,7 +110,8 @@ class TitleScreenUIElements():
             font_size=30,
             bg_rgb=GameColors.BLACK.value,
             text_rgb=GameColors.WHITE.value,
-            text="Load Saved Game"
+            text="Load Saved Game",
+            action=GameState.LOAD_SAVE
         )
         self.__settings_button = UIElement(
             center_position=(500, 500),
@@ -118,15 +121,23 @@ class TitleScreenUIElements():
             text="Settings",
             action=GameState.SETTINGS
         )
-        self.__quit_button = UIElement(
+        self.__credits_button = UIElement(
             center_position=(500, 550),
+            font_size=30,
+            bg_rgb=GameColors.BLACK.value,
+            text_rgb=GameColors.WHITE.value,
+            text="Credits & Attributions",
+            action=GameState.CREDITS
+        )
+        self.__quit_button = UIElement(
+            center_position=(500, 600),
             font_size=30,
             bg_rgb=GameColors.BLACK.value,
             text_rgb=GameColors.WHITE.value,
             text="Exit",
             action=GameState.EXIT
         )
-        self.__buttons = [self.__start_button, self.__load_button, self.__settings_button, self.__quit_button]
+        self.__buttons = [self.__start_button, self.__load_button, self.__settings_button, self.__credits_button, self.__quit_button]
 
     @property
     def buttons(self):

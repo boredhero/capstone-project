@@ -2,3 +2,4 @@ max_fps: 60
 screen_height: 2160
 screen_width: 3840
 subtitles: false
+debug_mode: false

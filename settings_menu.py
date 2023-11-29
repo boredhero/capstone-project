@@ -40,6 +40,7 @@ class SettingsMenu:
         current_res = self.__get_current_resolution_index()
         self.settings.add.dropselect(title="Screen Resolution: ", items=self.resolution, default=current_res, dropselect_id="screen_resolution", selection_box_height=6, open_middle=True)
         self.settings.add.toggle_switch(title="Subtitles", default=self.__settingsconfig.subtitles, toggleswitch_id="subtitles")
+        self.settings.add.toggle_switch(title="Debug Mode", default=self.__settingsconfig.debug, toggleswitch_id="debug_mode")
         self.settings.add.text_input(title="Max FPS: ", default=self.__settingsconfig.max_fps, textinput_id="max_fps", input_type=pm.locals.INPUT_INT, range_values=(30, 144))
         self.settings.add.button(title="Save Settings and Restart to Apply", action=self.write_game_settings_and_quit, font_color=GameColors.WHITE.value, background_color=GameColors.BLACK.value)
         self.settings.add.button(title="Restore Defaults", action=self.write_default_settings_and_quit, font_color=GameColors.WHITE.value, background_color=GameColors.BLACK.value)
@@ -75,6 +76,10 @@ class SettingsMenu:
                     subtitles = value
                     if subtitles is None:
                         subtitles = self.__settingsconfig.subtitles
+                case "debug_mode"
+                    debug_mode = value
+                    if debug_mode is None:
+                        debug_mode = self.__settingsconfig.debug
                 case "max_fps":
                     max_fps = value
                     if int(max_fps) < 30:
@@ -88,7 +93,8 @@ class SettingsMenu:
                 "screen_width": screen_width,
                 "screen_height": screen_height,
                 "max_fps": max_fps,
-                "subtitles": subtitles
+                "subtitles": subtitles,
+                "debug_mode": debug_mode
             }
             try:
                 with open(self.__settingsconfig.config_name, 'w') as settings_file:
@@ -104,7 +110,9 @@ class SettingsMenu:
         return {
             "screen_width": self.__settingsconfig.screen_width,
             "screen_height": self.__settingsconfig.screen_height,
-            "max_fps": self.__settingsconfig.max_fps
+            "max_fps": self.__settingsconfig.max_fps,
+            "subtitles": self.__settingsconfig.subtitles,
+            "debug_mode": self.__settingsconfig.debug
         }
 
     def __get_current_resolution_index(self) -> int:
