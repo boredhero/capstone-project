@@ -1,4 +1,5 @@
 debug: false
+fancy_fonts: true
 max_fps: 60
 screen_height: 1080
 screen_width: 1920
