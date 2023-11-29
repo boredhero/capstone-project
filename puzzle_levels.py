@@ -1,5 +1,7 @@
 import pygame
 
+import pygame
+
 class GameMap:
 
     def __init__(self, image_path: str, screen):
@@ -35,7 +37,7 @@ class Player:
 
     def move(self, direction):
         """
-        Move the Player
+        Moev the Player
         """
         match direction:
             case "up":
@@ -53,6 +55,30 @@ class Player:
         """
         if self.visibility:
             pygame.draw.rect(screen, (255, 255, 255), (*self.position, 40, 40)) # Placeholder for a sprite
+
+    def set_visibility(self, visibility: bool):
+        """
+        Set Player visibility
+        """
+        self.visibility = visibility
+
+class PuzzleHitbox:
+
+    def __init__(self, pos):
+        """
+        Puzzle Hitbox
+        """
+        self.visibility = True
+        self.position = pos
+
+    def draw(self, screen):
+        """
+        Draw the PuzzleHitBox
+        """
+        if self.visibility:
+            pygame.draw.circle(screen, (0, 0, 0), self.position, 40)
+            pygame.draw.circle(screem, (26, 255, 0), self.position, 30)
+            pygame.draw.rect(screen, (0, 0, 0), (*self.position, 40, 40)) # Placeholder for a sprite
 
     def set_visibility(self, visibility: bool):
         """
