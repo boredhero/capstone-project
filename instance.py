@@ -24,7 +24,7 @@ class InstanceMain():
         self.__playing = False
         self.__pygame_init = pygame.init() #pylint: disable=unused-private-member
         self.__titlescreen_ui = ui.TitleScreenUIElements()
-        self.__game_map = game_map.GameMap("assets/backgrounds/map.png", self.__screen)
+        self.__game_map = game_map.GameMap("assets/backgrounds/missing_texture.png", self.__screen)
         self.__player = game_map.Player([100, 100])  # Player starting position
         while self.__running:
             mouse_up = False
@@ -33,6 +33,10 @@ class InstanceMain():
                     self.__running = False
                 if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
                     mouse_up = True
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        if self.__playing:
+                            self.return_to_main_menu()
             if not self.__playing:
                 self.__screen.fill("black")
                 ui_action = self.__titlescreen_ui.update(pygame.mouse.get_pos(), mouse_up)
@@ -77,6 +81,13 @@ class InstanceMain():
         Get the clock
         """
         return self.__clock
+
+    def return_to_main_menu(self):
+        """
+        Return to the main menu
+        """
+        self.__playing = False
+        self.__titlescreen_ui.set_visibility(True)
 
     def graceful_exit(self):
         """
