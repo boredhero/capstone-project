@@ -76,7 +76,7 @@ class SettingsMenu:
                     subtitles = value
                     if subtitles is None:
                         subtitles = self.__settingsconfig.subtitles
-                case "debug_mode"
+                case "debug_mode":
                     debug_mode = value
                     if debug_mode is None:
                         debug_mode = self.__settingsconfig.debug
