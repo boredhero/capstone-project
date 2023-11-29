@@ -7,6 +7,10 @@ name = "pypi"
 pygame = "*"
 tinydb = "*"
 python-dotenv = "*"
+pytz = "*"
+pyyaml = "*"
+pygame-menu = "*"
+numpy = "*"
 
 [dev-packages]
 
