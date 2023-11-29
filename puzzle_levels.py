@@ -1,7 +1,5 @@
 import pygame
 
-import pygame
-
 class GameMap:
 
     def __init__(self, image_path: str, screen):
@@ -77,11 +75,22 @@ class PuzzleHitbox:
         """
         if self.visibility:
             pygame.draw.circle(screen, (0, 0, 0), self.position, 40)
-            pygame.draw.circle(screem, (26, 255, 0), self.position, 30)
-            pygame.draw.rect(screen, (0, 0, 0), (*self.position, 40, 40)) # Placeholder for a sprite
+            pygame.draw.circle(screen, (26, 255, 0), self.position, 30)
 
     def set_visibility(self, visibility: bool):
         """
         Set Player visibility
         """
         self.visibility = visibility
+
+class PuzzleHitboxGenerator:
+
+    def __init__(self, n_hitboxes: int):
+        """
+        Puzzle Hitbox Generator
+        """
+        self.visibility = True
+        self.hitboxes = []
+        for _ in range(n_hitboxes):
+            self.hitboxes.append(PuzzleHitbox([100, 100]))
+            
