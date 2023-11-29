@@ -6,6 +6,7 @@ import pygame.font
 from pygame.sprite import Sprite
 from pygame.rect import Rect # pylint: disable=unused-import
 
+from config import SettingsConfig
 from misc import GameColors
 
 class GameState(Enum):
@@ -14,6 +15,7 @@ class GameState(Enum):
     PLAY = 1
     LOAD_SAVE = 2
     CREDITS = 3
+    DEBUG_PLAY_PUZZLE = 4
 
 def create_surface_with_text(text: str, font_size: int, text_rgb: Tuple, bg_rgb: Tuple):
     """
@@ -90,6 +92,10 @@ class TitleScreenUIElements():
         """
         Title Screen UI Elements init
         """
+        self.__settings = SettingsConfig()
+        self.__quit_button_y_pos = 600
+        if self.__settings.debug:
+            self.__quit_button_y_pos = 650
         self.__title = UIElement(
             center_position=(500, 300),
             font_size=60,
@@ -129,15 +135,27 @@ class TitleScreenUIElements():
             text="Credits & Attributions",
             action=GameState.CREDITS
         )
+        if self.__settings.debug:
+            self.__debug_play_puzzle_button = UIElement(
+                center_position=(500, 600),
+                font_size=30,
+                bg_rgb=GameColors.BLACK.value,
+                text_rgb=GameColors.WHITE.value,
+                text="Debug Play Puzzle",
+                action=GameState.DEBUG_PLAY_PUZZLE
+            )
         self.__quit_button = UIElement(
-            center_position=(500, 600),
+            center_position=(500, self.__quit_button_y_pos),
             font_size=30,
             bg_rgb=GameColors.BLACK.value,
             text_rgb=GameColors.WHITE.value,
             text="Exit",
             action=GameState.EXIT
         )
-        self.__buttons = [self.__start_button, self.__load_button, self.__settings_button, self.__credits_button, self.__quit_button]
+        if self.__settings.debug:
+            self.__buttons = [self.__start_button, self.__load_button, self.__settings_button, self.__credits_button, self.__debug_play_puzzle_button, self.__quit_button]
+        else:
+            self.__buttons = [self.__start_button, self.__load_button, self.__settings_button, self.__credits_button, self.__quit_button]
 
     @property
     def buttons(self):

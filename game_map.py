@@ -52,7 +52,7 @@ class Player:
         Draw the Player
         """
         if self.visibility:
-            pygame.draw.rect(screen, (255, 0, 0), (*self.position, 20, 20)) # Placeholder for a sprite
+            pygame.draw.rect(screen, (15, 0, 153), (*self.position, 40, 40)) # Placeholder for a sprite
 
     def set_visibility(self, visibility: bool):
         """
