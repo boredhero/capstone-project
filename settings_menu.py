@@ -94,7 +94,7 @@ class SettingsMenu:
                 "screen_height": screen_height,
                 "max_fps": max_fps,
                 "subtitles": subtitles,
-                "debug_mode": debug_mode
+                "debug": debug_mode
             }
             try:
                 with open(self.__settingsconfig.config_name, 'w') as settings_file:
@@ -112,7 +112,7 @@ class SettingsMenu:
             "screen_height": self.__settingsconfig.screen_height,
             "max_fps": self.__settingsconfig.max_fps,
             "subtitles": self.__settingsconfig.subtitles,
-            "debug_mode": self.__settingsconfig.debug
+            "debug": self.__settingsconfig.debug
         }
 
     def __get_current_resolution_index(self) -> int:
