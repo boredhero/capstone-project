@@ -79,8 +79,8 @@ class SettingsMenu:
                         subtitles = self.__settingsconfig.subtitles
                 case "debug":
                     debug = value
-                    if debug_mode is None:
-                        debug_mode = self.__settingsconfig.debug
+                    if debug is None:
+                        debug = self.__settingsconfig.debug
                 case "max_fps":
                     max_fps = value
                     if int(max_fps) < 30:
