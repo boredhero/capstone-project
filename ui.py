@@ -32,6 +32,7 @@ class UIElement(Sprite):
         """
         UIElement init
         """
+        self.visible = True
         self.mouse_over = False
         default_img = create_surface_with_text(text, font_size, text_rgb, bg_rgb)
         highlighted_img = create_surface_with_text(text, font_size+2, text_rgb, bg_rgb)
@@ -65,11 +66,18 @@ class UIElement(Sprite):
         else:
             self.mouse_over = False
 
+    def set_visibility(self, visibility: bool):
+        """
+        Toggle visibility of the UIElement
+        """
+        self.visible = visibility
+
     def draw(self, surface):
         """
         Draw a surface element
         """
-        surface.blit(self.image, self.rect)
+        if self.visible:
+            surface.blit(self.image, self.rect)
 
 class TitleScreenUIElements():
     """
@@ -151,3 +159,11 @@ class TitleScreenUIElements():
         for button in self.__buttons:
             button.draw(surface)
         self.__title.draw(surface)
+
+    def set_visibility(self, visibility: bool):
+        """
+        Toggle visibility of the UIElement
+        """
+        for button in self.__buttons:
+            button.set_visibility(visibility)
+        self.__title.set_visibility(visibility)

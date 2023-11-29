@@ -10,6 +10,7 @@ python-dotenv = "*"
 pytz = "*"
 pyyaml = "*"
 pygame-menu = "*"
+numpy = "*"
 
 [dev-packages]
 
