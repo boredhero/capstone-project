@@ -63,6 +63,7 @@ class InstanceMain():
                 if keys[pygame.K_d]:
                     self.__player.move("right")
                 self.__game_map.draw_map()
+                self.__game_map.draw_hitboxes()
                 self.__player.draw(self.__screen)
                 pygame.display.flip()
             self.__titlescreen_ui.draw(self.__screen)

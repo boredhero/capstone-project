@@ -1,3 +1,5 @@
+import random
+
 import pygame
 
 class GameMap:
@@ -85,11 +87,33 @@ class PuzzleHitbox:
 
 class PuzzleHitboxGenerator:
 
-    def __init__(self, n_hitboxes: int):
+    def __init__(self, n_hitboxes: int, screen):
         """
         Puzzle Hitbox Generator
         """
+        self.already_drawn = False
         self.visibility = True
         self.hitboxes = []
+        self.screen = screen
         for _ in range(n_hitboxes):
-            self.hitboxes.append(PuzzleHitbox([100, 100]))
+            x = random.randint(0, 1000)
+            y = random.randint(0, 1000)
+            self.hitboxes.append(PuzzleHitbox([x, y]))
+        self.already_drawn = True
+        if self.already_drawn:
+            self.draw()
+        self.draw()
+
+    def draw(self):
+        """
+        Draw the PuzzleHitBox
+        """
+        if self.visibility:
+            for hitbox in self.hitboxes:
+                hitbox.draw(self.screen)
+
+    def set_visibility(self, visibility: bool):
+        """
+        Set Player visibility
+        """
+        self.visibility = visibility

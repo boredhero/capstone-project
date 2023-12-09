@@ -1,4 +1,5 @@
 import pygame
+import puzzle_levels
 
 class GameMap:
 
@@ -9,6 +10,7 @@ class GameMap:
         self.visibility = True
         self.map_surface = pygame.image.load(image_path)
         self.screen = screen
+        self.draw_hitboxes()
 
     def draw_map(self):
         """
@@ -16,6 +18,13 @@ class GameMap:
         """
         if self.visibility:
             self.screen.blit(self.map_surface, (0, 0))
+
+    def draw_hitboxes(self):
+        """
+        Draw hitboxes on screen
+        """
+        hitboxes = puzzle_levels.PuzzleHitboxGenerator(10, self.screen)
+        hitboxes.draw()
 
     def set_visibility(self, visibility: bool):
         """
