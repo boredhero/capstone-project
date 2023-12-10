@@ -21,6 +21,12 @@ class GameMap:
         if self.visibility:
             self.screen.blit(self.map_surface, (0, 0))
 
+    def all_hitboxes_collided(self):
+        """
+        Check if all hitboxes are currently collided
+        """
+        return self.hitbox_generator.check_all_collided()
+
     def draw_hitboxes(self):
         """
         Draw hitboxes on screen
