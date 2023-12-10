@@ -3,13 +3,15 @@ import puzzle_levels
 
 class GameMap:
 
-    def __init__(self, image_path: str, screen):
+    def __init__(self, image_path: str, screen, player):
         """
         Basic Map Class
         """
         self.visibility = True
         self.map_surface = pygame.image.load(image_path)
         self.screen = screen
+        self.player = player
+        self.hitbox_generator = puzzle_levels.PuzzleHitboxGenerator([(100, 100), (10, 1000), (900, 500), (200, 400), (600, 700)], self.screen)
         self.draw_hitboxes()
 
     def draw_map(self):
@@ -23,8 +25,8 @@ class GameMap:
         """
         Draw hitboxes on screen
         """
-        hitboxes = puzzle_levels.PuzzleHitboxGenerator(10, self.screen)
-        hitboxes.draw()
+        self.hitbox_generator.check_collision(self.player)
+        self.hitbox_generator.draw()
 
     def set_visibility(self, visibility: bool):
         """

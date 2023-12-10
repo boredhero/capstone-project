@@ -24,8 +24,8 @@ class InstanceMain():
         self.__playing = False
         self.__pygame_init = pygame.init() #pylint: disable=unused-private-member
         self.__titlescreen_ui = ui.TitleScreenUIElements()
-        self.__game_map = game_map.GameMap("assets/backgrounds/missing_texture.png", self.__screen)
         self.__player = game_map.Player([100, 100])  # Player starting position
+        self.__game_map = game_map.GameMap("assets/backgrounds/missing_texture.png", self.__screen, self.__player)
         while self.__running:
             mouse_up = False
             for event in pygame.event.get():
