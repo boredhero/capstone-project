@@ -62,6 +62,8 @@ class InstanceMain():
                     self.__player.move("left")
                 if keys[pygame.K_d]:
                     self.__player.move("right")
+                if self.__game_map.all_hitboxes_collided():
+                    self.return_to_main_menu()
                 self.__game_map.draw_map()
                 self.__game_map.draw_hitboxes()
                 self.__player.draw(self.__screen)
