@@ -24,6 +24,7 @@ class InstanceMain():
         self.__playing = False
         self.__pygame_init = pygame.init() #pylint: disable=unused-private-member
         self.__titlescreen_ui = ui.TitleScreenUIElements()
+        self.__debug_play_puzzles_ui = ui.LevelSelectorUIElements()
         self.__player = game_map.Player([100, 100])  # Player starting position
         self.__game_map = game_map.GameMap("assets/backgrounds/missing_texture.png", self.__screen, self.__player)
         while self.__running:
@@ -39,19 +40,32 @@ class InstanceMain():
                             self.return_to_main_menu()
             if not self.__playing:
                 self.__screen.fill("black")
-                ui_action = self.__titlescreen_ui.update(pygame.mouse.get_pos(), mouse_up)
-                if ui_action is not None:
-                    match ui_action:
-                        case ui.GameState.EXIT:
-                            self.graceful_exit()
-                        case ui.GameState.SETTINGS:
-                            self.__gamesettings = SettingsMenu(self.__screen) # pylint: disable=unused-private-member
-                        case ui.GameState.PLAY:
-                            self.__titlescreen_ui.set_visibility(False)
-                            self.__playing = True
-                            self.__screen.fill((0, 0, 0))
-                        case _:
-                            pass
+                if self.__titlescreen_ui.visibility:
+                    ui_action = self.__titlescreen_ui.update(pygame.mouse.get_pos(), mouse_up)
+                    if ui_action is not None:
+                        match ui_action:
+                            case ui.GameState.EXIT:
+                                self.graceful_exit()
+                            case ui.GameState.SETTINGS:
+                                self.__gamesettings = SettingsMenu(self.__screen) # pylint: disable=unused-private-member
+                            case ui.GameState.PLAY:
+                                self.__titlescreen_ui.set_visibility(False)
+                                self.__playing = True
+                                self.__screen.fill((0, 0, 0))
+                            case ui.GameState.DEBUG_PLAY_PUZZLE:
+                                self.__titlescreen_ui.set_visibility(False)
+                                self.__debug_play_puzzles_ui.set_visibility(True)
+                            case _:
+                                pass
+                if self.__debug_play_puzzles_ui.visibility:
+                    ui_action_levels = self.__debug_play_puzzles_ui.update(pygame.mouse.get_pos(), mouse_up)
+                    if ui_action_levels is not None:
+                        match ui_action_levels:
+                            case ui.GameState.PLAY_PUZZLE_1:
+                                self.graceful_exit()
+                            case ui.GameState.PLAY_PUZZLE_2:
+                                self.graceful_exit()
+                mouse_up = False
             if self.__playing:
                 keys = pygame.key.get_pressed()
                 if keys[pygame.K_w]:
@@ -69,6 +83,8 @@ class InstanceMain():
                 self.__player.draw(self.__screen)
                 pygame.display.flip()
             self.__titlescreen_ui.draw(self.__screen)
+            if self.__debug_play_puzzles_ui.visibility:
+                self.__debug_play_puzzles_ui.draw(self.__screen)
             pygame.display.flip()
             self.__clock.tick(self.__settings.max_fps) # Set the FPS
         self.graceful_exit()
