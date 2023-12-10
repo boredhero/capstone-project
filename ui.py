@@ -22,8 +22,12 @@ def create_surface_with_text(text: str, font_size: int, text_rgb: Tuple, bg_rgb:
     Create a surface with text on it
     """
     # https://programmingpixels.com/handling-a-title-screen-game-flow-and-buttons-in-pygame.html
+    settings = SettingsConfig()
     pygame.font.init()
-    font = pygame.font.Font('fonts/porter-sans/porter-sans-inline-block.ttf', font_size)
+    if settings.fancy_fonts:
+        font = pygame.font.Font('fonts/porter-sans/porter-sans-inline-block.ttf', font_size)
+    else:
+        font = pygame.font.SysFont("Arial", font_size)
     surface = font.render(text, True, text_rgb, bg_rgb)
     return surface.convert_alpha()
 
