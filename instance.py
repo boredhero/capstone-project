@@ -27,9 +27,11 @@ class InstanceMain():
         self.__playing_puzzle_1 = False
         self.__playing_puzzle_2 = False
         self.__text_screen_1 = None
-        self.__text_screen_1 = None
+        self.__text_screen_2 = None
+        self.__credits = None
         self.__show_text_screen_1 = False
         self.__show_text_screen_2 = False
+        self.__show_credits = False
         pygame.init()
         self.__titlescreen_ui = ui.TitleScreenUIElements()
         self.__debug_play_puzzles_ui = ui.LevelSelectorUIElements()
@@ -68,6 +70,11 @@ class InstanceMain():
                                 self.__titlescreen_ui.set_visibility(False)
                                 self.__playing = True
                                 self.__screen.fill((0, 0, 0))
+                            case ui.GameState.CREDITS:
+                                self.__titlescreen_ui.set_visibility(False)
+                                self.__show_credits = True
+                                self.__credits = text_screen.TextScreen(self.__screen, text_screen.get_credits_and_attributions_text(), "Back")
+                                self.__credits.draw()
                             case ui.GameState.DEBUG_PLAY_PUZZLE:
                                 self.__titlescreen_ui.set_visibility(False)
                                 self.__debug_play_puzzles_ui.set_visibility(True)
@@ -97,6 +104,11 @@ class InstanceMain():
                     if self.__text_screen_2.handle_event(event): # pylint: disable=undefined-loop-variable
                         self.__show_text_screen_2 = False
                         self.__playing_puzzle_2 = True
+                if self.__show_credits:
+                    self.__credits.draw()
+                    if self.__credits.handle_event(event): # pylint: disable=undefined-loop-variable
+                        self.__titlescreen_ui.set_visibility(True)
+                        self.__show_credits = False
                 mouse_up = False
             if self.__playing:
                 keys = pygame.key.get_pressed()
