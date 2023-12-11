@@ -31,6 +31,24 @@ class InstanceMainLoop:
             self.__main_loop()
         self.graceful_exit()
 
+    def __main_loop(self):
+        """
+        Meaty bit of the main loop
+        """
+        self.__ml_handle_ginr() # Handle the game needing a reload
+        self.__ml_event_handler() # Handle game events
+        if not self.check_playing_anything(): # If we're not playing anything, draw the titlescreen
+            self.__ml_handle_ui_if_not_playing() # Handle drawing various UI screens
+        self.__handle_show_text_screens() # If we need to display a text screen right now, display that
+        if self.__playing: # Play button
+            self.__puzzle_1_logic()
+        if self.__playing_puzzle_1: # Debug Puzzle Menu option 1
+            self.__puzzle_1_logic()
+        if self.__playing_puzzle_2: # Debug puzzle menu option 2
+            self.__puzzle_2_logic()
+        pygame.display.flip() # Necessary for UI to update
+        self.__clock.tick(self.__settings.max_fps) # Set the FPS and tick the clock at the end of each loop
+
     def __ml_handle_ginr(self):
         """
         Handle reloading the game if we need to do that
@@ -192,24 +210,6 @@ class InstanceMainLoop:
         self.__titlescreen_ui.draw(self.__screen)
         if self.__debug_play_puzzles_ui.visibility:
             self.__debug_play_puzzles_ui.draw(self.__screen)
-
-    def __main_loop(self):
-        """
-        Meaty bit of the main loop
-        """
-        self.__ml_handle_ginr() # Handle the game needing a reload
-        self.__ml_event_handler() # Handle game events
-        if not self.check_playing_anything(): # If we're not playing anything, draw the titlescreen
-            self.__ml_handle_ui_if_not_playing() # Handle drawing various UI screens
-        self.__handle_show_text_screens() # If we need to display a text screen right now, display that
-        if self.__playing: # Play button
-            self.__puzzle_1_logic()
-        if self.__playing_puzzle_1: # Debug Puzzle Menu option 1
-            self.__puzzle_1_logic()
-        if self.__playing_puzzle_2: # Debug puzzle menu option 2
-            self.__puzzle_2_logic()
-        pygame.display.flip() # Necessary for UI to update
-        self.__clock.tick(self.__settings.max_fps) # Set the FPS and tick the clock at the end of each loop
 
     def pygame_init(self):
         """
