@@ -199,6 +199,7 @@ class PuzzleHitboxGenerator1:
                 return True
         return False
 
+
     def set_collidability(self, collidability: bool):
         """
         Set hitbox collidability

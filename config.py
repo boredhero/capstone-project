@@ -89,7 +89,6 @@ class SettingsConfig(metaclass=Singleton):
             "debug": False,
             "fancy_fonts": True,
             "grayscale_mode": False
-        }
 
     def __write_settings_yml_file(self, contents: dict | None = None):
         """
