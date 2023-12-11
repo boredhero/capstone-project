@@ -44,7 +44,9 @@ class GameMapPuzzle2:
         if self.__settings.grayscale_mode:
             self.__cb = "bw"
         self.image_path = f"assets/backgrounds/puzzle_2/pz2_{self.__cb}_{self.__settings.screen_height}p.png"
-        self.map_surface = pygame.image.load(self.image_path)
+        self.image = pygame.image.load(self.image_path)
+        self.map_surface = pygame.Surface(self.image.get_size(), flags=pygame.HWSURFACE)
+        self.map_surface.blit(self.image, (0, 0))
         self.screen = screen
         self.hitbox_generator = PuzzleHitboxGenerator2(self.screen, self.__settings.puzzle_2_difficulty_number)
         self.draw_hitboxes()
