@@ -6,9 +6,35 @@ import pygame
 from game_logger import GameLogger
 from config import SettingsConfig
 
+def get_intrusive_thoughts_list():
+    """
+    Get a list of intrusive thoughts
+    """
+    return [
+        "I'm a failure",
+        "I can't remember the Doctor's Name",
+        "The receptionist will think I'm stupid",
+        "I'm not good enough",
+        "I didn't go to class yesterday",
+        "I bet they think I sound weird",
+        "I'm ugly",
+        "What will they think of me?",
+        "What if my blood test results are bad?",
+        "The receptionist will tell the doctor I'm stupid",
+        "What if my health insurance doesn't cover this?",
+        "I'm afraid of the doctor",
+        "Why did I forget to take out the trash yesterday?"
+    ]
+
+def get_intrusive_thoughts():
+    """
+    Get a random intrusive thought
+    """
+    return random.choice(get_intrusive_thoughts_list())
+
 class GameMapPuzzle2:
 
-    def __init__(self, image_path: str, screen, player):
+    def __init__(self, image_path: str, screen):
         """
         Map class for Game 1
         """
@@ -16,7 +42,6 @@ class GameMapPuzzle2:
         self.visibility = True
         self.map_surface = pygame.image.load(image_path)
         self.screen = screen
-        self.player = player
         self.hitbox_generator = PuzzleHitboxGenerator2(self.screen, self.__settings.puzzle_2_difficulty_number)
         self.draw_hitboxes()
 
@@ -27,12 +52,6 @@ class GameMapPuzzle2:
         if self.visibility:
             self.screen.blit(self.map_surface, (0, 0))
 
-    def all_hitboxes_collided(self):
-        """
-        Check if all hitboxes are currently collided
-        """
-        return self.hitbox_generator.check_all_collided()
-
     def draw_hitboxes(self):
         """
         Draw hitboxes on screen
@@ -42,43 +61,6 @@ class GameMapPuzzle2:
     def set_visibility(self, visibility: bool):
         """
         Set map visibility
-        """
-        self.visibility = visibility
-
-class PlayerPuzzle2:
-
-    def __init__(self, start_pos):
-        """
-        Basic Player Class
-        """
-        self.visibility = True
-        self.position = start_pos
-        self.speed = 7
-
-    def move(self, direction):
-        """
-        Move the Player
-        """
-        match direction:
-            case "up":
-                self.position[1] -= self.speed
-            case "down":
-                self.position[1] += self.speed
-            case "left":
-                self.position[0] -= self.speed
-            case "right":
-                self.position[0] += self.speed
-
-    def draw(self, screen):
-        """
-        Draw the Player
-        """
-        if self.visibility:
-            pygame.draw.rect(screen, (255, 255, 255), (*self.position, 40, 40)) # Placeholder for a sprite
-
-    def set_visibility(self, visibility: bool):
-        """
-        Set Player visibility
         """
         self.visibility = visibility
 
@@ -93,13 +75,14 @@ class PuzzleHitbox2:
         self.position = pos
         self.color = (252, 0, 0)
         self.original_color = (252, 0, 0)
-        self.collision_time = None
-        self.collision_duration= 870*self.__settings.puzzle_1_difficulty # milliseconds
-        self.is_currently_collided = False
+        self.click_time = None
+        self.click_duration= 870*self.__settings.puzzle_1_difficulty # milliseconds
+        self.is_currently_clicked = False
         self.text = text
         self.rect_size = (160, 80)
         self.velocity = [2, 2]
-        self.font_size= 46
+        self.font_size= 40
+        self.am_the_one = False
         self.screen_width = self.__settings.screen_width
         self.screen_height = self.__settings.screen_height
         self.__logger = GameLogger()
@@ -140,9 +123,9 @@ class PuzzleHitbox2:
             )
             if rect.collidepoint(mouse_pos):
                 current_time = pygame.time.get_ticks()
-                self.collision_time = current_time
+                self.click_time = current_time
                 self.update_color(screen, (0, 252, 0))
-                self.is_currently_collided = True
+                self.is_currently_clicked = True
                 self.__logger.debug("Click detected", f"PuzzleHitbox2[(x: {self.position[0]}, y: {self.position[1]})]")
                 return True
         return False
@@ -155,29 +138,34 @@ class PuzzleHitbox2:
             current_time = pygame.time.get_ticks()
 
             # Check if the hitbox needs to revert back to its original color
-            if self.collision_time:
-                if current_time - self.collision_time > self.collision_duration:
+            if self.click_time:
+                if current_time - self.click_time > self.click_duration:
                     self.color = self.original_color  # Revert to original color
-                    self.collision_time = None
-                    self.is_currently_collided = False
+                    self.click_time = None
+                    self.is_currently_clicked = False
                 else:
                     color = (0, 252, 0)  # Keep the color green
 
-            # Use the current color if a specific color is not provided
-            final_color = self.color if color is None else color
+            # Calculate text dimensions
+            font = pygame.font.Font(None, self.font_size)
+            text_surface = font.render(self.text, True, (255, 255, 255))
+            text_width, text_height = text_surface.get_size()
+
+            # Adjust rectangle size to fit text
+            padding = 10  # Additional padding around text
+            rect_width = max(text_width + padding, self.rect_size[0])
+            rect_height = max(text_height + padding, self.rect_size[1])
 
             # Draw the rectangle
             rect = pygame.Rect(
-                self.position[0] - self.rect_size[0] // 2,
-                self.position[1] - self.rect_size[1] // 2,
-                self.rect_size[0],
-                self.rect_size[1]
+                self.position[0] - rect_width // 2,
+                self.position[1] - rect_height // 2,
+                rect_width,
+                rect_height
             )
-            pygame.draw.rect(screen, final_color, rect)
+            pygame.draw.rect(screen, self.color if color is None else color, rect)
 
             # Draw the text
-            font = pygame.font.Font(None, self.font_size)  # Choose an appropriate font size
-            text_surface = font.render(self.text, True, (255, 255, 255))  # White text
             text_rect = text_surface.get_rect(center=rect.center)
             screen.blit(text_surface, text_rect)
 
@@ -217,12 +205,6 @@ class PuzzleHitboxGenerator2:
                 return True
         return False
 
-    def check_all_collided(self):
-        """
-        Check if all hitboxes are collided
-        """
-        return all(hitbox.is_currently_collided for hitbox in self.hitboxes)
-
     def draw(self):
         """
         Draw the PuzzleHitBox
@@ -257,7 +239,8 @@ class PuzzleHitboxGenerator2:
             while True:
                 x = random.randint(hitbox_radius, screen_width - hitbox_radius)
                 y = random.randint(hitbox_radius, screen_height - hitbox_radius)
-                new_hitbox = PuzzleHitbox2([x, y], "test")
+                random_thought = get_intrusive_thoughts()
+                new_hitbox = PuzzleHitbox2([x, y], random_thought)
 
                 # Randomized velocity with a speed multiplier
                 new_hitbox.velocity = [
@@ -268,6 +251,19 @@ class PuzzleHitboxGenerator2:
                 if not self.hitbox_overlap(new_hitbox, hitbox_radius + padding):
                     self.hitboxes.append(new_hitbox)
                     break
+        if self.hitboxes:
+            chosen_one = random.choice(self.hitboxes)
+            chosen_one.am_the_one = True
+            chosen_one.text = "Click me!"
+
+    def is_the_one_clicked(self):
+        """
+        Check if the hitbox marked as 'the one' is clicked
+        """
+        for hitbox in self.hitboxes:
+            if hitbox.am_the_one and hitbox.is_currently_clicked:
+                return True
+        return False
 
     def hitbox_overlap(self, new_hitbox, min_distance):
         """

@@ -34,9 +34,8 @@ class InstanceMain():
         self.__titlescreen_ui = ui.TitleScreenUIElements()
         self.__debug_play_puzzles_ui = ui.LevelSelectorUIElements()
         self.__player_puzzle_1 = puzzle_level_1.PlayerPuzzle1([100, 100])  # Player starting position
-        self.__player_puzzle_2 = puzzle_level_2.PlayerPuzzle2([100, 100])  # Player starting position
         self.__game_map_puzzle_1 = puzzle_level_1.GameMapPuzzle1("assets/backgrounds/missing_texture.png", self.__screen, self.__player_puzzle_1)
-        self.__game_map_puzzle_2 = puzzle_level_2.GameMapPuzzle2("assets/backgrounds/missing_texture.png", self.__screen, self.__player_puzzle_2)
+        self.__game_map_puzzle_2 = puzzle_level_2.GameMapPuzzle2("assets/backgrounds/missing_texture.png", self.__screen)
         while self.__running:
             mouse_up = False
             for event in pygame.event.get():
@@ -133,20 +132,11 @@ class InstanceMain():
                 pygame.display.flip()
             if self.__playing_puzzle_2:
                 keys = pygame.key.get_pressed()
-                if keys[pygame.K_w]:
-                    self.__player_puzzle_2.move("up")
-                if keys[pygame.K_s]:
-                    self.__player_puzzle_2.move("down")
-                if keys[pygame.K_a]:
-                    self.__player_puzzle_2.move("left")
-                if keys[pygame.K_d]:
-                    self.__player_puzzle_2.move("right")
-                if self.__game_map_puzzle_2.all_hitboxes_collided():
-                    self.puzzle_2_return_to_main_menu()
                 self.__game_map_puzzle_2.hitbox_generator.update_hitbox_positions()
                 self.__game_map_puzzle_2.draw_map()
                 self.__game_map_puzzle_2.draw_hitboxes()
-                self.__player_puzzle_2.draw(self.__screen)
+                if self.__game_map_puzzle_2.hitbox_generator.is_the_one_clicked():
+                    self.puzzle_2_return_to_main_menu()
                 pygame.display.flip()
             self.__titlescreen_ui.draw(self.__screen)
             if self.__debug_play_puzzles_ui.visibility:
