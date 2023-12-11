@@ -305,6 +305,14 @@ class PuzzleHitboxGenerator2:
             chosen_one.am_the_one = True
             chosen_one.text = "Dr. Best"
 
+    def reset_hitboxes(self):
+        """
+        Clear all hitboxes
+        """
+        self.hitboxes = []
+        self.create_hitboxes()
+        self.draw()
+
     def is_the_one_clicked(self):
         """
         Check if the hitbox marked as 'the one' is clicked

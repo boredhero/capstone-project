@@ -204,7 +204,6 @@ class PuzzleHitboxGenerator1:
                 return True
         return False
 
-
     def set_collidability(self, collidability: bool):
         """
         Set hitbox collidability
@@ -248,6 +247,14 @@ class PuzzleHitboxGenerator1:
                 if not self.hitbox_overlap(new_hitbox, hitbox_radius + padding):
                     self.hitboxes.append(new_hitbox)
                     break
+
+    def reset_hitboxes(self):
+        """
+        Clear all hitboxes
+        """
+        self.hitboxes = []
+        self.create_hitboxes()
+        self.draw()
 
     def hitbox_overlap(self, new_hitbox, min_distance):
         """
