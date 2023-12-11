@@ -63,7 +63,7 @@ class TextScreen:
             self.screen.blit(text_surface, text_rect)
             y_offset += line_spacing
         # Draw the button, positioned below the text
-        self.button_rect.center = (self.screen.get_width() // 2, y_offset + self.button_rect.height // 2)
+        self.button_rect.center = (self.screen.get_width() // 2, y_offset + 20 + self.button_rect.height // 2)
         pygame.draw.rect(self.screen, (255, 255, 255), self.button_rect)  # White button
         button_text_surface = self.button_font.render(self.button_text, True, (0, 0, 0))  # Black text
         button_text_rect = button_text_surface.get_rect(center=self.button_rect.center)
