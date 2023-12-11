@@ -42,6 +42,7 @@ class SettingsMenu:
         self.settings.add.toggle_switch(title="Subtitles", default=self.__settingsconfig.subtitles, toggleswitch_id="subtitles")
         self.settings.add.toggle_switch(title="Debug Mode", default=self.__settingsconfig.debug, toggleswitch_id="debug")
         self.settings.add.toggle_switch(title="Fancy Fonts", default=self.__settingsconfig.fancy_fonts, toggleswitch_id="fancy_fonts")
+        self.settings.add.toggle_switch(title="Colorblind Mode (B&W)", default=self.__settingsconfig.grayscale_mode, toggleswitch_id="grayscale_mode")
         self.settings.add.text_input(title="Max FPS: ", default=self.__settingsconfig.max_fps, textinput_id="max_fps", input_type=pm.locals.INPUT_INT, range_values=(30, 144))
         self.settings.add.range_slider(title="Puzzle 1 Difficulty: ", default=int(self.__settingsconfig.puzzle_1_difficulty), range_values=(1, 50), increment=1, rangeslider_id="puzzle_one_diff", value_format=lambda x: str(round(x, None)))
         self.settings.add.range_slider(title="Puzzle 2 Difficulty (Speed): ", default=int(self.__settingsconfig.puzzle_2_difficulty_speed), range_values=(1, 50), increment=1, rangeslider_id="puzzle_two_diff_speed", value_format=lambda x: str(round(x, None)))
@@ -71,6 +72,7 @@ class SettingsMenu:
         subtitles = None
         debug = None
         fancy_fonts = None
+        grayscale_mode = None
         settings_data = self.settings.get_input_data()
         for key, value in settings_data.items():
             match key:
@@ -89,6 +91,10 @@ class SettingsMenu:
                     fancy_fonts = value
                     if fancy_fonts is None:
                         fancy_fonts = self.__settingsconfig.fancy_fonts
+                case "grayscale_mode":
+                    grayscale_mode = value
+                    if grayscale_mode is None:
+                        grayscale_mode = self.__settingsconfig.grayscale_mode
                 case "debug":
                     debug = value
                     if debug is None:
@@ -123,7 +129,8 @@ class SettingsMenu:
                 "puzzle_2_difficulty_number": puzzle_2_difficulty_number,
                 "subtitles": subtitles,
                 "debug": debug,
-                "fancy_fonts": fancy_fonts
+                "fancy_fonts": fancy_fonts,
+                "grayscale_mode": grayscale_mode
             }
             try:
                 with open(self.__settingsconfig.config_name, 'w') as settings_file:
@@ -144,6 +151,8 @@ class SettingsMenu:
             "puzzle_2_difficulty_speed": self.__settingsconfig.puzzle_2_difficulty_speed,
             "puzzle_2_difficulty_number": self.__settingsconfig.puzzle_2_difficulty_number,
             "subtitles": self.__settingsconfig.subtitles,
+            "fancy_fonts": self.__settingsconfig.fancy_fonts,
+            "grayscale_mode": self.__settingsconfig.grayscale_mode,
             "debug": self.__settingsconfig.debug
         }
 

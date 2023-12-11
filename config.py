@@ -38,6 +38,7 @@ class SettingsConfig(metaclass=Singleton):
         self.subtitles = self.__settings.get("subtitles")
         self.debug = self.__settings.get("debug")
         self.fancy_fonts = self.__settings.get("fancy_fonts")
+        self.grayscale_mode = self.__settings.get("grayscale_mode")
 
     def __load_settings(self):
         """
@@ -86,7 +87,8 @@ class SettingsConfig(metaclass=Singleton):
             "puzzle_2_difficulty_number": 20,
             "subtitles": True,
             "debug": False,
-            "fancy_fonts": True
+            "fancy_fonts": True,
+            "grayscale_mode": False
         }
 
     def __write_settings_yml_file(self, contents: dict | None = None):

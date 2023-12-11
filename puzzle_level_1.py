@@ -92,8 +92,11 @@ class PuzzleHitbox1:
         self.__settings = SettingsConfig()
         self.visibility = True
         self.position = pos
-        self.color = (252, 0, 0)
-        self.original_color = (252, 0, 0)
+        self.color = (25, 0, 252)
+        self.original_color = (25, 0, 252)
+        if self.__settings.grayscale_mode:
+            self.color = (41, 41, 41)
+            self.original_color = (41, 41, 41)
         self.collision_time = None
         self.collision_duration= 870*self.__settings.puzzle_1_difficulty # milliseconds
         self.is_currently_collided = False
@@ -120,7 +123,10 @@ class PuzzleHitbox1:
 
                 # Collision detected, update color and record collision time
                 self.collision_time = pygame.time.get_ticks()
-                self.update_color(screen, (0, 252, 0))
+                if self.__settings.grayscale_mode:
+                    self.update_color(screen, (222, 220, 220))
+                else:
+                    self.update_color(screen, (0, 231, 252))
                 if self.is_currently_collided is False:
                     self.__logger.debug("Collision detected", f"PuzzleHitbox1[(x: {self.position[0]}, y: {self.position[1]})]")
                 self.is_currently_collided = True
@@ -140,7 +146,10 @@ class PuzzleHitbox1:
                     self.collision_time = None
                     self.is_currently_collided = False
                 else:
-                    color = (0, 252, 0)  # Keep the color green
+                    if self.__settings.grayscale_mode:
+                        color = (222, 220, 220)
+                    else:
+                        color = (0, 231, 252)
             # Use the current color if a specific color is not provided
             final_color = self.color if color is None else color
             pygame.draw.circle(screen, (0, 0, 0), self.position, 40)
