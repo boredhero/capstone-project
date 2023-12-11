@@ -58,7 +58,7 @@ def get_credits_and_attributions_text():
 
     Images Used (License):\n
     
-    All images taken by author or are Fair Use - Transformative (MIT)\n
+    All images taken by author or belong to the public domain; and are Fair Use - Transformative (MIT)\n
     """
 
 class TextScreen:

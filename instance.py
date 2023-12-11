@@ -37,7 +37,7 @@ class InstanceMain():
         self.__debug_play_puzzles_ui = ui.LevelSelectorUIElements()
         self.__player_puzzle_1 = puzzle_level_1.PlayerPuzzle1([100, 100])  # Player starting position
         self.__game_map_puzzle_1 = puzzle_level_1.GameMapPuzzle1("assets/backgrounds/missing_texture.png", self.__screen, self.__player_puzzle_1)
-        self.__game_map_puzzle_2 = puzzle_level_2.GameMapPuzzle2("assets/backgrounds/missing_texture.png", self.__screen)
+        self.__game_map_puzzle_2 = puzzle_level_2.GameMapPuzzle2(self.__screen)
         while self.__running:
             mouse_up = False
             for event in pygame.event.get():
@@ -150,7 +150,7 @@ class InstanceMain():
                 self.__game_map_puzzle_2.draw_map()
                 self.__game_map_puzzle_2.draw_hitboxes()
                 self.__game_map_puzzle_2.draw_message_box("What is your doctor's name so I can schedule an appointment?", self.__screen)
-                self.__game_map_puzzle_2.hitbox_generator.set_collidability(True)
+                self.__game_map_puzzle_2.hitbox_generator.set_clickability(True)
                 if self.__game_map_puzzle_2.hitbox_generator.is_the_one_clicked():
                     self.puzzle_2_return_to_main_menu()
                 pygame.display.flip()

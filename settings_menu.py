@@ -25,10 +25,8 @@ class SettingsMenu:
         self.resolution = [
             ("3840x2160", "3840x2160"),
             ("2650x1440", "2650x1440"),
-            ("1920x1200", "1920x1200"),
             ("1920x1080", "1920x1080"),
-            ("1280x720", "1280x720"),
-            ("800x600", "800x600")
+            ("1280x720", "1280x720")
         ]
         self.settings = pm.Menu(title="Settings",
                                 width=self.__settingsconfig.screen_width,
@@ -165,13 +163,9 @@ class SettingsMenu:
                 return 0
             case 1440:
                 return 1
-            case 1200:
-                return 2
             case 1080:
-                return 3
+                return 2
             case 720:
-                return 4
-            case 600:
-                return 5
+                return 3
             case _:
                 return 3

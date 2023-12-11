@@ -34,13 +34,17 @@ def get_intrusive_thoughts():
 
 class GameMapPuzzle2:
 
-    def __init__(self, image_path: str, screen):
+    def __init__(self, screen):
         """
         Map class for Game 1
         """
         self.__settings = SettingsConfig()
+        self.__cb = "color"
+        if self.__settings.grayscale_mode:
+            self.__cb = "bw"
         self.visibility = True
-        self.map_surface = pygame.image.load(image_path)
+        self.image_path = f"assets/backgrounds/puzzle_2/pz2_{self.__cb}_{self.__settings.screen_height}p.png"
+        self.map_surface = pygame.image.load(self.image_path)
         self.screen = screen
         self.hitbox_generator = PuzzleHitboxGenerator2(self.screen, self.__settings.puzzle_2_difficulty_number)
         self.draw_hitboxes()
