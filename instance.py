@@ -23,6 +23,8 @@ class InstanceMain():
         self.__clock = pygame.time.Clock()
         self.__running = True
         self.__playing = False
+        self.__playing_puzzle_1 = False
+        self.__playing_puzzle_2 = False
         self.__text_screen_1 = None
         self.__text_screen_1 = None
         self.__show_text_screen_1 = False
@@ -43,7 +45,7 @@ class InstanceMain():
                     if event.key == pygame.K_ESCAPE:
                         if self.__playing:
                             self.return_to_main_menu()
-            if not self.__playing:
+            if not self.check_playing_anything():
                 self.__screen.fill("black")
                 if self.__titlescreen_ui.visibility:
                     ui_action = self.__titlescreen_ui.update(pygame.mouse.get_pos(), mouse_up)
@@ -80,10 +82,12 @@ class InstanceMain():
                     self.__text_screen_1.draw()
                     if self.__text_screen_1.handle_event(event): # pylint: disable=undefined-loop-variable
                         self.__show_text_screen_1 = False
+                        self.__playing_puzzle_1 = True
                 if self.__show_text_screen_2:
                     self.__text_screen_2.draw()
                     if self.__text_screen_2.handle_event(event): # pylint: disable=undefined-loop-variable
                         self.__show_text_screen_2 = False
+                        self.__playing_puzzle_2 = True
                 mouse_up = False
             if self.__playing:
                 keys = pygame.key.get_pressed()
@@ -97,6 +101,22 @@ class InstanceMain():
                     self.__player.move("right")
                 if self.__game_map.all_hitboxes_collided():
                     self.return_to_main_menu()
+                self.__game_map.draw_map()
+                self.__game_map.draw_hitboxes()
+                self.__player.draw(self.__screen)
+                pygame.display.flip()
+            if self.__playing_puzzle_1:
+                keys = pygame.key.get_pressed()
+                if keys[pygame.K_w]:
+                    self.__player.move("up")
+                if keys[pygame.K_s]:
+                    self.__player.move("down")
+                if keys[pygame.K_a]:
+                    self.__player.move("left")
+                if keys[pygame.K_d]:
+                    self.__player.move("right")
+                if self.__game_map.all_hitboxes_collided():
+                    self.puzzle_1_return_to_main_menu()
                 self.__game_map.draw_map()
                 self.__game_map.draw_hitboxes()
                 self.__player.draw(self.__screen)
@@ -126,6 +146,26 @@ class InstanceMain():
         """
         self.__playing = False
         self.__titlescreen_ui.set_visibility(True)
+
+    def puzzle_1_return_to_main_menu(self):
+        """
+        Return to the main menu
+        """
+        self.__playing_puzzle_1 = False
+        self.__titlescreen_ui.set_visibility(True)
+
+    def puzzle_2_return_to_main_menu(self):
+        """
+        Return to the main menu
+        """
+        self.__playing_puzzle_2 = False
+        self.__titlescreen_ui.set_visibility(True)
+
+    def check_playing_anything(self):
+        """
+        Check if playing anything
+        """
+        return self.__playing or self.__playing_puzzle_1 or self.__playing_puzzle_2
 
     def graceful_exit(self):
         """
