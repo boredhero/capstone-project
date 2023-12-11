@@ -2,7 +2,8 @@ debug: true
 fancy_fonts: true
 max_fps: 60
 puzzle_1_difficulty: 10
-puzzle_2_difficulty: 10
+puzzle_2_difficulty_number: 50
+puzzle_2_difficulty_speed: 7
 screen_height: 1200
 screen_width: 1920
 subtitles: true

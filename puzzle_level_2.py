@@ -17,7 +17,7 @@ class GameMapPuzzle2:
         self.map_surface = pygame.image.load(image_path)
         self.screen = screen
         self.player = player
-        self.hitbox_generator = PuzzleHitboxGenerator2(self.screen, self.__settings.puzzle_1_difficulty)
+        self.hitbox_generator = PuzzleHitboxGenerator2(self.screen, self.__settings.puzzle_2_difficulty_number)
         self.draw_hitboxes()
 
     def draw_map(self):
@@ -99,6 +99,7 @@ class PuzzleHitbox2:
         self.text = text
         self.rect_size = (160, 80)
         self.velocity = [2, 2]
+        self.font_size= 46
         self.screen_width = self.__settings.screen_width
         self.screen_height = self.__settings.screen_height
         self.__logger = GameLogger()
@@ -175,7 +176,7 @@ class PuzzleHitbox2:
             pygame.draw.rect(screen, final_color, rect)
 
             # Draw the text
-            font = pygame.font.Font(None, 24)  # Choose an appropriate font size
+            font = pygame.font.Font(None, self.font_size)  # Choose an appropriate font size
             text_surface = font.render(self.text, True, (255, 255, 255))  # White text
             text_rect = text_surface.get_rect(center=rect.center)
             screen.blit(text_surface, text_rect)
@@ -250,7 +251,7 @@ class PuzzleHitboxGenerator2:
         screen_width, screen_height = self.__settings.screen_width, self.__settings.screen_height
         hitbox_radius = 40  # Hitboxes are a circle with r=40
         padding = 100  # Minimum space between hitboxes and screen edge
-        speed_multiplier = self.__settings.puzzle_2_difficulty
+        speed_multiplier = self.__settings.puzzle_2_difficulty_speed
 
         for _ in range(self.num_hitboxes):
             while True:
