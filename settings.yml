@@ -1,6 +1,7 @@
 debug: true
 fancy_fonts: true
 max_fps: 60
+puzzle_1_difficulty: 17
 screen_height: 1200
 screen_width: 1920
 subtitles: true
