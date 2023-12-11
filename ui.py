@@ -210,9 +210,9 @@ class TitleScreenUIElements():
         """
         self.visibility = True
         self.__settings = SettingsConfig()
-        self.__quit_button_y_pos = 600
+        self.__quit_button_y_pos = 550
         if self.__settings.debug:
-            self.__quit_button_y_pos = 650
+            self.__quit_button_y_pos = 600
         self.__title = UIElement(
             center_position=(500, 300),
             font_size=60,
@@ -228,16 +228,16 @@ class TitleScreenUIElements():
             text="Play",
             action=GameState.PLAY
         )
-        self.__load_button = UIElement(
-            center_position=(500, 450),
-            font_size=30,
-            bg_rgb=GameColors.BLACK.value,
-            text_rgb=GameColors.WHITE.value,
-            text="Load Saved Game",
-            action=GameState.LOAD_SAVE
-        )
+        #self.__load_button = UIElement(
+        #    center_position=(500, 450),
+        #    font_size=30,
+        #    bg_rgb=GameColors.BLACK.value,
+        #    text_rgb=GameColors.WHITE.value,
+        #    text="Load Saved Game",
+        #    action=GameState.LOAD_SAVE
+        #)
         self.__settings_button = UIElement(
-            center_position=(500, 500),
+            center_position=(500, 450),
             font_size=30,
             bg_rgb=GameColors.BLACK.value,
             text_rgb=GameColors.WHITE.value,
@@ -245,7 +245,7 @@ class TitleScreenUIElements():
             action=GameState.SETTINGS
         )
         self.__credits_button = UIElement(
-            center_position=(500, 550),
+            center_position=(500, 500),
             font_size=30,
             bg_rgb=GameColors.BLACK.value,
             text_rgb=GameColors.WHITE.value,
@@ -254,7 +254,7 @@ class TitleScreenUIElements():
         )
         if self.__settings.debug:
             self.__debug_play_puzzle_button = UIElement(
-                center_position=(500, 600),
+                center_position=(500, 550),
                 font_size=30,
                 bg_rgb=GameColors.BLACK.value,
                 text_rgb=GameColors.WHITE.value,
@@ -270,9 +270,9 @@ class TitleScreenUIElements():
             action=GameState.EXIT
         )
         if self.__settings.debug:
-            self.__buttons = [self.__start_button, self.__load_button, self.__settings_button, self.__credits_button, self.__debug_play_puzzle_button, self.__quit_button]
+            self.__buttons = [self.__start_button, self.__settings_button, self.__credits_button, self.__debug_play_puzzle_button, self.__quit_button]
         else:
-            self.__buttons = [self.__start_button, self.__load_button, self.__settings_button, self.__credits_button, self.__quit_button]
+            self.__buttons = [self.__start_button, self.__settings_button, self.__credits_button, self.__quit_button]
 
     @property
     def buttons(self):

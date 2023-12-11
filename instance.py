@@ -123,7 +123,7 @@ class InstanceMain():
                 if self.__game_map_puzzle_1.all_hitboxes_collided():
                     self.return_to_main_menu()
                 self.__game_map_puzzle_1.draw_map()
-                self.__game_map_puzzle_1.set_collidability(True)
+                self.__game_map_puzzle_1.hitbox_generator.set_collidability(True)
                 self.__game_map_puzzle_1.draw_hitboxes()
                 self.__player_puzzle_1.draw(self.__screen)
                 pygame.display.flip()
@@ -178,6 +178,7 @@ class InstanceMain():
         Return to the main menu
         """
         self.__playing = False
+        self.__game_map_puzzle_1.hitbox_generator.set_collidability(False)
         self.__titlescreen_ui.set_visibility(True)
 
     def puzzle_1_return_to_main_menu(self):
