@@ -103,10 +103,9 @@ class PuzzleHitbox:
                 # Collision detected, update color and record collision time
                 self.collision_time = pygame.time.get_ticks()
                 self.update_color(screen, (0, 252, 0))
+                if self.is_currently_collided is False:
+                    self.__logger.debug("Collision detected", f"PuzzleHitbox[(x: {self.position[0]}, y: {self.position[1]})]")  
                 self.is_currently_collided = True
-
-                # Log the collision
-                self.__logger.debug("Collision detected", f"PuzzleHitbox[(x: {self.position[0]}, y: {self.position[1]})]")
                 return True
         return False
 
