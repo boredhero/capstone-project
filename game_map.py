@@ -11,7 +11,7 @@ class GameMap:
         self.map_surface = pygame.image.load(image_path)
         self.screen = screen
         self.player = player
-        self.hitbox_generator = puzzle_levels.PuzzleHitboxGenerator([(100, 100), (10, 1000), (900, 500), (200, 400), (600, 700)], self.screen)
+        self.hitbox_generator = puzzle_levels.PuzzleHitboxGenerator(self.screen, 10)
         self.draw_hitboxes()
 
     def draw_map(self):

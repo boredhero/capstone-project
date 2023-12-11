@@ -1,8 +1,10 @@
+import random
 from typing import Tuple
 
 import pygame
 
 from game_logger import GameLogger
+from config import SettingsConfig
 
 class GameMap:
 
@@ -136,18 +138,19 @@ class PuzzleHitbox:
 
 class PuzzleHitboxGenerator:
 
-    def __init__(self, hitbox_coords: list[Tuple], screen):
+    def __init__(self, screen, num_hitboxes: int):
         """
         Puzzle Hitbox Generator
         """
+        self.__settings = SettingsConfig()
         self.already_drawn = False
         self.visibility = True
         self.hitboxes = []
         self.screen = screen
-        for coords in hitbox_coords:
-            x = coords[0]
-            y = coords[1]
-            self.hitboxes.append(PuzzleHitbox([x, y]))
+        self.num_hitboxes = num_hitboxes
+        # Keep above
+        self.create_hitboxes()
+        # Keep below
         self.already_drawn = True
         if self.already_drawn:
             self.draw()
@@ -182,3 +185,31 @@ class PuzzleHitboxGenerator:
         Set Player visibility
         """
         self.visibility = visibility
+
+    def create_hitboxes(self):
+        """
+        Create hitboxes that do not leave bounds of screen!
+        """
+        screen_width, screen_height = self.__settings.screen_width, self.__settings.screen_height
+        hitbox_radius = 40  # Hitboxes are a cicle with r=40
+        padding = 20  # Minimum space between hitboxes and screen edge
+        for _ in range(self.num_hitboxes):
+            while True:
+                x = random.randint(hitbox_radius, screen_width - hitbox_radius)
+                y = random.randint(hitbox_radius, screen_height - hitbox_radius)
+                new_hitbox = PuzzleHitbox([x, y])
+                if not self.hitbox_overlap(new_hitbox, hitbox_radius + padding):
+                    self.hitboxes.append(new_hitbox)
+                    break
+
+    def hitbox_overlap(self, new_hitbox, min_distance):
+        """
+        Check if a hitbox overlaps with existing hitboxes 
+        """
+        for hitbox in self.hitboxes:
+            dx = hitbox.position[0] - new_hitbox.position[0]
+            dy = hitbox.position[1] - new_hitbox.position[1]
+            distance = (dx**2 + dy**2)**0.5
+            if distance < min_distance:
+                return True
+        return False
