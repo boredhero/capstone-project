@@ -31,6 +31,7 @@ class SettingsConfig(metaclass=Singleton):
         self.__load_settings()
         self.screen_width = self.__settings.get("screen_width")
         self.screen_height = self.__settings.get("screen_height")
+        self.window_mode = self.__settings.get("window_mode")
         self.max_fps = self.__settings.get("max_fps")
         self.puzzle_1_difficulty = self.__settings.get("puzzle_1_difficulty")
         self.puzzle_1_difficulty_mult = self.__settings.get("puzzle_1_difficulty_mult")
@@ -41,6 +42,18 @@ class SettingsConfig(metaclass=Singleton):
         self.debug = self.__settings.get("debug")
         self.fancy_fonts = self.__settings.get("fancy_fonts")
         self.grayscale_mode = self.__settings.get("grayscale_mode")
+        # Artificially constructed helpers
+        match self.screen_height:
+            case 2160:
+                self.screen_size_speed_multiplier = 2
+            case 1440:
+                self.screen_size_speed_multiplier = 1.5
+            case 1080:
+                self.screen_size_speed_multiplier = 1
+            case 720:
+                self.screen_size_speed_multiplier = 0.8
+            case _:
+                self.screen_size_speed_multipliere = 1
 
     def __load_settings(self):
         """
@@ -83,6 +96,7 @@ class SettingsConfig(metaclass=Singleton):
         return {
             "screen_width": 1920,
             "screen_height": 1080,
+            "window_mode": "windowed",
             "max_fps": 60,
             "puzzle_1_difficulty": 10,
             "puzzle_1_difficulty_mult": 870,

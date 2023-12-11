@@ -59,7 +59,7 @@ class PlayerPuzzle1:
         self.__settings = SettingsConfig()
         self.visibility = True
         self.position = start_pos
-        self.speed = self.__settings.puzzle_1_difficulty_speed
+        self.speed = self.__settings.puzzle_1_difficulty_speed*self.__settings.screen_size_speed_multiplier
 
     def move(self, direction):
         """

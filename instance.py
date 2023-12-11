@@ -19,7 +19,19 @@ class InstanceMain():
         self.__config = GameConfig()
         self.__settings = SettingsConfig()
         self.init_logger()
-        self.__screen = pygame.display.set_mode((self.__settings.screen_width, self.__settings.screen_height)) # Set the window dimensions
+        match self.__settings.window_mode:
+            case "windowed":
+                args = pygame.SCALED | pygame.DOUBLEBUF # pylint: disable=unused-variable
+                self.__screen = pygame.display.set_mode((self.__settings.screen_width, self.__settings.screen_height))
+            case "fullscreen":
+                args = pygame.SCALED | pygame.FULLSCREEN | pygame.DOUBLEBUF # pylint: disable=unused-variable
+                self.__screen = pygame.display.set_mode((self.__settings.screen_width, self.__settings.screen_height), pygame.FULLSCREEN)
+            case "borderless":
+                args = pygame.SCALED | pygame.NOFRAME | pygame.DOUBLEBUF # pylint: disable=unused-variable
+                self.__screen = pygame.display.set_mode((self.__settings.screen_width, self.__settings.screen_height), pygame.NOFRAME)
+            case _:
+                args = pygame.SCALED | pygame.DOUBLEBUF # pylint: disable=unused-variable
+                self.__screen = pygame.display.set_mode((self.__settings.screen_width, self.__settings.screen_height))
         pygame.display.set_caption(f"{self.__config.title} v{self.__config.version}")
         self.__clock = pygame.time.Clock()
         pygame.init()
@@ -73,7 +85,20 @@ class InstanceMain():
             if self.__ginr.needs_reload:
                 self.__settings.refresh_from_disk()
                 self.__ginr.set_needs_reload(False)
-                self.__screen = pygame.display.set_mode((self.__settings.screen_width, self.__settings.screen_height))
+                match self.__settings.window_mode:
+                    case "windowed":
+                        args = pygame.SCALED | pygame.DOUBLEBUF # pylint: disable=unused-variable
+                        self.__screen = pygame.display.set_mode((self.__settings.screen_width, self.__settings.screen_height))
+                    case "fullscreen":
+                        args = pygame.SCALED | pygame.FULLSCREEN | pygame.DOUBLEBUF # pylint: disable=unused-variable
+                        self.__screen = pygame.display.set_mode((self.__settings.screen_width, self.__settings.screen_height), pygame.FULLSCREEN)
+                    case "borderless":
+                        args = pygame.SCALED | pygame.NOFRAME | pygame.DOUBLEBUF # pylint: disable=unused-variable
+                        self.__screen = pygame.display.set_mode((self.__settings.screen_width, self.__settings.screen_height), pygame.NOFRAME)
+                    case _:
+                        args = pygame.SCALED | pygame.DOUBLEBUF # pylint: disable=unused-variable
+                        self.__screen = pygame.display.set_mode((self.__settings.screen_width, self.__settings.screen_height))
+                #self.__screen = pygame.display.set_mode((self.__settings.screen_width, self.__settings.screen_height))
                 self.__init__() # pylint: disable=non-parent-init-called, unnecessary-dunder-call
             mouse_up = False
             for event in pygame.event.get():

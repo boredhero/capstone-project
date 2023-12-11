@@ -47,6 +47,11 @@ class SettingsMenu:
             ("1920x1080", "1920x1080"),
             ("1280x720", "1280x720")
         ]
+        self.window_mode = [
+            ("Windowed", "Windowed"),
+            ("Fullscreen", "Fullscreen"),
+            ("Borderless", "Borderless")
+        ]
         self.settings = pm.Menu(title="Settings",
                                 width=self.__settingsconfig.screen_width,
                                 height=self.__settingsconfig.screen_height,
@@ -55,7 +60,9 @@ class SettingsMenu:
         self.settings._theme.widget_font_color = GameColors.WHITE.value
         self.settings._theme.widget_alignment = pm.locals.ALIGN_LEFT
         current_res = self.__get_current_resolution_index()
-        self.settings.add.dropselect(title="Screen Resolution: ", items=self.resolution, default=current_res, dropselect_id="screen_resolution", selection_box_height=6, open_middle=True)
+        current_window_mode = self.__get_current_window_mode_index()
+        self.settings.add.dropselect(title="Screen Resolution: ", items=self.resolution, default=current_res, dropselect_id="screen_resolution", selection_box_height=6, open_middle=False)
+        self.settings.add.dropselect(title="Window Mode: ", items=self.window_mode, default=current_window_mode, dropselect_id="window_mode", selection_box_height=6, open_middle=False)
         self.settings.add.toggle_switch(title="Subtitles", default=self.__settingsconfig.subtitles, toggleswitch_id="subtitles")
         self.settings.add.toggle_switch(title="Debug Mode", default=self.__settingsconfig.debug, toggleswitch_id="debug")
         self.settings.add.toggle_switch(title="Fancy Fonts", default=self.__settingsconfig.fancy_fonts, toggleswitch_id="fancy_fonts")
@@ -106,6 +113,7 @@ class SettingsMenu:
         # getting the data using "get_input_data" method of the Menu class
         screen_width = None
         screen_height = None
+        window_mode = None
         max_fps = None
         puzzle_1_difficulty = None
         puzzle_1_difficulty_mult = None
@@ -126,6 +134,12 @@ class SettingsMenu:
                     else:
                         screen_width = self.__settingsconfig.screen_width
                         screen_height = self.__settingsconfig.screen_height
+                case "window_mode":
+                    window_mode = value[0][0]
+                    if window_mode is not None:
+                        window_mode = window_mode.lower()
+                    else:
+                        window_mode = self.__settingsconfig.window_mode
                 case "subtitles":
                     subtitles = value
                     if subtitles is None:
@@ -174,6 +188,7 @@ class SettingsMenu:
             wd = {
                 "screen_width": screen_width,
                 "screen_height": screen_height,
+                "window_mode": window_mode,
                 "max_fps": max_fps,
                 "puzzle_1_difficulty": puzzle_1_difficulty,
                 "puzzle_1_difficulty_mult": puzzle_1_difficulty_mult,
@@ -200,6 +215,7 @@ class SettingsMenu:
         return {
             "screen_width": self.__settingsconfig.screen_width,
             "screen_height": self.__settingsconfig.screen_height,
+            "window_mode": self.__settingsconfig.window_mode,
             "max_fps": self.__settingsconfig.max_fps,
             "puzzle_1_difficulty": self.__settingsconfig.puzzle_1_difficulty,
             "puzzle_1_difficulty_mult": self.__settingsconfig.puzzle_1_difficulty_mult,
@@ -227,3 +243,17 @@ class SettingsMenu:
                 return 3
             case _:
                 return 3
+
+    def __get_current_window_mode_index(self) -> int:
+        """
+        Get the current window mode index
+        """
+        match self.__settingsconfig.window_mode:
+            case "windowed":
+                return 0
+            case "fullscreen":
+                return 1
+            case "borderless":
+                return 2
+            case _:
+                return 0
