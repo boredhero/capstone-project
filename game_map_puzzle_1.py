@@ -1,20 +1,20 @@
 import pygame
-import puzzle_levels
+import puzzle_level_1
 
 from config import SettingsConfig
 
-class GameMap:
+class GameMapPuzzle1:
 
     def __init__(self, image_path: str, screen, player):
         """
-        Basic Map Class
+        Map class for Game 1
         """
         self.__settings = SettingsConfig()
         self.visibility = True
         self.map_surface = pygame.image.load(image_path)
         self.screen = screen
         self.player = player
-        self.hitbox_generator = puzzle_levels.PuzzleHitboxGenerator(self.screen, self.__settings.puzzle_1_difficulty)
+        self.hitbox_generator = puzzle_level_1.PuzzleHitboxGenerator(self.screen, self.__settings.puzzle_1_difficulty)
         self.draw_hitboxes()
 
     def draw_map(self):
@@ -43,7 +43,7 @@ class GameMap:
         """
         self.visibility = visibility
 
-class Player:
+class PlayerPuzzle1:
 
     def __init__(self, start_pos):
         """
