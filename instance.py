@@ -185,6 +185,7 @@ class InstanceMain():
         Return to the main menu
         """
         self.__playing_puzzle_1 = False
+        self.__game_map_puzzle_1.hitbox_generator.set_collidability(False)
         self.__titlescreen_ui.set_visibility(True)
 
     def puzzle_2_return_to_main_menu(self):
@@ -192,6 +193,7 @@ class InstanceMain():
         Return to the main menu
         """
         self.__playing_puzzle_2 = False
+        self.__game_map_puzzle_2.hitbox_generator.set_clickability(False)
         self.__titlescreen_ui.set_visibility(True)
 
     def check_playing_anything(self):
