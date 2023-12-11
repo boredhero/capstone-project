@@ -39,10 +39,10 @@ class GameMapPuzzle2:
         Map class for Game 1
         """
         self.__settings = SettingsConfig()
+        self.visibility = True
         self.__cb = "color"
         if self.__settings.grayscale_mode:
             self.__cb = "bw"
-        self.visibility = True
         self.image_path = f"assets/backgrounds/puzzle_2/pz2_{self.__cb}_{self.__settings.screen_height}p.png"
         self.map_surface = pygame.image.load(self.image_path)
         self.screen = screen
