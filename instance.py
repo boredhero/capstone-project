@@ -143,6 +143,7 @@ class InstanceMain():
                     self.__player_puzzle_2.move("right")
                 if self.__game_map_puzzle_2.all_hitboxes_collided():
                     self.puzzle_2_return_to_main_menu()
+                self.__game_map_puzzle_2.hitbox_generator.update_hitbox_positions()
                 self.__game_map_puzzle_2.draw_map()
                 self.__game_map_puzzle_2.draw_hitboxes()
                 self.__player_puzzle_2.draw(self.__screen)
