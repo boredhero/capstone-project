@@ -17,7 +17,7 @@ class GameMapPuzzle1:
         self.map_surface = pygame.image.load(image_path)
         self.screen = screen
         self.player = player
-        self.hitbox_generator = PuzzleHitboxGenerator(self.screen, self.__settings.puzzle_1_difficulty)
+        self.hitbox_generator = PuzzleHitboxGenerator1(self.screen, self.__settings.puzzle_1_difficulty)
         self.draw_hitboxes()
 
     def draw_map(self):
@@ -83,7 +83,7 @@ class PlayerPuzzle1:
         """
         self.visibility = visibility
 
-class PuzzleHitbox:
+class PuzzleHitbox1:
 
     def __init__(self, pos):
         """
@@ -152,7 +152,7 @@ class PuzzleHitbox:
         """
         self.visibility = visibility
 
-class PuzzleHitboxGenerator:
+class PuzzleHitboxGenerator1:
 
     def __init__(self, screen, num_hitboxes: int):
         """
@@ -213,7 +213,7 @@ class PuzzleHitboxGenerator:
             while True:
                 x = random.randint(hitbox_radius, screen_width - hitbox_radius)
                 y = random.randint(hitbox_radius, screen_height - hitbox_radius)
-                new_hitbox = PuzzleHitbox([x, y])
+                new_hitbox = PuzzleHitbox1([x, y])
                 if not self.hitbox_overlap(new_hitbox, hitbox_radius + padding):
                     self.hitboxes.append(new_hitbox)
                     break

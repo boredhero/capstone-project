@@ -29,7 +29,7 @@ class InstanceMain():
         self.__text_screen_1 = None
         self.__show_text_screen_1 = False
         self.__show_text_screen_2 = False
-        self.__pygame_init = pygame.init() #pylint: disable=unused-private-member
+        pygame.init()
         self.__titlescreen_ui = ui.TitleScreenUIElements()
         self.__debug_play_puzzles_ui = ui.LevelSelectorUIElements()
         self.__player = puzzle_level_1.PlayerPuzzle1([100, 100])  # Player starting position
