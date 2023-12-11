@@ -118,13 +118,13 @@ class InstanceMain():
                 mouse_up = False
             if self.__playing:
                 keys = pygame.key.get_pressed()
-                if keys[pygame.K_w]:
+                if keys[pygame.K_w] or keys[pygame.K_UP]:
                     self.__player_puzzle_1.move("up")
-                if keys[pygame.K_s]:
+                if keys[pygame.K_s] or keys[pygame.K_DOWN]:
                     self.__player_puzzle_1.move("down")
-                if keys[pygame.K_a]:
+                if keys[pygame.K_a] or keys[pygame.K_LEFT]:
                     self.__player_puzzle_1.move("left")
-                if keys[pygame.K_d]:
+                if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
                     self.__player_puzzle_1.move("right")
                 if keys[pygame.K_n]:
                     self.__game_map_puzzle_1.hitbox_generator.reset_hitboxes()
@@ -137,13 +137,13 @@ class InstanceMain():
                 pygame.display.flip()
             if self.__playing_puzzle_1:
                 keys = pygame.key.get_pressed()
-                if keys[pygame.K_w]:
+                if keys[pygame.K_w] or keys[pygame.K_UP]:
                     self.__player_puzzle_1.move("up")
-                if keys[pygame.K_s]:
+                if keys[pygame.K_s] or keys[pygame.K_DOWN]:
                     self.__player_puzzle_1.move("down")
-                if keys[pygame.K_a]:
+                if keys[pygame.K_a] or keys[pygame.K_LEFT]:
                     self.__player_puzzle_1.move("left")
-                if keys[pygame.K_d]:
+                if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
                     self.__player_puzzle_1.move("right")
                 if keys[pygame.K_n]:
                     self.__game_map_puzzle_1.hitbox_generator.reset_hitboxes()
