@@ -4,7 +4,7 @@ from game_logger import GameLogger
 from config import GameConfig, SettingsConfig
 import ui
 from settings_menu import SettingsMenu
-import game_map_puzzle_1
+import puzzle_level_1
 import text_screen
 
 class InstanceMain():
@@ -32,8 +32,8 @@ class InstanceMain():
         self.__pygame_init = pygame.init() #pylint: disable=unused-private-member
         self.__titlescreen_ui = ui.TitleScreenUIElements()
         self.__debug_play_puzzles_ui = ui.LevelSelectorUIElements()
-        self.__player = game_map_puzzle_1.PlayerPuzzle1([100, 100])  # Player starting position
-        self.__game_map_puzzle_1 = game_map_puzzle_1.GameMapPuzzle1("assets/backgrounds/missing_texture.png", self.__screen, self.__player)
+        self.__player = puzzle_level_1.PlayerPuzzle1([100, 100])  # Player starting position
+        self.__game_map_puzzle_1 = puzzle_level_1.GameMapPuzzle1("assets/backgrounds/missing_texture.png", self.__screen, self.__player)
         while self.__running:
             mouse_up = False
             for event in pygame.event.get():
