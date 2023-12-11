@@ -1,6 +1,7 @@
 # Instance
+## A game about subjective experiences of mental health issues
 
-My capstone project - A game about depression and anxiety - Working Title: Instance
+My DNID Capstone Project
 
 # How to run the game?
 
@@ -10,4 +11,4 @@ Please set up python + pipenv. Run `pipenv install` and `pipenv shell` from insi
 
 ## License
 
-MIT, see LICENSE file
+GPLv3, see LICENSE file
