@@ -72,12 +72,13 @@ class PuzzleHitbox:
         """
         Puzzle Hitbox
         """
+        self.__settings = SettingsConfig()
         self.visibility = True
         self.position = pos
         self.color = (252, 0, 0)
         self.original_color = (252, 0, 0)
         self.collision_time = None
-        self.collision_duration = 8000 # milliseconds
+        self.collision_duration= 860*self.__settings.puzzle_1_difficulty # milliseconds
         self.is_currently_collided = False
         self.__logger = GameLogger()
 
