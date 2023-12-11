@@ -5,6 +5,7 @@ from config import GameConfig, SettingsConfig
 import ui
 from settings_menu import SettingsMenu
 import puzzle_level_1
+import puzzle_level_2
 import text_screen
 
 class InstanceMain():
@@ -32,8 +33,10 @@ class InstanceMain():
         pygame.init()
         self.__titlescreen_ui = ui.TitleScreenUIElements()
         self.__debug_play_puzzles_ui = ui.LevelSelectorUIElements()
-        self.__player = puzzle_level_1.PlayerPuzzle1([100, 100])  # Player starting position
-        self.__game_map_puzzle_1 = puzzle_level_1.GameMapPuzzle1("assets/backgrounds/missing_texture.png", self.__screen, self.__player)
+        self.__player_puzzle_1 = puzzle_level_1.PlayerPuzzle1([100, 100])  # Player starting position
+        self.__player_puzzle_2 = puzzle_level_2.PlayerPuzzle2([100, 100])  # Player starting position
+        self.__game_map_puzzle_1 = puzzle_level_1.GameMapPuzzle1("assets/backgrounds/missing_texture.png", self.__screen, self.__player_puzzle_1)
+        self.__game_map_puzzle_2 = puzzle_level_2.GameMapPuzzle2("assets/backgrounds/missing_texture.png", self.__screen, self.__player_puzzle_2)
         while self.__running:
             mouse_up = False
             for event in pygame.event.get():
@@ -71,12 +74,12 @@ class InstanceMain():
                             case ui.GameState.PLAY_PUZZLE_1:
                                 self.__show_text_screen_1 = True
                                 self.__debug_play_puzzles_ui.set_visibility(False)
-                                self.__text_screen_1 = text_screen.TextScreen(self.__screen, text_screen.get_puzzle_1_intro_text(), "OK")
+                                self.__text_screen_1 = text_screen.TextScreen(self.__screen, text_screen.get_puzzle_1_intro_text(), "Continue")
                                 self.__text_screen_1.draw()
                             case ui.GameState.PLAY_PUZZLE_2:
                                 self.__show_text_screen_2 = True
                                 self.__debug_play_puzzles_ui.set_visibility(False)
-                                self.__text_screen_2 = text_screen.TextScreen(self.__screen, text_screen.get_puzzle_2_intro_text(), "OK")
+                                self.__text_screen_2 = text_screen.TextScreen(self.__screen, text_screen.get_puzzle_2_intro_text(), "Continue")
                                 self.__text_screen_2.draw()
                 if self.__show_text_screen_1:
                     self.__text_screen_1.draw()
@@ -92,34 +95,50 @@ class InstanceMain():
             if self.__playing:
                 keys = pygame.key.get_pressed()
                 if keys[pygame.K_w]:
-                    self.__player.move("up")
+                    self.__player_puzzle_1.move("up")
                 if keys[pygame.K_s]:
-                    self.__player.move("down")
+                    self.__player_puzzle_1.move("down")
                 if keys[pygame.K_a]:
-                    self.__player.move("left")
+                    self.__player_puzzle_1.move("left")
                 if keys[pygame.K_d]:
-                    self.__player.move("right")
+                    self.__player_puzzle_1.move("right")
                 if self.__game_map_puzzle_1.all_hitboxes_collided():
                     self.return_to_main_menu()
                 self.__game_map_puzzle_1.draw_map()
                 self.__game_map_puzzle_1.draw_hitboxes()
-                self.__player.draw(self.__screen)
+                self.__player_puzzle_1.draw(self.__screen)
                 pygame.display.flip()
             if self.__playing_puzzle_1:
                 keys = pygame.key.get_pressed()
                 if keys[pygame.K_w]:
-                    self.__player.move("up")
+                    self.__player_puzzle_1.move("up")
                 if keys[pygame.K_s]:
-                    self.__player.move("down")
+                    self.__player_puzzle_1.move("down")
                 if keys[pygame.K_a]:
-                    self.__player.move("left")
+                    self.__player_puzzle_1.move("left")
                 if keys[pygame.K_d]:
-                    self.__player.move("right")
+                    self.__player_puzzle_1.move("right")
                 if self.__game_map_puzzle_1.all_hitboxes_collided():
                     self.puzzle_1_return_to_main_menu()
                 self.__game_map_puzzle_1.draw_map()
                 self.__game_map_puzzle_1.draw_hitboxes()
-                self.__player.draw(self.__screen)
+                self.__player_puzzle_1.draw(self.__screen)
+                pygame.display.flip()
+            if self.__playing_puzzle_2:
+                keys = pygame.key.get_pressed()
+                if keys[pygame.K_w]:
+                    self.__player_puzzle_2.move("up")
+                if keys[pygame.K_s]:
+                    self.__player_puzzle_2.move("down")
+                if keys[pygame.K_a]:
+                    self.__player_puzzle_2.move("left")
+                if keys[pygame.K_d]:
+                    self.__player_puzzle_2.move("right")
+                if self.__game_map_puzzle_2.all_hitboxes_collided():
+                    self.puzzle_2_return_to_main_menu()
+                self.__game_map_puzzle_2.draw_map()
+                self.__game_map_puzzle_2.draw_hitboxes()
+                self.__player_puzzle_2.draw(self.__screen)
                 pygame.display.flip()
             self.__titlescreen_ui.draw(self.__screen)
             if self.__debug_play_puzzles_ui.visibility:
