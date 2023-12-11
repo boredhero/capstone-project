@@ -135,6 +135,7 @@ class InstanceMain():
                 self.__game_map_puzzle_2.hitbox_generator.update_hitbox_positions()
                 self.__game_map_puzzle_2.draw_map()
                 self.__game_map_puzzle_2.draw_hitboxes()
+                self.__game_map_puzzle_2.draw_message_box("What is your doctor's name so I can schedule an appointment?", self.__screen)
                 if self.__game_map_puzzle_2.hitbox_generator.is_the_one_clicked():
                     self.puzzle_2_return_to_main_menu()
                 pygame.display.flip()

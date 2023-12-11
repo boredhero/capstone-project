@@ -52,6 +52,34 @@ class GameMapPuzzle2:
         if self.visibility:
             self.screen.blit(self.map_surface, (0, 0))
 
+    def draw_message_box(self, text: str, screen):
+        """
+        Draw a static box in the top left corner with text
+        """
+        box_margin = 20  # Margin from the screen edge
+        box_padding = 10  # Padding around the text
+
+        # Render the text
+        font = pygame.font.Font(None, 50)  # Choose an appropriate font size
+        text_surface = font.render(text, True, (255, 255, 255))  # White text
+        text_width, text_height = text_surface.get_size()
+
+        # Calculate box size based on text dimensions
+        box_width = text_width + (box_padding * 2)
+        box_height = text_height + (box_padding * 2)
+
+        # Create the box rect
+        box_rect = pygame.Rect(box_margin, box_margin, box_width, box_height)
+
+        # Draw the box
+        pygame.draw.rect(screen, (0, 0, 0), box_rect)  # Black box
+
+        # Calculate text position
+        text_rect = text_surface.get_rect(center=box_rect.center)
+
+        # Blit the text onto the screen
+        screen.blit(text_surface, text_rect)
+
     def draw_hitboxes(self):
         """
         Draw hitboxes on screen
@@ -73,8 +101,8 @@ class PuzzleHitbox2:
         self.__settings = SettingsConfig()
         self.visibility = True
         self.position = pos
-        self.color = (252, 0, 0)
-        self.original_color = (252, 0, 0)
+        self.color = (191, 71, 119)
+        self.original_color = (191, 71, 119)
         self.click_time = None
         self.click_duration= 870*self.__settings.puzzle_1_difficulty # milliseconds
         self.is_currently_clicked = False
@@ -124,7 +152,8 @@ class PuzzleHitbox2:
             if rect.collidepoint(mouse_pos):
                 current_time = pygame.time.get_ticks()
                 self.click_time = current_time
-                self.update_color(screen, (0, 252, 0))
+                if not self.am_the_one:  # Only change color if it's not "the one"
+                    self.update_color(screen, (116, 56, 156))
                 self.is_currently_clicked = True
                 self.__logger.debug("Click detected", f"PuzzleHitbox2[(x: {self.position[0]}, y: {self.position[1]})]")
                 return True
@@ -136,27 +165,19 @@ class PuzzleHitbox2:
         """
         if self.visibility:
             current_time = pygame.time.get_ticks()
-
-            # Check if the hitbox needs to revert back to its original color
             if self.click_time:
                 if current_time - self.click_time > self.click_duration:
-                    self.color = self.original_color  # Revert to original color
+                    self.color = self.original_color
                     self.click_time = None
                     self.is_currently_clicked = False
                 else:
-                    color = (0, 252, 0)  # Keep the color green
-
-            # Calculate text dimensions
+                    color = (116, 56, 156)
             font = pygame.font.Font(None, self.font_size)
             text_surface = font.render(self.text, True, (255, 255, 255))
             text_width, text_height = text_surface.get_size()
-
-            # Adjust rectangle size to fit text
-            padding = 10  # Additional padding around text
+            padding = 10
             rect_width = max(text_width + padding, self.rect_size[0])
             rect_height = max(text_height + padding, self.rect_size[1])
-
-            # Draw the rectangle
             rect = pygame.Rect(
                 self.position[0] - rect_width // 2,
                 self.position[1] - rect_height // 2,
@@ -164,8 +185,6 @@ class PuzzleHitbox2:
                 rect_height
             )
             pygame.draw.rect(screen, self.color if color is None else color, rect)
-
-            # Draw the text
             text_rect = text_surface.get_rect(center=rect.center)
             screen.blit(text_surface, text_rect)
 
@@ -187,9 +206,7 @@ class PuzzleHitboxGenerator2:
         self.hitboxes = []
         self.screen = screen
         self.num_hitboxes = num_hitboxes
-        # Keep above
         self.create_hitboxes()
-        # Keep below
         self.already_drawn = True
         if self.already_drawn:
             self.draw()
@@ -254,7 +271,7 @@ class PuzzleHitboxGenerator2:
         if self.hitboxes:
             chosen_one = random.choice(self.hitboxes)
             chosen_one.am_the_one = True
-            chosen_one.text = "Click me!"
+            chosen_one.text = "Dr. Best"
 
     def is_the_one_clicked(self):
         """
