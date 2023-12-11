@@ -78,11 +78,11 @@ class InstanceMain():
                                 self.__text_screen_2.draw()
                 if self.__show_text_screen_1:
                     self.__text_screen_1.draw()
-                    if self.__text_screen_1.handle_event(event):
+                    if self.__text_screen_1.handle_event(event): # pylint: disable=undefined-loop-variable
                         self.__show_text_screen_1 = False
                 if self.__show_text_screen_2:
                     self.__text_screen_2.draw()
-                    if self.__text_screen_2.handle_event(event):
+                    if self.__text_screen_2.handle_event(event): # pylint: disable=undefined-loop-variable
                         self.__show_text_screen_2 = False
                 mouse_up = False
             if self.__playing:
