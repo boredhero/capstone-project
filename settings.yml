@@ -4,7 +4,7 @@ grayscale_mode: false
 max_fps: 60
 puzzle_1_difficulty: 10
 puzzle_1_difficulty_mult: 870
-puzzle_1_difficulty_speed: 7
+puzzle_1_difficulty_speed: 10
 puzzle_2_difficulty_number: 50
 puzzle_2_difficulty_speed: 11
 screen_height: 1080
