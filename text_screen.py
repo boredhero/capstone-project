@@ -31,6 +31,36 @@ def get_puzzle_2_intro_text():
     puzzle mechanic because I believe it simulates the difficulty of sifting through intrusive looping thoughts to get a word out.\n
     """
 
+def get_credits_and_attributions_text():
+    """
+    Get the credits and attributions text
+    """
+    return """
+    Credits & Attributions:\n
+
+    Author: Noah Martino\n
+    License: GPLv3 License (see LICENSE file)\n
+    Source Available At: https://github.com/boredhero/capstone-project\n
+
+    Languages and Libraries Used (License):\n
+
+    python 3.11.6 (PSF)\n
+    pygame (LGPL)\n
+    pygame-menu (MIT)\n
+    python-dotenv (BSD 3-Clause)\n
+    pytz (MIT)\n
+    pyyaml (MIT)\n
+        
+    Fonts Used (License):\n
+
+    Porter Sans Inline Block (SIL Open Font License)\n
+    System Default Fonts (Various)\n
+
+    Images Used (License):\n
+    
+    All images taken by author or are Fair Use - Transformative (MIT)\n
+    """
+
 class TextScreen:
 
     def __init__(self, screen, text, button_text="OK"):
