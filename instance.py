@@ -48,6 +48,13 @@ class InstanceMain():
                     if event.key == pygame.K_ESCAPE:
                         if self.__playing:
                             self.return_to_main_menu()
+                        if self.__playing_puzzle_1:
+                            self.puzzle_1_return_to_main_menu()
+                        if self.__playing_puzzle_2:
+                            self.puzzle_2_return_to_main_menu()
+                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:  # Left mouse button
+                    mouse_pos = pygame.mouse.get_pos()
+                    self.__game_map_puzzle_2.hitbox_generator.check_click(mouse_pos)
             if not self.check_playing_anything():
                 self.__screen.fill("black")
                 if self.__titlescreen_ui.visibility:
