@@ -6,7 +6,7 @@ import pygame
 from game_logger import GameLogger
 from config import SettingsConfig
 
-class GameMapPuzzle1:
+class GameMapPuzzle2:
 
     def __init__(self, image_path: str, screen, player):
         """
@@ -17,7 +17,7 @@ class GameMapPuzzle1:
         self.map_surface = pygame.image.load(image_path)
         self.screen = screen
         self.player = player
-        self.hitbox_generator = PuzzleHitboxGenerator(self.screen, self.__settings.puzzle_1_difficulty)
+        self.hitbox_generator = PuzzleHitboxGenerator2(self.screen, self.__settings.puzzle_1_difficulty)
         self.draw_hitboxes()
 
     def draw_map(self):
@@ -46,7 +46,7 @@ class GameMapPuzzle1:
         """
         self.visibility = visibility
 
-class PlayerPuzzle1:
+class PlayerPuzzle2:
 
     def __init__(self, start_pos):
         """
@@ -83,7 +83,7 @@ class PlayerPuzzle1:
         """
         self.visibility = visibility
 
-class PuzzleHitbox:
+class PuzzleHitbox2:
 
     def __init__(self, pos):
         """
@@ -107,7 +107,7 @@ class PuzzleHitbox:
         self.draw(screen, self.color)
         pygame.display.flip()
 
-    def check_collision(self, screen, player: PlayerPuzzle1):
+    def check_collision(self, screen, player: PlayerPuzzle2):
         """
         Check if player collides with hitbox
         """
@@ -152,7 +152,7 @@ class PuzzleHitbox:
         """
         self.visibility = visibility
 
-class PuzzleHitboxGenerator:
+class PuzzleHitboxGenerator2:
 
     def __init__(self, screen, num_hitboxes: int):
         """
@@ -172,7 +172,7 @@ class PuzzleHitboxGenerator:
             self.draw()
         self.draw()
 
-    def check_collision(self, player: PlayerPuzzle1):
+    def check_collision(self, player: PlayerPuzzle2):
         """
         Check if player collides with hitbox
         """
@@ -213,7 +213,7 @@ class PuzzleHitboxGenerator:
             while True:
                 x = random.randint(hitbox_radius, screen_width - hitbox_radius)
                 y = random.randint(hitbox_radius, screen_height - hitbox_radius)
-                new_hitbox = PuzzleHitbox([x, y])
+                new_hitbox = PuzzleHitbox2([x, y])
                 if not self.hitbox_overlap(new_hitbox, hitbox_radius + padding):
                     self.hitboxes.append(new_hitbox)
                     break
