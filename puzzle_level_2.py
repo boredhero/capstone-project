@@ -97,8 +97,26 @@ class PuzzleHitbox2:
         self.collision_duration= 870*self.__settings.puzzle_1_difficulty # milliseconds
         self.is_currently_collided = False
         self.text = text
-        self.rect_size = (80, 40)
+        self.rect_size = (160, 80)
+        self.velocity = [2, 2]
+        self.screen_width = self.__settings.screen_width
+        self.screen_height = self.__settings.screen_height
         self.__logger = GameLogger()
+
+    def update_position(self):
+        """
+        Update the position of the hitbox and bounce off screen edges
+        """
+        self.position[0] += self.velocity[0]
+        self.position[1] += self.velocity[1]
+
+        # Bounce off left/right edges
+        if self.position[0] <= 0 or self.position[0] >= self.screen_width:
+            self.velocity[0] *= -1
+
+        # Bounce off top/bottom edges
+        if self.position[1] <= 0 or self.position[1] >= self.screen_height:
+            self.velocity[1] *= -1
 
     def update_color(self, screen, color: Tuple[int, int, int]):
         """
@@ -218,18 +236,34 @@ class PuzzleHitboxGenerator2:
         """
         self.visibility = visibility
 
+    def update_hitbox_positions(self):
+        """
+        Update the positions of all hitboxes
+        """
+        for hitbox in self.hitboxes:
+            hitbox.update_position()
+
     def create_hitboxes(self):
         """
-        Create hitboxes that do not leave bounds of screen!
+        Create hitboxes that do not leave bounds of screen
         """
         screen_width, screen_height = self.__settings.screen_width, self.__settings.screen_height
-        hitbox_radius = 40  # Hitboxes are a cicle with r=40
+        hitbox_radius = 40  # Hitboxes are a circle with r=40
         padding = 100  # Minimum space between hitboxes and screen edge
+        speed_multiplier = self.__settings.puzzle_2_difficulty
+
         for _ in range(self.num_hitboxes):
             while True:
                 x = random.randint(hitbox_radius, screen_width - hitbox_radius)
                 y = random.randint(hitbox_radius, screen_height - hitbox_radius)
                 new_hitbox = PuzzleHitbox2([x, y], "test")
+
+                # Randomized velocity with a speed multiplier
+                new_hitbox.velocity = [
+                    random.choice([-2, -1, 1, 2]) * speed_multiplier,
+                    random.choice([-2, -1, 1, 2]) * speed_multiplier
+                ]
+
                 if not self.hitbox_overlap(new_hitbox, hitbox_radius + padding):
                     self.hitboxes.append(new_hitbox)
                     break
