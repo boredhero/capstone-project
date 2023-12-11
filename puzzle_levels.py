@@ -78,7 +78,7 @@ class PuzzleHitbox:
         self.color = (252, 0, 0)
         self.original_color = (252, 0, 0)
         self.collision_time = None
-        self.collision_duration= 860*self.__settings.puzzle_1_difficulty # milliseconds
+        self.collision_duration= 870*self.__settings.puzzle_1_difficulty # milliseconds
         self.is_currently_collided = False
         self.__logger = GameLogger()
 
@@ -191,7 +191,7 @@ class PuzzleHitboxGenerator:
         """
         screen_width, screen_height = self.__settings.screen_width, self.__settings.screen_height
         hitbox_radius = 40  # Hitboxes are a cicle with r=40
-        padding = 20  # Minimum space between hitboxes and screen edge
+        padding = 100  # Minimum space between hitboxes and screen edge
         for _ in range(self.num_hitboxes):
             while True:
                 x = random.randint(hitbox_radius, screen_width - hitbox_radius)
