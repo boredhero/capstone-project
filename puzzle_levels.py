@@ -41,7 +41,7 @@ class Player:
 
     def move(self, direction):
         """
-        Moev the Player
+        Move the Player
         """
         match direction:
             case "up":
