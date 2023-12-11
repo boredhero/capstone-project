@@ -14,15 +14,46 @@ class InstanceMain():
         """
         Main class
         """
+        self.create_private_static_class_variable_defaults()
         self.__ginr = GameInNeedOfReload()
-        self.__glogger = GameLogger()
         self.__config = GameConfig()
         self.__settings = SettingsConfig()
-        self.__glogger.log_startup(self.__config.version, self.__config.title)
-        self.__glogger.info(f"{self.__settings.max_fps} FPS {self.__settings.screen_width} x {self.__settings.screen_height}", name=__name__)
+        self.init_logger()
         self.__screen = pygame.display.set_mode((self.__settings.screen_width, self.__settings.screen_height)) # Set the window dimensions
         pygame.display.set_caption(f"{self.__config.title} v{self.__config.version}")
         self.__clock = pygame.time.Clock()
+        pygame.init()
+        self.init_ui()
+        self.init_puzzles()
+        self.main_game_loop()
+
+    def init_logger(self):
+        """
+        Initialize Logger
+        """
+        self.__glogger = GameLogger()
+        self.__glogger.log_startup(self.__config.version, self.__config.title)
+        self.__glogger.info(f"{self.__settings.max_fps} FPS {self.__settings.screen_width} x {self.__settings.screen_height}", name=__name__)
+
+    def init_ui(self):
+        """
+        Initialize UI
+        """
+        self.__titlescreen_ui = ui.TitleScreenUIElements()
+        self.__debug_play_puzzles_ui = ui.LevelSelectorUIElements()
+
+    def init_puzzles(self):
+        """
+        Initialize puzzles
+        """
+        self.__player_puzzle_1 = puzzle_level_1.PlayerPuzzle1([100, 100])  # Player starting position
+        self.__game_map_puzzle_1 = puzzle_level_1.GameMapPuzzle1(self.__screen, self.__player_puzzle_1)
+        self.__game_map_puzzle_2 = puzzle_level_2.GameMapPuzzle2(self.__screen)
+
+    def create_private_static_class_variable_defaults(self):
+        """
+        Create private class variable defaults
+        """
         self.__running = True
         self.__playing = False
         self.__playing_puzzle_1 = False
@@ -33,18 +64,17 @@ class InstanceMain():
         self.__show_text_screen_1 = False
         self.__show_text_screen_2 = False
         self.__show_credits = False
-        pygame.init()
-        self.__titlescreen_ui = ui.TitleScreenUIElements()
-        self.__debug_play_puzzles_ui = ui.LevelSelectorUIElements()
-        self.__player_puzzle_1 = puzzle_level_1.PlayerPuzzle1([100, 100])  # Player starting position
-        self.__game_map_puzzle_1 = puzzle_level_1.GameMapPuzzle1(self.__screen, self.__player_puzzle_1)
-        self.__game_map_puzzle_2 = puzzle_level_2.GameMapPuzzle2(self.__screen)
+
+    def main_game_loop(self):
+        """
+        Main game loop
+        """
         while self.__running:
             if self.__ginr.needs_reload:
                 self.__settings.refresh_from_disk()
                 self.__ginr.set_needs_reload(False)
                 self.__screen = pygame.display.set_mode((self.__settings.screen_width, self.__settings.screen_height))
-                self.__init__() # pylint: disable=non-parent-init-called
+                self.__init__() # pylint: disable=non-parent-init-called, unnecessary-dunder-call
             mouse_up = False
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -189,7 +219,7 @@ class InstanceMain():
         """
         Return to the main menu
         """
-        self.__playing = False
+        self.__playing = False # pylint: disable=attribute-defined-outside-init
         self.__game_map_puzzle_1.hitbox_generator.set_collidability(False)
         self.__game_map_puzzle_1.hitbox_generator.reset_hitboxes()
         self.__titlescreen_ui.set_visibility(True)
@@ -198,7 +228,7 @@ class InstanceMain():
         """
         Return to the main menu
         """
-        self.__playing_puzzle_1 = False
+        self.__playing_puzzle_1 = False # pylint: disable=attribute-defined-outside-init
         self.__game_map_puzzle_1.hitbox_generator.set_collidability(False)
         self.__game_map_puzzle_1.hitbox_generator.reset_hitboxes()
         self.__titlescreen_ui.set_visibility(True)
@@ -207,7 +237,7 @@ class InstanceMain():
         """
         Return to the main menu
         """
-        self.__playing_puzzle_2 = False
+        self.__playing_puzzle_2 = False # pylint: disable=attribute-defined-outside-init
         self.__game_map_puzzle_2.hitbox_generator.set_clickability(False)
         self.__game_map_puzzle_2.hitbox_generator.reset_hitboxes()
         self.__titlescreen_ui.set_visibility(True)
