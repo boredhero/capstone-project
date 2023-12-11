@@ -37,7 +37,6 @@ class GameMapPuzzle2:
         """
         Draw hitboxes on screen
         """
-        self.hitbox_generator.check_collision(self.player)
         self.hitbox_generator.draw()
 
     def set_visibility(self, visibility: bool):
@@ -109,23 +108,23 @@ class PuzzleHitbox2:
         self.draw(screen, self.color)
         pygame.display.flip()
 
-    def check_collision(self, screen, player: PlayerPuzzle2):
+    def check_click(self, screen, mouse_pos: Tuple[int, int]):
         """
-        Check if player collides with hitbox
+        Check if the hitbox is clicked
         """
         if self.visibility:
-            # Check for collision with the player
-            if (player.position[0] >= self.position[0] - 40 and
-                player.position[0] <= self.position[0] + 40 and
-                player.position[1] >= self.position[1] - 40 and
-                player.position[1] <= self.position[1] + 40):
-
-                # Collision detected, update color and record collision time
-                self.collision_time = pygame.time.get_ticks()
+            rect = pygame.Rect(
+                self.position[0] - self.rect_size[0] // 2,
+                self.position[1] - self.rect_size[1] // 2,
+                self.rect_size[0],
+                self.rect_size[1]
+            )
+            if rect.collidepoint(mouse_pos):
+                current_time = pygame.time.get_ticks()
+                self.collision_time = current_time
                 self.update_color(screen, (0, 252, 0))
-                if self.is_currently_collided is False:
-                    self.__logger.debug("Collision detected", f"PuzzleHitbox[(x: {self.position[0]}, y: {self.position[1]})]")
                 self.is_currently_collided = True
+                self.__logger.debug("Click detected", f"PuzzleHitbox2[(x: {self.position[0]}, y: {self.position[1]})]")
                 return True
         return False
 
@@ -189,12 +188,12 @@ class PuzzleHitboxGenerator2:
             self.draw()
         self.draw()
 
-    def check_collision(self, player: PlayerPuzzle2):
+    def check_click(self, mouse_pos: Tuple[int, int]):
         """
-        Check if player collides with hitbox
+        Check if any hitbox is clicked
         """
         for hitbox in self.hitboxes:
-            if hitbox.check_collision(self.screen, player):
+            if hitbox.check_click(self.screen, mouse_pos):
                 hitbox.update_color(self.screen, (0, 252, 0))
                 return True
         return False
