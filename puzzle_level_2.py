@@ -103,6 +103,9 @@ class PuzzleHitbox2:
         self.position = pos
         self.color = (191, 71, 119)
         self.original_color = (191, 71, 119)
+        if self.__settings.grayscale_mode:
+            self.color = (0, 0, 0)
+            self.original_color = (0, 0, 0)
         self.click_time = None
         self.click_duration= 870*self.__settings.puzzle_1_difficulty # milliseconds
         self.is_currently_clicked = False
@@ -153,7 +156,10 @@ class PuzzleHitbox2:
                 current_time = pygame.time.get_ticks()
                 self.click_time = current_time
                 if not self.am_the_one:  # Only change color if it's not "the one"
-                    self.update_color(screen, (116, 56, 156))
+                    if self.__settings.grayscale_mode:
+                        self.update_color(screen, (255, 255, 255))
+                    else:
+                        self.update_color(screen, (116, 56, 156))
                 self.is_currently_clicked = True
                 self.__logger.debug("Click detected", f"PuzzleHitbox2[(x: {self.position[0]}, y: {self.position[1]})]")
                 return True
@@ -171,9 +177,15 @@ class PuzzleHitbox2:
                     self.click_time = None
                     self.is_currently_clicked = False
                 else:
-                    color = (116, 56, 156)
+                    if self.__settings.grayscale_mode:
+                        color = (255, 255, 255)
+                    else:
+                        color = (116, 56, 156)
             font = pygame.font.Font(None, self.font_size)
-            text_surface = font.render(self.text, True, (255, 255, 255))
+            if color is (255, 255, 255):
+                text_surface = font.render(self.text, True, (0, 0, 0))
+            else:
+                text_surface = font.render(self.text, True, (255, 255, 255))
             text_width, text_height = text_surface.get_size()
             padding = 10
             rect_width = max(text_width + padding, self.rect_size[0])
