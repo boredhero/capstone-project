@@ -101,16 +101,22 @@ class LevelSelectorUIElements():
         """
         Level selector UI elements constructor
         """
+        self.__settings = SettingsConfig()
+        screen_height = self.__settings.screen_height
+        screen_width = self.__settings.screen_width
+        title_y = screen_height // 3
+        puzzle_1_y = title_y + 100  # Adjust as needed
+        puzzle_2_y = puzzle_1_y + 50  # Adjust as needed
         self.visibility = None
         self.__title = UIElement(
-            center_position=(500, 300),
+            center_position=(screen_width // 2, title_y),
             font_size=60,
             bg_rgb=GameColors.BLACK.value,
             text_rgb=GameColors.WHITE.value,
             text="Select a Level"
         )
         self.__puzzle_1 = UIElement(
-            center_position=(500, 400),
+            center_position=(screen_width // 2, puzzle_1_y),
             font_size=30,
             bg_rgb=GameColors.BLACK.value,
             text_rgb=GameColors.WHITE.value,
@@ -118,7 +124,7 @@ class LevelSelectorUIElements():
             action=GameState.PLAY_PUZZLE_1
         )
         self.__puzzle_2 = UIElement(
-            center_position=(500, 450),
+            center_position=(screen_width // 2, puzzle_2_y),
             font_size=30,
             bg_rgb=GameColors.BLACK.value,
             text_rgb=GameColors.WHITE.value,
