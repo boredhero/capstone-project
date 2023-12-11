@@ -36,7 +36,7 @@ class InstanceMain():
         self.__titlescreen_ui = ui.TitleScreenUIElements()
         self.__debug_play_puzzles_ui = ui.LevelSelectorUIElements()
         self.__player_puzzle_1 = puzzle_level_1.PlayerPuzzle1([100, 100])  # Player starting position
-        self.__game_map_puzzle_1 = puzzle_level_1.GameMapPuzzle1("assets/backgrounds/missing_texture.png", self.__screen, self.__player_puzzle_1)
+        self.__game_map_puzzle_1 = puzzle_level_1.GameMapPuzzle1(self.__screen, self.__player_puzzle_1)
         self.__game_map_puzzle_2 = puzzle_level_2.GameMapPuzzle2(self.__screen)
         while self.__running:
             mouse_up = False
