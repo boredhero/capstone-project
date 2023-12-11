@@ -33,6 +33,8 @@ class SettingsConfig(metaclass=Singleton):
         self.screen_height = self.__settings.get("screen_height")
         self.max_fps = self.__settings.get("max_fps")
         self.puzzle_1_difficulty = self.__settings.get("puzzle_1_difficulty")
+        self.puzzle_1_difficulty_mult = self.__settings.get("puzzle_1_difficulty_mult")
+        self.puzzle_1_difficulty_speed = self.__settings.get("puzzle_1_difficulty_speed")
         self.puzzle_2_difficulty_speed = self.__settings.get("puzzle_2_difficulty_speed")
         self.puzzle_2_difficulty_number = self.__settings.get("puzzle_2_difficulty_number")
         self.subtitles = self.__settings.get("subtitles")
@@ -83,6 +85,8 @@ class SettingsConfig(metaclass=Singleton):
             "screen_height": 1080,
             "max_fps": 60,
             "puzzle_1_difficulty": 10,
+            "puzzle_1_difficulty_mult": 870,
+            "puzzle_1_difficulty_speed": 7,
             "puzzle_2_difficulty_speed": 10,
             "puzzle_2_difficulty_number": 20,
             "subtitles": True,
