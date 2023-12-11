@@ -40,7 +40,7 @@ def get_credits_and_attributions_text():
 
     Author: Noah Martino\n
     License: GPLv3 License (see LICENSE file)\n
-    Source Available At: https://github.com/boredhero/capstone-project\n
+    Source Available At: https://github.com/boredhero/instance\n
 
     Languages and Libraries Used (License):\n
 
