@@ -126,6 +126,8 @@ class InstanceMain():
                     self.__player_puzzle_1.move("left")
                 if keys[pygame.K_d]:
                     self.__player_puzzle_1.move("right")
+                if keys[pygame.K_n]:
+                    self.__game_map_puzzle_1.hitbox_generator.reset_hitboxes()
                 if self.__game_map_puzzle_1.all_hitboxes_collided():
                     self.return_to_main_menu()
                 self.__game_map_puzzle_1.draw_map()
@@ -143,6 +145,8 @@ class InstanceMain():
                     self.__player_puzzle_1.move("left")
                 if keys[pygame.K_d]:
                     self.__player_puzzle_1.move("right")
+                if keys[pygame.K_n]:
+                    self.__game_map_puzzle_1.hitbox_generator.reset_hitboxes()
                 if self.__game_map_puzzle_1.all_hitboxes_collided():
                     self.puzzle_1_return_to_main_menu()
                 self.__game_map_puzzle_1.draw_map()
@@ -152,6 +156,8 @@ class InstanceMain():
                 pygame.display.flip()
             if self.__playing_puzzle_2:
                 keys = pygame.key.get_pressed()
+                if keys[pygame.K_n]:
+                    self.__game_map_puzzle_2.hitbox_generator.reset_hitboxes()
                 self.__game_map_puzzle_2.hitbox_generator.update_hitbox_positions()
                 self.__game_map_puzzle_2.draw_map()
                 self.__game_map_puzzle_2.draw_hitboxes()
