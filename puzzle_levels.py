@@ -124,7 +124,6 @@ class PuzzleHitbox:
                     self.is_currently_collided = False
                 else:
                     color = (0, 252, 0)  # Keep the color green
-
             # Use the current color if a specific color is not provided
             final_color = self.color if color is None else color
             pygame.draw.circle(screen, (0, 0, 0), self.position, 40)
