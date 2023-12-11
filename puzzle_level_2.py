@@ -100,6 +100,7 @@ class PuzzleHitbox2:
         """
         self.__settings = SettingsConfig()
         self.visibility = True
+        self.clickability = False
         self.position = pos
         self.color = (191, 71, 119)
         self.original_color = (191, 71, 119)
@@ -145,7 +146,7 @@ class PuzzleHitbox2:
         """
         Check if the hitbox is clicked
         """
-        if self.visibility:
+        if self.visibility and self.clickability:
             rect = pygame.Rect(
                 self.position[0] - self.rect_size[0] // 2,
                 self.position[1] - self.rect_size[1] // 2,
@@ -202,9 +203,15 @@ class PuzzleHitbox2:
 
     def set_visibility(self, visibility: bool):
         """
-        Set Player visibility
+        Set Hitbox visibility
         """
         self.visibility = visibility
+
+    def set_clickability(self, clickability: bool):
+        """
+        Set Hitbox clickability
+        """
+        self.clickability = clickability
 
 class PuzzleHitboxGenerator2:
 
@@ -215,6 +222,7 @@ class PuzzleHitboxGenerator2:
         self.__settings = SettingsConfig()
         self.already_drawn = False
         self.visibility = True
+        self.clickability = False
         self.hitboxes = []
         self.screen = screen
         self.num_hitboxes = num_hitboxes
@@ -241,6 +249,14 @@ class PuzzleHitboxGenerator2:
         if self.visibility:
             for hitbox in self.hitboxes:
                 hitbox.draw(self.screen)
+
+    def set_clickability(self, clickability: bool):
+        """
+        Set Hitbox clickability
+        """
+        self.clickability = clickability
+        for hitbox in self.hitboxes:
+            hitbox.set_clickability(clickability)
 
     def set_visibility(self, visibility: bool):
         """

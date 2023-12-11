@@ -91,6 +91,7 @@ class PuzzleHitbox1:
         """
         self.__settings = SettingsConfig()
         self.visibility = True
+        self.collidability = False
         self.position = pos
         self.color = (25, 0, 252)
         self.original_color = (25, 0, 252)
@@ -114,7 +115,7 @@ class PuzzleHitbox1:
         """
         Check if player collides with hitbox
         """
-        if self.visibility:
+        if self.visibility and self.collidability:
             # Check for collision with the player
             if (player.position[0] >= self.position[0] - 40 and
                 player.position[0] <= self.position[0] + 40 and
@@ -161,6 +162,12 @@ class PuzzleHitbox1:
         """
         self.visibility = visibility
 
+    def set_collidability(self, collidability: bool):
+        """
+        Set Player visibility
+        """
+        self.collidability = collidability
+
 class PuzzleHitboxGenerator1:
 
     def __init__(self, screen, num_hitboxes: int):
@@ -170,6 +177,7 @@ class PuzzleHitboxGenerator1:
         self.__settings = SettingsConfig()
         self.already_drawn = False
         self.visibility = True
+        self.collidability = False
         self.hitboxes = []
         self.screen = screen
         self.num_hitboxes = num_hitboxes
@@ -191,6 +199,14 @@ class PuzzleHitboxGenerator1:
                 return True
         return False
 
+    def set_collidability(self, collidability: bool):
+        """
+        Set hitbox collidability
+        """
+        self.collidability = collidability
+        for hitbox in self.hitboxes:
+            hitbox.set_collidability(collidability)
+
     def check_all_collided(self):
         """
         Check if all hitboxes are collided
@@ -207,7 +223,7 @@ class PuzzleHitboxGenerator1:
 
     def set_visibility(self, visibility: bool):
         """
-        Set Player visibility
+        Set PuzzleHitbox visibility
         """
         self.visibility = visibility
 

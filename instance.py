@@ -123,6 +123,7 @@ class InstanceMain():
                 if self.__game_map_puzzle_1.all_hitboxes_collided():
                     self.return_to_main_menu()
                 self.__game_map_puzzle_1.draw_map()
+                self.__game_map_puzzle_1.set_collidability(True)
                 self.__game_map_puzzle_1.draw_hitboxes()
                 self.__player_puzzle_1.draw(self.__screen)
                 pygame.display.flip()
@@ -139,6 +140,7 @@ class InstanceMain():
                 if self.__game_map_puzzle_1.all_hitboxes_collided():
                     self.puzzle_1_return_to_main_menu()
                 self.__game_map_puzzle_1.draw_map()
+                self.__game_map_puzzle_1.hitbox_generator.set_collidability(True)
                 self.__game_map_puzzle_1.draw_hitboxes()
                 self.__player_puzzle_1.draw(self.__screen)
                 pygame.display.flip()
@@ -148,6 +150,7 @@ class InstanceMain():
                 self.__game_map_puzzle_2.draw_map()
                 self.__game_map_puzzle_2.draw_hitboxes()
                 self.__game_map_puzzle_2.draw_message_box("What is your doctor's name so I can schedule an appointment?", self.__screen)
+                self.__game_map_puzzle_2.hitbox_generator.set_collidability(True)
                 if self.__game_map_puzzle_2.hitbox_generator.is_the_one_clicked():
                     self.puzzle_2_return_to_main_menu()
                 pygame.display.flip()
