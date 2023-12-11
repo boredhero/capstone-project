@@ -43,6 +43,7 @@ class SettingsMenu:
         self.settings.add.toggle_switch(title="Debug Mode", default=self.__settingsconfig.debug, toggleswitch_id="debug")
         self.settings.add.toggle_switch(title="Fancy Fonts", default=self.__settingsconfig.fancy_fonts, toggleswitch_id="fancy_fonts")
         self.settings.add.text_input(title="Max FPS: ", default=self.__settingsconfig.max_fps, textinput_id="max_fps", input_type=pm.locals.INPUT_INT, range_values=(30, 144))
+        self.settings.add.range_slider(title="Puzzle 1 Difficulty: ", default=int(self.__settingsconfig.puzzle_1_difficulty), range_values=(1, 50), increment=1, rangeslider_id="puzzle_one_diff", value_format=lambda x: str(round(x, None)))
         self.settings.add.button(title="Save Settings and Restart to Apply", action=self.write_game_settings_and_quit, font_color=GameColors.WHITE.value, background_color=GameColors.BLACK.value)
         self.settings.add.button(title="Restore Defaults", action=self.write_default_settings_and_quit, font_color=GameColors.WHITE.value, background_color=GameColors.BLACK.value)
         self.settings.mainloop(self.__screen)
@@ -62,6 +63,7 @@ class SettingsMenu:
         screen_width = None
         screen_height = None
         max_fps = None
+        puzzle_1_difficulty = None
         subtitles = None
         debug = None
         fancy_fonts = None
@@ -87,6 +89,10 @@ class SettingsMenu:
                     debug = value
                     if debug is None:
                         debug = self.__settingsconfig.debug
+                case "puzzle_one_diff":
+                    puzzle_1_difficulty = int(value)
+                    if puzzle_1_difficulty is None:
+                        puzzle_1_difficulty = int(self.__settingsconfig.puzzle_1_difficulty)
                 case "max_fps":
                     max_fps = value
                     if int(max_fps) < 30:
@@ -100,6 +106,7 @@ class SettingsMenu:
                 "screen_width": screen_width,
                 "screen_height": screen_height,
                 "max_fps": max_fps,
+                "puzzle_1_difficulty": puzzle_1_difficulty,
                 "subtitles": subtitles,
                 "debug": debug,
                 "fancy_fonts": fancy_fonts
@@ -119,6 +126,7 @@ class SettingsMenu:
             "screen_width": self.__settingsconfig.screen_width,
             "screen_height": self.__settingsconfig.screen_height,
             "max_fps": self.__settingsconfig.max_fps,
+            "puzzle_1_difficulty": self.__settingsconfig.puzzle_1_difficulty,
             "subtitles": self.__settingsconfig.subtitles,
             "debug": self.__settingsconfig.debug
         }
