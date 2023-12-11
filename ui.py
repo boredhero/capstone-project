@@ -7,7 +7,7 @@ from pygame.sprite import Sprite
 from pygame.rect import Rect # pylint: disable=unused-import
 
 from config import SettingsConfig
-from misc import GameColors
+from misc import GameColors, Singleton
 
 class GameState(Enum):
     EXIT = -1
@@ -18,6 +18,31 @@ class GameState(Enum):
     DEBUG_PLAY_PUZZLE = 4
     PLAY_PUZZLE_1 = 5
     PLAY_PUZZLE_2 = 6
+
+class CurrentGameState(metaclass=Singleton):
+    """
+    Current Game State
+    """
+
+    def __init__(self):
+        """
+        Current Game State constructor
+        """
+        self.__game_state = GameState.SETTINGS
+
+    @property
+    def game_state(self):
+        """
+        Game State Property
+        """
+        return self.__game_state
+
+    @game_state.setter
+    def game_state(self, game_state: GameState):
+        """
+        Game State Setter
+        """
+        self.__game_state = game_state
 
 def create_surface_with_text(text: str, font_size: int, text_rgb: Tuple, bg_rgb: Tuple):
     """

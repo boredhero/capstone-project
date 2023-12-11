@@ -51,7 +51,7 @@ class Player:
         """
         self.visibility = True
         self.position = start_pos
-        self.speed = 5
+        self.speed = 7
 
     def move(self, direction):
         """
