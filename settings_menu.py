@@ -6,6 +6,24 @@ import pygame_menu as pm
 from ui import GameColors
 from game_logger import GameLogger
 from config import SettingsConfig
+from misc import Singleton
+
+class GameInNeedOfReload(metaclass=Singleton):
+
+    def __init__(self):
+        """
+        A way to pass data back easily from settings
+        """
+        self.needs_reload = False
+
+    def set_needs_reload(self, needs_reload: bool):
+        """
+        Set the needs reload flag
+        """
+        self.needs_reload = bool(needs_reload)
+
+GameInNeedOfReload()
+
 class SettingsMenu:
 
     def __init__(self, screen: Any):
@@ -14,6 +32,7 @@ class SettingsMenu:
         https://www.geeksforgeeks.org/create-settings-menu-in-python-pygame/
         """
         self.__screen = screen
+        self.__ginr = GameInNeedOfReload()
         self.__glogger = GameLogger()
         self.__settingsconfig = SettingsConfig()
         try:
@@ -47,18 +66,40 @@ class SettingsMenu:
         self.settings.add.range_slider(title="Puzzle 1 Difficutly (Player Speed)", default=int(self.__settingsconfig.puzzle_1_difficulty_speed), range_values=(5, 20), increment=1, rangeslider_id="puzzle_one_diff_speed", value_format=lambda x: str(round(x, None)))
         self.settings.add.range_slider(title="Puzzle 2 Difficulty (Speed): ", default=int(self.__settingsconfig.puzzle_2_difficulty_speed), range_values=(1, 50), increment=1, rangeslider_id="puzzle_two_diff_speed", value_format=lambda x: str(round(x, None)))
         self.settings.add.range_slider(title="Puzzle 2 Difficulty (Number): ", default=int(self.__settingsconfig.puzzle_2_difficulty_number), range_values=(1, 50), increment=1, rangeslider_id="puzzle_two_diff_number", value_format=lambda x: str(round(x, None)))
-        self.settings.add.button(title="Save Settings and Restart to Apply", action=self.write_game_settings_and_quit, font_color=GameColors.WHITE.value, background_color=GameColors.BLACK.value)
+        self.settings.add.button(title="Save Settings and Apply", action=self.write_game_settings, font_color=GameColors.WHITE.value, background_color=GameColors.BLACK.value)
         self.settings.add.button(title="Restore Defaults", action=self.write_default_settings_and_quit, font_color=GameColors.WHITE.value, background_color=GameColors.BLACK.value)
+        self.settings.add.button(title="Return to Main Menu", action=self.return_to_main_menu, font_color=GameColors.WHITE.value, background_color=GameColors.BLACK.value)
         self.settings.mainloop(self.__screen)
+
+    def return_to_main_menu(self):
+        """
+        Return to the main menu
+        """
+        self.settings.disable()  # or self.settings.reset(1)
+
+    def set_reload_state(self, reload_state: bool):
+        """
+        Set the reload state
+        """
+        self.__ginr.set_needs_reload(reload_state)
+
+    def return_and_reload(self):
+        """
+        Return to the main menu and reload the game
+        """
+        self.set_reload_state(True)
+        self.__settingsconfig.refresh_from_disk()
+        self.return_to_main_menu()
 
     def write_default_settings_and_quit(self):
         """
         Write the default settings and quit
         """
         self.__settingsconfig.write_default_settings()
-        self.settings._exit() # pylint: disable=protected-access
+        #self.settings._exit() # pylint: disable=protected-access
+        self.return_and_reload()
 
-    def write_game_settings_and_quit(self):
+    def write_game_settings(self):
         """
         Log the game settings
         """
@@ -149,7 +190,8 @@ class SettingsMenu:
                     yaml.dump(wd, settings_file)
             except Exception as e:
                 print("Settings failed to write to disk", e)
-        self.settings._exit() # pylint: disable=protected-access
+        #self.settings._exit() # pylint: disable=protected-access
+        self.return_and_reload()
 
     def __get_settings_state_from_disk(self) -> dict:
         """

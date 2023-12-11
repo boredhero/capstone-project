@@ -3,7 +3,7 @@ import pygame
 from game_logger import GameLogger
 from config import GameConfig, SettingsConfig
 import ui
-from settings_menu import SettingsMenu
+from settings_menu import SettingsMenu, GameInNeedOfReload
 import puzzle_level_1
 import puzzle_level_2
 import text_screen
@@ -14,6 +14,7 @@ class InstanceMain():
         """
         Main class
         """
+        self.__ginr = GameInNeedOfReload()
         self.__glogger = GameLogger()
         self.__config = GameConfig()
         self.__settings = SettingsConfig()
@@ -39,6 +40,11 @@ class InstanceMain():
         self.__game_map_puzzle_1 = puzzle_level_1.GameMapPuzzle1(self.__screen, self.__player_puzzle_1)
         self.__game_map_puzzle_2 = puzzle_level_2.GameMapPuzzle2(self.__screen)
         while self.__running:
+            if self.__ginr.needs_reload:
+                self.__settings.refresh_from_disk()
+                self.__ginr.set_needs_reload(False)
+                self.__screen = pygame.display.set_mode((self.__settings.screen_width, self.__settings.screen_height))
+                self.__init__() # pylint: disable=non-parent-init-called
             mouse_up = False
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:

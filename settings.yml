@@ -1,6 +1,6 @@
 debug: true
 fancy_fonts: true
-grayscale_mode: false
+grayscale_mode: true
 max_fps: 60
 puzzle_1_difficulty: 10
 puzzle_1_difficulty_mult: 870
