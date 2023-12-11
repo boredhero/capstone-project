@@ -4,7 +4,7 @@ from game_logger import GameLogger
 from config import GameConfig, SettingsConfig
 import ui
 from settings_menu import SettingsMenu
-import game_map
+import game_map_puzzle_1
 import text_screen
 
 class InstanceMain():
@@ -32,8 +32,8 @@ class InstanceMain():
         self.__pygame_init = pygame.init() #pylint: disable=unused-private-member
         self.__titlescreen_ui = ui.TitleScreenUIElements()
         self.__debug_play_puzzles_ui = ui.LevelSelectorUIElements()
-        self.__player = game_map.Player([100, 100])  # Player starting position
-        self.__game_map = game_map.GameMap("assets/backgrounds/missing_texture.png", self.__screen, self.__player)
+        self.__player = game_map_puzzle_1.PlayerPuzzle1([100, 100])  # Player starting position
+        self.__game_map_puzzle_1 = game_map_puzzle_1.GameMapPuzzle1("assets/backgrounds/missing_texture.png", self.__screen, self.__player)
         while self.__running:
             mouse_up = False
             for event in pygame.event.get():
@@ -99,10 +99,10 @@ class InstanceMain():
                     self.__player.move("left")
                 if keys[pygame.K_d]:
                     self.__player.move("right")
-                if self.__game_map.all_hitboxes_collided():
+                if self.__game_map_puzzle_1.all_hitboxes_collided():
                     self.return_to_main_menu()
-                self.__game_map.draw_map()
-                self.__game_map.draw_hitboxes()
+                self.__game_map_puzzle_1.draw_map()
+                self.__game_map_puzzle_1.draw_hitboxes()
                 self.__player.draw(self.__screen)
                 pygame.display.flip()
             if self.__playing_puzzle_1:
@@ -115,10 +115,10 @@ class InstanceMain():
                     self.__player.move("left")
                 if keys[pygame.K_d]:
                     self.__player.move("right")
-                if self.__game_map.all_hitboxes_collided():
+                if self.__game_map_puzzle_1.all_hitboxes_collided():
                     self.puzzle_1_return_to_main_menu()
-                self.__game_map.draw_map()
-                self.__game_map.draw_hitboxes()
+                self.__game_map_puzzle_1.draw_map()
+                self.__game_map_puzzle_1.draw_hitboxes()
                 self.__player.draw(self.__screen)
                 pygame.display.flip()
             self.__titlescreen_ui.draw(self.__screen)
