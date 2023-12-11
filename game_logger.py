@@ -8,8 +8,7 @@ class GameLogger(metaclass=Singleton):
 
     def __init__(self):
         """
-        Freedom gateway Logger
-        Log shit, to ALL the places at once!
+        Game Logger
         """
         try:
             self.__start_logged = False
@@ -29,6 +28,7 @@ class GameLogger(metaclass=Singleton):
             )
             self.__logger = logging.getLogger()
             self.info("Successful Init GameLogger", name=__name__)
+            self.__clear_log_folder()
         except Exception:
             print(f"[GameLogger Error] Error initializing GameLogger! :: \n{traceback.format_exc()}")
 
@@ -56,7 +56,7 @@ class GameLogger(metaclass=Singleton):
                     log_str = f"[{name}] :: {msg}{err}"
                     self.__logger.info(log_str)
             if name is None:
-                name = "FGLogger"
+                name = "GLogger"
         except Exception:
             print(f"[GameLogger Error] Error logging message: {msg}")
             print(traceback.format_exc())
@@ -71,6 +71,20 @@ class GameLogger(metaclass=Singleton):
             print(f"[GameLogger Error] Error formatting exception: {ex}")
             self.error("An unknown error occurred while formatting an exception!", name=__name__, exception=e) # This should be fine because we know e will be valid here!
             return ""
+
+    def __clear_log_folder(self):
+        """
+        Deletes all files in the log folder
+        """
+        try:
+            for file in os.listdir(self.__log_folder):
+                file_path = os.path.join(self.__log_folder, file)
+                if os.path.isfile(file_path):
+                    os.unlink(file_path)
+            self.info("Successful Delete All Previous Log Files", name=__name__)
+        except Exception as e:
+            print(f"[GameLogger Error] Error clearing log files: {e}")
+            self.error("Error occurred while clearing log files", name=__name__, exception=e)
 
     def critical(self, msg: str, name: str | None = None, exception: Exception | None = None):
         """GameLogger Level CRITICAL"""
