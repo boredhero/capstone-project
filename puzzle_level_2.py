@@ -85,7 +85,7 @@ class PlayerPuzzle2:
 
 class PuzzleHitbox2:
 
-    def __init__(self, pos):
+    def __init__(self, pos, text):
         """
         Puzzle Hitbox
         """
@@ -97,6 +97,8 @@ class PuzzleHitbox2:
         self.collision_time = None
         self.collision_duration= 870*self.__settings.puzzle_1_difficulty # milliseconds
         self.is_currently_collided = False
+        self.text = text
+        self.rect_size = (80, 40)
         self.__logger = GameLogger()
 
     def update_color(self, screen, color: Tuple[int, int, int]):
@@ -133,6 +135,7 @@ class PuzzleHitbox2:
         """
         if self.visibility:
             current_time = pygame.time.get_ticks()
+
             # Check if the hitbox needs to revert back to its original color
             if self.collision_time:
                 if current_time - self.collision_time > self.collision_duration:
@@ -141,10 +144,24 @@ class PuzzleHitbox2:
                     self.is_currently_collided = False
                 else:
                     color = (0, 252, 0)  # Keep the color green
+
             # Use the current color if a specific color is not provided
             final_color = self.color if color is None else color
-            pygame.draw.circle(screen, (0, 0, 0), self.position, 40)
-            pygame.draw.circle(screen, final_color, self.position, 30)
+
+            # Draw the rectangle
+            rect = pygame.Rect(
+                self.position[0] - self.rect_size[0] // 2,
+                self.position[1] - self.rect_size[1] // 2,
+                self.rect_size[0],
+                self.rect_size[1]
+            )
+            pygame.draw.rect(screen, final_color, rect)
+
+            # Draw the text
+            font = pygame.font.Font(None, 24)  # Choose an appropriate font size
+            text_surface = font.render(self.text, True, (255, 255, 255))  # White text
+            text_rect = text_surface.get_rect(center=rect.center)
+            screen.blit(text_surface, text_rect)
 
     def set_visibility(self, visibility: bool):
         """
@@ -213,7 +230,7 @@ class PuzzleHitboxGenerator2:
             while True:
                 x = random.randint(hitbox_radius, screen_width - hitbox_radius)
                 y = random.randint(hitbox_radius, screen_height - hitbox_radius)
-                new_hitbox = PuzzleHitbox2([x, y])
+                new_hitbox = PuzzleHitbox2([x, y], "test")
                 if not self.hitbox_overlap(new_hitbox, hitbox_radius + padding):
                     self.hitboxes.append(new_hitbox)
                     break
