@@ -5,6 +5,7 @@ from config import GameConfig, SettingsConfig
 import ui
 from settings_menu import SettingsMenu
 import game_map
+import text_screen
 
 class InstanceMain():
 
@@ -22,6 +23,10 @@ class InstanceMain():
         self.__clock = pygame.time.Clock()
         self.__running = True
         self.__playing = False
+        self.__text_screen_1 = None
+        self.__text_screen_1 = None
+        self.__show_text_screen_1 = False
+        self.__show_text_screen_2 = False
         self.__pygame_init = pygame.init() #pylint: disable=unused-private-member
         self.__titlescreen_ui = ui.TitleScreenUIElements()
         self.__debug_play_puzzles_ui = ui.LevelSelectorUIElements()
@@ -62,9 +67,23 @@ class InstanceMain():
                     if ui_action_levels is not None:
                         match ui_action_levels:
                             case ui.GameState.PLAY_PUZZLE_1:
-                                self.graceful_exit()
+                                self.__show_text_screen_1 = True
+                                self.__debug_play_puzzles_ui.set_visibility(False)
+                                self.__text_screen_1 = text_screen.TextScreen(self.__screen, text_screen.get_puzzle_1_intro_text(), "OK")
+                                self.__text_screen_1.draw()
                             case ui.GameState.PLAY_PUZZLE_2:
-                                self.graceful_exit()
+                                self.__show_text_screen_2 = True
+                                self.__debug_play_puzzles_ui.set_visibility(False)
+                                self.__text_screen_2 = text_screen.TextScreen(self.__screen, text_screen.get_puzzle_2_intro_text(), "OK")
+                                self.__text_screen_2.draw()
+                if self.__show_text_screen_1:
+                    self.__text_screen_1.draw()
+                    if self.__text_screen_1.handle_event(event):
+                        self.__show_text_screen_1 = False
+                if self.__show_text_screen_2:
+                    self.__text_screen_2.draw()
+                    if self.__text_screen_2.handle_event(event):
+                        self.__show_text_screen_2 = False
                 mouse_up = False
             if self.__playing:
                 keys = pygame.key.get_pressed()
