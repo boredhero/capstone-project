@@ -179,7 +179,7 @@ class InstanceMain():
                         self.__show_credits = False
                 if self.__show_mla_works_cited:
                     self.__mla_works_cited.draw()
-                    if self.__credits.handle_event(event): # pylint: disable=undefined-loop-variable
+                    if self.__mla_works_cited.handle_event(event): # pylint: disable=undefined-loop-variable
                         self.__titlescreen_ui.set_visibility(True)
                         self.__show_mla_works_cited = False
                 mouse_up = False
