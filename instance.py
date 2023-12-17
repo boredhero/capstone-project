@@ -73,9 +73,11 @@ class InstanceMain():
         self.__text_screen_1 = None
         self.__text_screen_2 = None
         self.__credits = None
+        self.__mla_works_cited = None
         self.__show_text_screen_1 = False
         self.__show_text_screen_2 = False
         self.__show_credits = False
+        self.__show_mla_works_cited = False
 
     def main_game_loop(self):
         """
@@ -136,6 +138,11 @@ class InstanceMain():
                                 self.__show_credits = True
                                 self.__credits = text_screen.TextScreen(self.__screen, text_screen.get_credits_and_attributions_text(), "Back")
                                 self.__credits.draw()
+                            case ui.GameState.MLA_WORKS_CITED:
+                                self.__titlescreen_ui.set_visibility(False)
+                                self.__show_mla_works_cited = True
+                                self.__mla_works_cited = text_screen.TextScreen(self.__screen, text_screen.get_mla_works_cited(), "Back")
+                                self.__mla_works_cited.draw()
                             case ui.GameState.DEBUG_PLAY_PUZZLE:
                                 self.__titlescreen_ui.set_visibility(False)
                                 self.__debug_play_puzzles_ui.set_visibility(True)
@@ -170,6 +177,11 @@ class InstanceMain():
                     if self.__credits.handle_event(event): # pylint: disable=undefined-loop-variable
                         self.__titlescreen_ui.set_visibility(True)
                         self.__show_credits = False
+                if self.__show_mla_works_cited:
+                    self.__mla_works_cited.draw()
+                    if self.__credits.handle_event(event): # pylint: disable=undefined-loop-variable
+                        self.__titlescreen_ui.set_visibility(True)
+                        self.__show_mla_works_cited = False
                 mouse_up = False
             if self.__playing:
                 keys = pygame.key.get_pressed()
