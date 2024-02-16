@@ -8,6 +8,7 @@ from pygame.rect import Rect # pylint: disable=unused-import
 
 from config import SettingsConfig
 from misc import GameColors, Singleton
+from save import SaveDataManager
 
 class GameState(Enum):
     EXIT = -1
@@ -19,6 +20,7 @@ class GameState(Enum):
     PLAY_PUZZLE_1 = 5
     PLAY_PUZZLE_2 = 6
     MLA_WORKS_CITED = 7
+    INPUT_NAME = 8
 
 class CurrentGameState(metaclass=Singleton):
     """
