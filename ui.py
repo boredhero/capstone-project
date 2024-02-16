@@ -211,7 +211,7 @@ class TitleScreenUIElements():
         """
         self.visibility = True
         self.__settings = SettingsConfig()
-        self.__quit_button_y_pos = 550
+        self.__quit_button_y_pos = 600
         if self.__settings.debug:
             self.__quit_button_y_pos = 650
         self.__title = UIElement(
