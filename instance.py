@@ -4,6 +4,7 @@ from game_logger import GameLogger
 from config import GameConfig, SettingsConfig
 import ui
 from settings_menu import SettingsMenu, GameInNeedOfReload
+from save import SaveDataManager
 import puzzle_level_1
 import puzzle_level_2
 import text_screen
@@ -18,6 +19,7 @@ class InstanceMain():
         self.__ginr = GameInNeedOfReload()
         self.__config = GameConfig()
         self.__settings = SettingsConfig()
+        self.__save_data = SaveDataManager()
         self.init_logger()
         match self.__settings.window_mode:
             case "windowed":
@@ -130,9 +132,12 @@ class InstanceMain():
                             case ui.GameState.SETTINGS:
                                 self.__gamesettings = SettingsMenu(self.__screen) # pylint: disable=unused-private-member
                             case ui.GameState.PLAY:
-                                self.__titlescreen_ui.set_visibility(False)
-                                self.__playing = True
-                                self.__screen.fill((0, 0, 0))
+                                if self.__save_data.get_player_name() is None:
+                                    self.show_name_input_screen()
+                                else:
+                                    self.__titlescreen_ui.set_visibility(False)
+                                    self.__playing = True
+                                    self.__screen.fill((0, 0, 0))
                             case ui.GameState.CREDITS:
                                 self.__titlescreen_ui.set_visibility(False)
                                 self.__show_credits = True
@@ -185,13 +190,13 @@ class InstanceMain():
                 mouse_up = False
             if self.__playing:
                 keys = pygame.key.get_pressed()
-                if keys[pygame.K_w] or keys[pygame.K_UP]:
+                if keys[self.get_pygame_key_for_key(self.__settings.keybind_up)]:
                     self.__player_puzzle_1.move("up")
-                if keys[pygame.K_s] or keys[pygame.K_DOWN]:
+                if keys[self.get_pygame_key_for_key(self.__settings.keybind_down)]:
                     self.__player_puzzle_1.move("down")
-                if keys[pygame.K_a] or keys[pygame.K_LEFT]:
+                if keys[self.get_pygame_key_for_key(self.__settings.keybind_left)]:
                     self.__player_puzzle_1.move("left")
-                if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
+                if keys[self.get_pygame_key_for_key(self.__settings.keybind_right)]:
                     self.__player_puzzle_1.move("right")
                 if keys[pygame.K_n]:
                     self.__game_map_puzzle_1.hitbox_generator.reset_hitboxes()
@@ -204,13 +209,13 @@ class InstanceMain():
                 pygame.display.flip()
             if self.__playing_puzzle_1:
                 keys = pygame.key.get_pressed()
-                if keys[pygame.K_w] or keys[pygame.K_UP]:
+                if keys[self.get_pygame_key_for_key(self.__settings.keybind_up)]:
                     self.__player_puzzle_1.move("up")
-                if keys[pygame.K_s] or keys[pygame.K_DOWN]:
+                if keys[self.get_pygame_key_for_key(self.__settings.keybind_down)]:
                     self.__player_puzzle_1.move("down")
-                if keys[pygame.K_a] or keys[pygame.K_LEFT]:
+                if keys[self.get_pygame_key_for_key(self.__settings.keybind_left)]:
                     self.__player_puzzle_1.move("left")
-                if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
+                if keys[self.get_pygame_key_for_key(self.__settings.keybind_right)]:
                     self.__player_puzzle_1.move("right")
                 if keys[pygame.K_n]:
                     self.__game_map_puzzle_1.hitbox_generator.reset_hitboxes()
@@ -284,6 +289,143 @@ class InstanceMain():
         Check if playing anything
         """
         return self.__playing or self.__playing_puzzle_1 or self.__playing_puzzle_2
+
+    def show_name_input_screen(self):
+        """
+        Show the name input
+        """
+        input_active = True
+        player_name = ""
+        input_box = pygame.Rect(100, 150, 140, 32)
+        color_inactive = pygame.Color('lightskyblue3')
+        color_active = pygame.Color('dodgerblue2')
+        color = color_inactive
+        font = pygame.font.Font(None, 32)
+        while input_active:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    exit()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if input_box.collidepoint(event.pos):
+                        input_active = not input_active
+                    else:
+                        input_active = False
+                    color = color_active if input_active else color_inactive
+                if event.type == pygame.KEYDOWN:
+                    if input_active:
+                        if event.key == pygame.K_RETURN:
+                            self.__save_data.set_player_name(player_name)
+                            return
+                        elif event.key == pygame.K_BACKSPACE:
+                            player_name = player_name[:-1]
+                        else:
+                            player_name += event.unicode
+            self.__screen.fill((30, 30, 30))
+            instruction_text = "Please enter a player name and press Enter to continue"
+            txt_instruction = font.render(instruction_text, True, pygame.Color('white'))
+            self.__screen.blit(txt_instruction, (100, 100))  # Adjust position as needed
+            txt_surface = font.render(player_name, True, color)
+            width = max(200, txt_surface.get_width()+10)
+            input_box.w = width
+            self.__screen.blit(txt_surface, (input_box.x+5, input_box.y+5))
+            pygame.draw.rect(self.__screen, color, input_box, 2)
+            pygame.display.flip()
+            self.__clock.tick(30)
+
+    def get_pygame_key_for_key(self, key: str):
+        """
+        Match the string name of a key with pygame's key constants
+        """
+        key_map = {
+            "space": pygame.K_SPACE,
+            "q": pygame.K_q,
+            "w": pygame.K_w,
+            "e": pygame.K_e,
+            "r": pygame.K_r,
+            "t": pygame.K_t,
+            "y": pygame.K_y,
+            "u": pygame.K_u,
+            "i": pygame.K_i,
+            "o": pygame.K_o,
+            "p": pygame.K_p,
+            "a": pygame.K_a,
+            "s": pygame.K_s,
+            "d": pygame.K_d,
+            "f": pygame.K_f,
+            "g": pygame.K_g,
+            "h": pygame.K_h,
+            "j": pygame.K_j,
+            "k": pygame.K_k,
+            "l": pygame.K_l,
+            "z": pygame.K_z,
+            "x": pygame.K_x,
+            "c": pygame.K_c,
+            "v": pygame.K_v,
+            "b": pygame.K_b,
+            "n": pygame.K_n,
+            "m": pygame.K_m,
+            "up": pygame.K_UP,
+            "down": pygame.K_DOWN,
+            "left": pygame.K_LEFT,
+            "right": pygame.K_RIGHT,
+            "left shift": pygame.K_LSHIFT,
+            "right shift": pygame.K_RSHIFT,
+            "left ctrl": pygame.K_LCTRL,
+            "right ctrl": pygame.K_RCTRL,
+            "left alt": pygame.K_LALT,
+            "right alt": pygame.K_RALT,
+            "tab": pygame.K_TAB,
+            "backspace": pygame.K_BACKSPACE,
+            "return": pygame.K_RETURN,
+            "escape": pygame.K_ESCAPE,
+            "insert": pygame.K_INSERT,
+            "delete": pygame.K_DELETE,
+            "home": pygame.K_HOME,
+            "end": pygame.K_END,
+            "page up": pygame.K_PAGEUP,
+            "page down": pygame.K_PAGEDOWN,
+            "print screen": pygame.K_PRINTSCREEN,
+            "scroll lock": pygame.K_SCROLLLOCK,
+            "pause": pygame.K_PAUSE,
+            "f1": pygame.K_F1,
+            "f2": pygame.K_F2,
+            "f3": pygame.K_F3,
+            "f4": pygame.K_F4,
+            "f5": pygame.K_F5,
+            "f6": pygame.K_F6,
+            "f7": pygame.K_F7,
+            "f8": pygame.K_F8,
+            "f9": pygame.K_F9,
+            "f10": pygame.K_F10,
+            "f11": pygame.K_F11,
+            "f12": pygame.K_F12,
+            "f13": pygame.K_F13,
+            "f14": pygame.K_F14,
+            "f15": pygame.K_F15,
+            "1": pygame.K_1,
+            "2": pygame.K_2,
+            "3": pygame.K_3,
+            "4": pygame.K_4,
+            "5": pygame.K_5,
+            "6": pygame.K_6,
+            "7": pygame.K_7,
+            "8": pygame.K_8,
+            "9": pygame.K_9,
+            "0": pygame.K_0,
+            "-": pygame.K_MINUS,
+            "=": pygame.K_EQUALS,
+            "[": pygame.K_LEFTBRACKET,
+            "]": pygame.K_RIGHTBRACKET,
+            ";": pygame.K_SEMICOLON,
+            "'": pygame.K_QUOTE,
+            "/": pygame.K_SLASH,
+            "\\": pygame.K_BACKSLASH,
+            ",": pygame.K_COMMA,
+            ".": pygame.K_PERIOD,
+            "`": pygame.K_BACKQUOTE
+        }
+        return key_map.get(key.lower(), None)
 
     def graceful_exit(self):
         """
