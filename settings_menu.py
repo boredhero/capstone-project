@@ -36,7 +36,6 @@ class SettingsMenu:
         self.__glogger = GameLogger()
         self.__settingsconfig = SettingsConfig()
         self.__keybinds = {
-            "jump": self.__settingsconfig.keybind_jump,
             "up": self.__settingsconfig.keybind_up,
             "down": self.__settingsconfig.keybind_down,
             "right": self.__settingsconfig.keybind_right,
@@ -81,7 +80,6 @@ class SettingsMenu:
         self.settings.add.range_slider(title="Puzzle 1 Difficutly (Player Speed)", default=int(self.__settingsconfig.puzzle_1_difficulty_speed), range_values=(5, 20), increment=1, rangeslider_id="puzzle_one_diff_speed", value_format=lambda x: str(round(x, None)))
         self.settings.add.range_slider(title="Puzzle 2 Difficulty (Speed): ", default=int(self.__settingsconfig.puzzle_2_difficulty_speed), range_values=(1, 50), increment=1, rangeslider_id="puzzle_two_diff_speed", value_format=lambda x: str(round(x, None)))
         self.settings.add.range_slider(title="Puzzle 2 Difficulty (Number): ", default=int(self.__settingsconfig.puzzle_2_difficulty_number), range_values=(1, 50), increment=1, rangeslider_id="puzzle_two_diff_number", value_format=lambda x: str(round(x, None)))
-        self.settings.add.button(title=f"Jump Keybind: {self.__keybinds['jump']}", action=self.listen_for_jump_key, button_id='jump_keybind_button', font_color=GameColors.WHITE.value)
         self.settings.add.button(title=f"Interact Keybind: {self.__keybinds['interact']}", action=self.listen_for_interact_key, button_id='interact_keybind_button', font_color=GameColors.WHITE.value)
         self.settings.add.button(title=f"Up Keybind: {self.__keybinds['up']}", action=self.listen_for_up_key, button_id='up_keybind_button', font_color=GameColors.WHITE.value)
         self.settings.add.button(title=f"Down Keybind: {self.__keybinds['down']}", action=self.listen_for_down_key, button_id='down_keybind_button', font_color=GameColors.WHITE.value)
@@ -128,12 +126,6 @@ class SettingsMenu:
         #self.settings._exit() # pylint: disable=protected-access
         self.return_and_reload()
 
-    def listen_for_jump_key(self):
-        """
-        Listen for the jump key
-        """
-        self.listen_for_keypress("jump")
-
     def listen_for_up_key(self):
         """
         Listen for the up key
@@ -166,7 +158,7 @@ class SettingsMenu:
 
     def listen_for_keypress(self, bind_name: str):
         """
-        Listen for the jump key and set it
+        Listen for a key press and set the keybind
         """
         self.settings.disable()
         self.__glogger.info(f"Listening for {bind_name} keybind", name=__name__)
@@ -280,7 +272,6 @@ class SettingsMenu:
                 "debug": debug,
                 "fancy_fonts": fancy_fonts,
                 "grayscale_mode": grayscale_mode,
-                "keybind_jump": self.__keybinds['jump'],
                 "keybind_up": self.__keybinds['up'],
                 "keybind_down": self.__keybinds['down'],
                 "keybind_right": self.__keybinds['right'],
@@ -313,7 +304,6 @@ class SettingsMenu:
             "fancy_fonts": self.__settingsconfig.fancy_fonts,
             "grayscale_mode": self.__settingsconfig.grayscale_mode,
             "debug": self.__settingsconfig.debug,
-            "keybind_jump": self.__settingsconfig.keybind_jump,
             "keybind_up": self.__settingsconfig.keybind_up,
             "keybind_down": self.__settingsconfig.keybind_down,
             "keybind_right": self.__settingsconfig.keybind_right,

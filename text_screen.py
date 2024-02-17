@@ -29,7 +29,6 @@ def get_main_game_controls_text():
     Left: {settings.keybind_left}\n
     Right: {settings.keybind_right}\n
     Interact: {settings.keybind_interact}\n
-    Jump: {settings.keybind_jump}\n
     Return to Main Menu: Esc
     """
 
