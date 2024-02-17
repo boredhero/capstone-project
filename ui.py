@@ -4,11 +4,9 @@ from enum import Enum
 import pygame
 import pygame.font
 from pygame.sprite import Sprite
-from pygame.rect import Rect # pylint: disable=unused-import
 
 from config import SettingsConfig
 from misc import GameColors, Singleton
-from save import SaveDataManager
 
 class GameState(Enum):
     EXIT = -1

@@ -18,6 +18,21 @@ class SaveDataManager(metaclass=Singleton):
             self.__player_name = None
         self.__player_x = self.__save_contents.get("player_x")
         self.__player_y = self.__save_contents.get("player_y")
+        self.__shown_intro_and_controls = bool(self.__save_contents.get("shown_intro_and_controls"))
+
+    def get_shown_intro_and_controls(self):
+        """
+        Have we shown the intro and controls
+        """
+        return self.__shown_intro_and_controls
+
+    def set_shown_intro_and_controls(self, shown: bool):
+        """
+        Set shown intro and controls
+        """
+        self.__save_contents["shown_intro_and_controls"] = shown
+        self.__write_save_yml_file(self.__save_contents)
+        self.__shown_intro_and_controls = shown
 
     def get_player_name(self):
         """
@@ -102,7 +117,8 @@ class SaveDataManager(metaclass=Singleton):
         return {
             "player_name": "None",
             "player_x": 0,
-            "player_y": 0
+            "player_y": 0,
+            "shown_main_intro_and_controls": False,
         }
 
     def __write_save_yml_file(self, contents: dict | None = None):

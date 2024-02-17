@@ -142,6 +142,11 @@ class InstanceMain():
                             case ui.GameState.PLAY:
                                 if self.__save_data.get_player_name() is None:
                                     self.show_name_input_screen()
+                                    self.__titlescreen_ui.set_visibility(False)
+                                    self.__show_intro_screen = True
+                                    self.__intro_screen = text_screen.TextScreen(self.__screen, text_screen.get_main_game_intro_text(), "Continue")
+                                    self.__intro_screen.draw()
+                                    self.__controls_screen = text_screen.TextScreen(self.__screen, text_screen.get_main_game_controls_text(), "Continue")
                                 else:
                                     self.__titlescreen_ui.set_visibility(False)
                                     self.__playing = True
@@ -165,10 +170,6 @@ class InstanceMain():
                     ui_action_levels = self.__debug_play_puzzles_ui.update(pygame.mouse.get_pos(), mouse_up)
                     if ui_action_levels is not None:
                         match ui_action_levels:
-                            case ui.GameState.PLAY:
-                                self.__show_intro_screen = True
-                                self.__intro_screen = text_screen.TextScreen(self.__screen, text_screen.get_main_game_intro_text(), "Continue")
-                                self.__text_screen_1.draw()
                             case ui.GameState.PLAY_PUZZLE_1:
                                 self.__show_text_screen_1 = True
                                 self.__debug_play_puzzles_ui.set_visibility(False)
@@ -183,11 +184,12 @@ class InstanceMain():
                     self.__intro_screen.draw()
                     if self.__intro_screen.handle_event(event): # pylint: disable=undefined-loop-variable
                         self.__show_intro_screen = False
-                        self.__playing = True
+                        self.__show_controls_screen = True
                 if self.__show_controls_screen:
                     self.__controls_screen.draw()
                     if self.__controls_screen.handle_event(event): # pylint: disable=undefined-loop-variable
                         self.__show_controls_screen = False
+                        self.__save_data.set_shown_intro_and_controls(True)
                         self.__playing = True
                 if self.__show_text_screen_1:
                     self.__text_screen_1.draw()
@@ -347,6 +349,8 @@ class InstanceMain():
             pygame.draw.rect(self.__screen, color, input_box, 2)
             pygame.display.flip()
             self.__clock.tick(30)
+        self.__show_intro_screen = True
+        self.__titlescreen_ui.set_visibility(False)
 
     def get_pygame_key_for_key(self, key: str):
         """
