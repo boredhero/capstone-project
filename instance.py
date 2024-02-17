@@ -5,6 +5,7 @@ from config import GameConfig, SettingsConfig
 import ui
 from settings_menu import SettingsMenu, GameInNeedOfReload
 from save import SaveDataManager
+import main_map
 import puzzle_level_1
 import puzzle_level_2
 import text_screen
@@ -60,9 +61,12 @@ class InstanceMain():
         """
         Initialize puzzles
         """
+        main_map_image_path = "assets/backgrounds/missing_texture.png"
         self.__player_puzzle_1 = puzzle_level_1.PlayerPuzzle1([100, 100])  # Player starting position
+        self.__player_main_map = main_map.MapPlayer([100, 100], main_map_image_path)
         self.__game_map_puzzle_1 = puzzle_level_1.GameMapPuzzle1(self.__screen, self.__player_puzzle_1)
         self.__game_map_puzzle_2 = puzzle_level_2.GameMapPuzzle2(self.__screen)
+        self.__game_map_main = main_map.MainGameMap(self.__screen, self.__player_main_map, main_map_image_path)
 
     def create_private_static_class_variable_defaults(self):
         """
@@ -72,10 +76,14 @@ class InstanceMain():
         self.__playing = False
         self.__playing_puzzle_1 = False
         self.__playing_puzzle_2 = False
+        self.__intro_screen = None
+        self.__controls_screen = None
         self.__text_screen_1 = None
         self.__text_screen_2 = None
         self.__credits = None
         self.__mla_works_cited = None
+        self.__show_intro_screen = False
+        self.__show_controls_screen = False
         self.__show_text_screen_1 = False
         self.__show_text_screen_2 = False
         self.__show_credits = False
@@ -157,6 +165,10 @@ class InstanceMain():
                     ui_action_levels = self.__debug_play_puzzles_ui.update(pygame.mouse.get_pos(), mouse_up)
                     if ui_action_levels is not None:
                         match ui_action_levels:
+                            case ui.GameState.PLAY:
+                                self.__show_intro_screen = True
+                                self.__intro_screen = text_screen.TextScreen(self.__screen, text_screen.get_main_game_intro_text(), "Continue")
+                                self.__text_screen_1.draw()
                             case ui.GameState.PLAY_PUZZLE_1:
                                 self.__show_text_screen_1 = True
                                 self.__debug_play_puzzles_ui.set_visibility(False)
@@ -167,6 +179,16 @@ class InstanceMain():
                                 self.__debug_play_puzzles_ui.set_visibility(False)
                                 self.__text_screen_2 = text_screen.TextScreen(self.__screen, text_screen.get_puzzle_2_intro_text(), "Continue")
                                 self.__text_screen_2.draw()
+                if self.__show_intro_screen:
+                    self.__intro_screen.draw()
+                    if self.__intro_screen.handle_event(event): # pylint: disable=undefined-loop-variable
+                        self.__show_intro_screen = False
+                        self.__playing = True
+                if self.__show_controls_screen:
+                    self.__controls_screen.draw()
+                    if self.__controls_screen.handle_event(event): # pylint: disable=undefined-loop-variable
+                        self.__show_controls_screen = False
+                        self.__playing = True
                 if self.__show_text_screen_1:
                     self.__text_screen_1.draw()
                     if self.__text_screen_1.handle_event(event): # pylint: disable=undefined-loop-variable
@@ -191,21 +213,15 @@ class InstanceMain():
             if self.__playing:
                 keys = pygame.key.get_pressed()
                 if keys[self.get_pygame_key_for_key(self.__settings.keybind_up)]:
-                    self.__player_puzzle_1.move("up")
-                if keys[self.get_pygame_key_for_key(self.__settings.keybind_down)]:
-                    self.__player_puzzle_1.move("down")
-                if keys[self.get_pygame_key_for_key(self.__settings.keybind_left)]:
-                    self.__player_puzzle_1.move("left")
-                if keys[self.get_pygame_key_for_key(self.__settings.keybind_right)]:
-                    self.__player_puzzle_1.move("right")
-                if keys[pygame.K_n]:
-                    self.__game_map_puzzle_1.hitbox_generator.reset_hitboxes()
-                if self.__game_map_puzzle_1.all_hitboxes_collided():
-                    self.return_to_main_menu()
-                self.__game_map_puzzle_1.draw_map()
-                self.__game_map_puzzle_1.hitbox_generator.set_collidability(True)
-                self.__game_map_puzzle_1.draw_hitboxes()
-                self.__player_puzzle_1.draw(self.__screen)
+                    self.__player_main_map.move("up", self.__game_map_main.camera_rect)
+                elif keys[self.get_pygame_key_for_key(self.__settings.keybind_down)]:
+                    self.__player_main_map.move("down", self.__game_map_main.camera_rect)
+                elif keys[self.get_pygame_key_for_key(self.__settings.keybind_left)]:
+                    self.__player_main_map.move("left", self.__game_map_main.camera_rect)
+                elif keys[self.get_pygame_key_for_key(self.__settings.keybind_right)]:
+                    self.__player_main_map.move("right", self.__game_map_main.camera_rect)
+                self.__game_map_main.draw_map()
+                self.__player_main_map.draw(self.__screen, self.__game_map_main.camera_rect)
                 pygame.display.flip()
             if self.__playing_puzzle_1:
                 keys = pygame.key.get_pressed()
@@ -262,8 +278,7 @@ class InstanceMain():
         Return to the main menu
         """
         self.__playing = False # pylint: disable=attribute-defined-outside-init
-        self.__game_map_puzzle_1.hitbox_generator.set_collidability(False)
-        self.__game_map_puzzle_1.hitbox_generator.reset_hitboxes()
+        self.__game_map_main.set_visibility(False)
         self.__titlescreen_ui.set_visibility(True)
 
     def puzzle_1_return_to_main_menu(self):

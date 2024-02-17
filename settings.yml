@@ -1,12 +1,12 @@
-debug: false
+debug: true
 fancy_fonts: true
 grayscale_mode: false
-keybind_down: down
+keybind_down: s
 keybind_interact: left shift
 keybind_jump: space
-keybind_left: left
-keybind_right: right
-keybind_up: up
+keybind_left: a
+keybind_right: d
+keybind_up: w
 max_fps: 60
 puzzle_1_difficulty: 10
 puzzle_1_difficulty_mult: 870
