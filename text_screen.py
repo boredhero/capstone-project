@@ -1,5 +1,38 @@
 import pygame
 
+from config import SettingsConfig
+from save import SaveDataManager
+
+def get_main_game_intro_text():
+    """
+    Get the main game intro text
+    """
+    save = SaveDataManager()
+    return f"""
+    Hello, {save.get_player_name()}! This game is a collection of puzzles and experiences that are meant to simulate the feelings of anxiety and depression.\n
+    It is meant to be a learning experience for those who do not have mental health issues, and a validating experience for those who do.\n
+    The game is meant to be a safe space for those who have these feelings, and to help others understand what it is like to have these feelings.\n
+
+    Your objective is to explore the world and complete the puzzles. The story is non-linear and is open to your discovery and interpretation via\n
+    artifacts you can find and read throughout.\n
+    """
+
+def get_main_game_controls_text():
+    """
+    Get the main game controls text
+    """
+    settings = SettingsConfig()
+    return f"""
+    Controls:\n
+    Up: {settings.keybind_up}\n
+    Down: {settings.keybind_down}\n
+    Left: {settings.keybind_left}\n
+    Right: {settings.keybind_right}\n
+    Interact: {settings.keybind_interact}\n
+    Jump: {settings.keybind_jump}\n
+    Return to Main Menu: Esc
+    """
+
 def get_puzzle_1_intro_text():
     """
     Get the text for puzzle 1 intro
