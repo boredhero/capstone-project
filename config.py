@@ -42,6 +42,11 @@ class SettingsConfig(metaclass=Singleton):
         self.debug = self.__settings.get("debug")
         self.fancy_fonts = self.__settings.get("fancy_fonts")
         self.grayscale_mode = self.__settings.get("grayscale_mode")
+        self.keybind_up = self.__settings.get("keybind_up")
+        self.keybind_down = self.__settings.get("keybind_down")
+        self.keybind_right = self.__settings.get("keybind_right")
+        self.keybind_left = self.__settings.get("keybind_left")
+        self.keybind_interact = self.__settings.get("keybind_interact")
         # Artificially constructed helpers
         match self.screen_height:
             case 2160:
@@ -106,7 +111,12 @@ class SettingsConfig(metaclass=Singleton):
             "subtitles": True,
             "debug": False,
             "fancy_fonts": True,
-            "grayscale_mode": False
+            "grayscale_mode": False,
+            "keybind_up": "w",
+            "keybind_down": "s",
+            "keybind_right": "d",
+            "keybind_left": "a",
+            "keybind_interact": "e"
         }
 
     def __write_settings_yml_file(self, contents: dict | None = None):

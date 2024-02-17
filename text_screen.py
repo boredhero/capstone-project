@@ -1,5 +1,37 @@
 import pygame
 
+from config import SettingsConfig
+from save import SaveDataManager
+
+def get_main_game_intro_text():
+    """
+    Get the main game intro text
+    """
+    save = SaveDataManager()
+    return f"""
+    Hello, {save.get_player_name()}! This game is a collection of puzzles and experiences that are meant to simulate the feelings of anxiety and depression.\n
+    It is meant to be a learning experience for those who do not have mental health issues, and a validating experience for those who do.\n
+    The game is meant to be a safe space for those who have these feelings, and to help others understand what it is like to have these feelings.\n
+
+    Your objective is to explore the world and complete the puzzles. The story is non-linear and is open to your discovery and interpretation via\n
+    artifacts you can find and read throughout.\n
+    """
+
+def get_main_game_controls_text():
+    """
+    Get the main game controls text
+    """
+    settings = SettingsConfig()
+    return f"""
+    Controls:\n
+    Up: {settings.keybind_up}\n
+    Down: {settings.keybind_down}\n
+    Left: {settings.keybind_left}\n
+    Right: {settings.keybind_right}\n
+    Interact: {settings.keybind_interact}\n
+    Return to Main Menu: Esc
+    """
+
 def get_puzzle_1_intro_text():
     """
     Get the text for puzzle 1 intro
@@ -56,6 +88,18 @@ def get_credits_and_attributions_text():
     Porter Sans Inline Block (SIL Open Font License)\n
     System Default Fonts (Various)\n
 
+    Music:\n
+
+    "Gymnopedie No. 1" Kevin MacLeod (incompetech.com)\n 
+    Licensed under Creative Commons: BY Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/\n
+
+    "Prelude in E Minor, Op. 28, Nr. 4 for piano." Frederic Chopin. Porticodoro / SmartCGArt Media Productions.\n
+    Licensed under Creative Commons: BY Attribution 3.0 License http://creativecommons.org/licenses/by/3.0/\n
+
+    "Violin Partita No.2 in D minor, BWV 1004 Chaconne (No.5) (Bach, Johann Sebastian)" Performed by Ray Chen (violin)\n
+    https://imslp.org/wiki/Violin_Partita_No.2_in_D_minor%2C_BWV_1004_(Bach%2C_Johann_Sebastian)\n
+    Licensed under Creative Commons: BY-ND 4.0 DEED https://creativecommons.org/licenses/by-nd/4.0/deed.en\n
+    
     Images Used (License):\n
     
     All images taken by author or belong to the public domain; and are Fair Use - Transformative (MIT)\n

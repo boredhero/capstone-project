@@ -1,6 +1,6 @@
 from typing import Any
 
-import yaml
+import yaml, pygame
 import pygame_menu as pm
 
 from ui import GameColors
@@ -35,6 +35,13 @@ class SettingsMenu:
         self.__ginr = GameInNeedOfReload()
         self.__glogger = GameLogger()
         self.__settingsconfig = SettingsConfig()
+        self.__keybinds = {
+            "up": self.__settingsconfig.keybind_up,
+            "down": self.__settingsconfig.keybind_down,
+            "right": self.__settingsconfig.keybind_right,
+            "left": self.__settingsconfig.keybind_left,
+            "interact": self.__settingsconfig.keybind_interact
+        }
         try:
             self.__settings_state = self.__get_settings_state_from_disk() # pylint: disable=unused-private-member
             self.__glogger.debug(f"Loaded settings from disk: {self.__settings_state}", name=__name__)
@@ -73,6 +80,11 @@ class SettingsMenu:
         self.settings.add.range_slider(title="Puzzle 1 Difficutly (Player Speed)", default=int(self.__settingsconfig.puzzle_1_difficulty_speed), range_values=(5, 20), increment=1, rangeslider_id="puzzle_one_diff_speed", value_format=lambda x: str(round(x, None)))
         self.settings.add.range_slider(title="Puzzle 2 Difficulty (Speed): ", default=int(self.__settingsconfig.puzzle_2_difficulty_speed), range_values=(1, 50), increment=1, rangeslider_id="puzzle_two_diff_speed", value_format=lambda x: str(round(x, None)))
         self.settings.add.range_slider(title="Puzzle 2 Difficulty (Number): ", default=int(self.__settingsconfig.puzzle_2_difficulty_number), range_values=(1, 50), increment=1, rangeslider_id="puzzle_two_diff_number", value_format=lambda x: str(round(x, None)))
+        self.settings.add.button(title=f"Interact Keybind: {self.__keybinds['interact']}", action=self.listen_for_interact_key, button_id='interact_keybind_button', font_color=GameColors.WHITE.value)
+        self.settings.add.button(title=f"Up Keybind: {self.__keybinds['up']}", action=self.listen_for_up_key, button_id='up_keybind_button', font_color=GameColors.WHITE.value)
+        self.settings.add.button(title=f"Down Keybind: {self.__keybinds['down']}", action=self.listen_for_down_key, button_id='down_keybind_button', font_color=GameColors.WHITE.value)
+        self.settings.add.button(title=f"Left Keybind: {self.__keybinds['left']}", action=self.listen_for_left_key, button_id='left_keybind_button', font_color=GameColors.WHITE.value)
+        self.settings.add.button(title=f"Right Keybind: {self.__keybinds['right']}", action=self.listen_for_right_key, button_id='right_keybind_button', font_color=GameColors.WHITE.value)
         self.settings.add.button(title="Save Settings and Apply", action=self.write_game_settings, font_color=GameColors.WHITE.value, background_color=GameColors.BLACK.value)
         self.settings.add.button(title="Restore Defaults", action=self.write_default_settings_and_quit, font_color=GameColors.WHITE.value, background_color=GameColors.BLACK.value)
         self.settings.add.button(title="Return to Main Menu", action=self.return_to_main_menu, font_color=GameColors.WHITE.value, background_color=GameColors.BLACK.value)
@@ -98,6 +110,14 @@ class SettingsMenu:
         self.__settingsconfig.refresh_from_disk()
         self.return_to_main_menu()
 
+    def reload_settings(self):
+        """
+        Reload the settings menu
+        """
+        self.__glogger.info("Reloading settings", name=__name__)
+        self.set_reload_state(True)
+        self.__settingsconfig.refresh_from_disk()
+
     def write_default_settings_and_quit(self):
         """
         Write the default settings and quit
@@ -105,6 +125,59 @@ class SettingsMenu:
         self.__settingsconfig.write_default_settings()
         #self.settings._exit() # pylint: disable=protected-access
         self.return_and_reload()
+
+    def listen_for_up_key(self):
+        """
+        Listen for the up key
+        """
+        self.listen_for_keypress("up")
+
+    def listen_for_down_key(self):
+        """
+        Listen for the down key
+        """
+        self.listen_for_keypress("down")
+
+    def listen_for_right_key(self):
+        """
+        Listen for the right key
+        """
+        self.listen_for_keypress("right")
+
+    def listen_for_left_key(self):
+        """
+        Listen for the left key
+        """
+        self.listen_for_keypress("left")
+
+    def listen_for_interact_key(self):
+        """
+        Listen for the interact key
+        """
+        self.listen_for_keypress("interact")
+
+    def listen_for_keypress(self, bind_name: str):
+        """
+        Listen for a key press and set the keybind
+        """
+        self.settings.disable()
+        self.__glogger.info(f"Listening for {bind_name} keybind", name=__name__)
+        waiting_for_key = True
+        while waiting_for_key:
+            events = pygame.event.get()
+            for event in events:
+                if event.type == pygame.KEYDOWN:
+                    self.__keybinds[bind_name] = pygame.key.name(event.key)
+                    self.__glogger.info(f"Keybind for {bind_name} set to {self.__keybinds[bind_name]}", name=__name__)
+                    waiting_for_key = False
+                    keybind_button = self.settings.get_widget(bind_name + '_keybind_button')
+                    if keybind_button:  # Check if the widget was found
+                        new_title = f"{bind_name.capitalize()} Keybind: {self.__keybinds[bind_name]}"
+                        keybind_button.set_title(new_title)
+                    self.settings.enable()
+                    self.settings.full_reset()
+                    self.settings.mainloop(self.__screen)
+                    return
 
     def write_game_settings(self):
         """
@@ -198,7 +271,12 @@ class SettingsMenu:
                 "subtitles": subtitles,
                 "debug": debug,
                 "fancy_fonts": fancy_fonts,
-                "grayscale_mode": grayscale_mode
+                "grayscale_mode": grayscale_mode,
+                "keybind_up": self.__keybinds['up'],
+                "keybind_down": self.__keybinds['down'],
+                "keybind_right": self.__keybinds['right'],
+                "keybind_left": self.__keybinds['left'],
+                "keybind_interact": self.__keybinds['interact']
             }
             try:
                 with open(self.__settingsconfig.config_name, 'w') as settings_file:
@@ -225,7 +303,12 @@ class SettingsMenu:
             "subtitles": self.__settingsconfig.subtitles,
             "fancy_fonts": self.__settingsconfig.fancy_fonts,
             "grayscale_mode": self.__settingsconfig.grayscale_mode,
-            "debug": self.__settingsconfig.debug
+            "debug": self.__settingsconfig.debug,
+            "keybind_up": self.__settingsconfig.keybind_up,
+            "keybind_down": self.__settingsconfig.keybind_down,
+            "keybind_right": self.__settingsconfig.keybind_right,
+            "keybind_left": self.__settingsconfig.keybind_left,
+            "keybind_interact": self.__settingsconfig.keybind_interact
         }
 
     def __get_current_resolution_index(self) -> int:

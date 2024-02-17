@@ -4,6 +4,8 @@ from game_logger import GameLogger
 from config import GameConfig, SettingsConfig
 import ui
 from settings_menu import SettingsMenu, GameInNeedOfReload
+from save import SaveDataManager
+import main_map
 import puzzle_level_1
 import puzzle_level_2
 import text_screen
@@ -18,6 +20,7 @@ class InstanceMain():
         self.__ginr = GameInNeedOfReload()
         self.__config = GameConfig()
         self.__settings = SettingsConfig()
+        self.__save_data = SaveDataManager()
         self.init_logger()
         match self.__settings.window_mode:
             case "windowed":
@@ -35,6 +38,7 @@ class InstanceMain():
         pygame.display.set_caption(f"{self.__config.title} v{self.__config.version}")
         self.__clock = pygame.time.Clock()
         pygame.init()
+        pygame.mixer.init()
         self.init_ui()
         self.init_puzzles()
         self.main_game_loop()
@@ -58,9 +62,12 @@ class InstanceMain():
         """
         Initialize puzzles
         """
+        main_map_image_path = "assets/backgrounds/missing_texture.png"
         self.__player_puzzle_1 = puzzle_level_1.PlayerPuzzle1([100, 100])  # Player starting position
+        self.__player_main_map = main_map.MapPlayer([100, 100], main_map_image_path)
         self.__game_map_puzzle_1 = puzzle_level_1.GameMapPuzzle1(self.__screen, self.__player_puzzle_1)
         self.__game_map_puzzle_2 = puzzle_level_2.GameMapPuzzle2(self.__screen)
+        self.__game_map_main = main_map.MainGameMap(self.__screen, self.__player_main_map, main_map_image_path)
 
     def create_private_static_class_variable_defaults(self):
         """
@@ -70,14 +77,21 @@ class InstanceMain():
         self.__playing = False
         self.__playing_puzzle_1 = False
         self.__playing_puzzle_2 = False
+        self.__intro_screen = None
+        self.__controls_screen = None
         self.__text_screen_1 = None
         self.__text_screen_2 = None
         self.__credits = None
         self.__mla_works_cited = None
+        self.__show_intro_screen = False
+        self.__show_controls_screen = False
         self.__show_text_screen_1 = False
         self.__show_text_screen_2 = False
         self.__show_credits = False
         self.__show_mla_works_cited = False
+        self.__playing_map_music = False
+        self.__playing_puzzle_1_music = False
+        self.__playing_puzzle_2_music = False
 
     def main_game_loop(self):
         """
@@ -130,9 +144,17 @@ class InstanceMain():
                             case ui.GameState.SETTINGS:
                                 self.__gamesettings = SettingsMenu(self.__screen) # pylint: disable=unused-private-member
                             case ui.GameState.PLAY:
-                                self.__titlescreen_ui.set_visibility(False)
-                                self.__playing = True
-                                self.__screen.fill((0, 0, 0))
+                                if self.__save_data.get_player_name() is None:
+                                    self.show_name_input_screen()
+                                    self.__titlescreen_ui.set_visibility(False)
+                                    self.__show_intro_screen = True
+                                    self.__intro_screen = text_screen.TextScreen(self.__screen, text_screen.get_main_game_intro_text(), "Continue")
+                                    self.__intro_screen.draw()
+                                    self.__controls_screen = text_screen.TextScreen(self.__screen, text_screen.get_main_game_controls_text(), "Continue")
+                                else:
+                                    self.__titlescreen_ui.set_visibility(False)
+                                    self.__playing = True
+                                    self.__screen.fill((0, 0, 0))
                             case ui.GameState.CREDITS:
                                 self.__titlescreen_ui.set_visibility(False)
                                 self.__show_credits = True
@@ -162,6 +184,17 @@ class InstanceMain():
                                 self.__debug_play_puzzles_ui.set_visibility(False)
                                 self.__text_screen_2 = text_screen.TextScreen(self.__screen, text_screen.get_puzzle_2_intro_text(), "Continue")
                                 self.__text_screen_2.draw()
+                if self.__show_intro_screen:
+                    self.__intro_screen.draw()
+                    if self.__intro_screen.handle_event(event): # pylint: disable=undefined-loop-variable
+                        self.__show_intro_screen = False
+                        self.__show_controls_screen = True
+                if self.__show_controls_screen:
+                    self.__controls_screen.draw()
+                    if self.__controls_screen.handle_event(event): # pylint: disable=undefined-loop-variable
+                        self.__show_controls_screen = False
+                        self.__save_data.set_shown_intro_and_controls(True)
+                        self.__playing = True
                 if self.__show_text_screen_1:
                     self.__text_screen_1.draw()
                     if self.__text_screen_1.handle_event(event): # pylint: disable=undefined-loop-variable
@@ -183,34 +216,43 @@ class InstanceMain():
                         self.__titlescreen_ui.set_visibility(True)
                         self.__show_mla_works_cited = False
                 mouse_up = False
+            if self.__playing and not self.__playing_map_music:
+                pygame.mixer.music.load("assets/music/gymnopedie_no_1.mp3")
+                pygame.mixer.music.play(-1)
+                pygame.mixer.music.set_volume(0.1)
+                self.__playing_map_music = True
+            if self.__playing_puzzle_1 and not self.__playing_puzzle_1_music:
+                pygame.mixer.music.load("assets/music/chopin_prelude_op_28_no_4.ogg")
+                pygame.mixer.music.play(-1)
+                pygame.mixer.music.set_volume(0.1)
+                self.__playing_puzzle_1_music = True
+            if self.__playing_puzzle_2 and not self.__playing_puzzle_2_music:
+                pygame.mixer.music.load("assets/music/violin_partita_no_2_in_d_minor_bwv_1004.mp3")
+                pygame.mixer.music.play(-1)
+                pygame.mixer.music.set_volume(0.1)
+                self.__playing_puzzle_2_music = True
             if self.__playing:
                 keys = pygame.key.get_pressed()
-                if keys[pygame.K_w] or keys[pygame.K_UP]:
-                    self.__player_puzzle_1.move("up")
-                if keys[pygame.K_s] or keys[pygame.K_DOWN]:
-                    self.__player_puzzle_1.move("down")
-                if keys[pygame.K_a] or keys[pygame.K_LEFT]:
-                    self.__player_puzzle_1.move("left")
-                if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
-                    self.__player_puzzle_1.move("right")
-                if keys[pygame.K_n]:
-                    self.__game_map_puzzle_1.hitbox_generator.reset_hitboxes()
-                if self.__game_map_puzzle_1.all_hitboxes_collided():
-                    self.return_to_main_menu()
-                self.__game_map_puzzle_1.draw_map()
-                self.__game_map_puzzle_1.hitbox_generator.set_collidability(True)
-                self.__game_map_puzzle_1.draw_hitboxes()
-                self.__player_puzzle_1.draw(self.__screen)
+                if keys[self.get_pygame_key_for_key(self.__settings.keybind_up)]:
+                    self.__player_main_map.move("up", self.__game_map_main.camera_rect)
+                elif keys[self.get_pygame_key_for_key(self.__settings.keybind_down)]:
+                    self.__player_main_map.move("down", self.__game_map_main.camera_rect)
+                elif keys[self.get_pygame_key_for_key(self.__settings.keybind_left)]:
+                    self.__player_main_map.move("left", self.__game_map_main.camera_rect)
+                elif keys[self.get_pygame_key_for_key(self.__settings.keybind_right)]:
+                    self.__player_main_map.move("right", self.__game_map_main.camera_rect)
+                self.__game_map_main.draw_map()
+                self.__player_main_map.draw(self.__screen, self.__game_map_main.camera_rect)
                 pygame.display.flip()
             if self.__playing_puzzle_1:
                 keys = pygame.key.get_pressed()
-                if keys[pygame.K_w] or keys[pygame.K_UP]:
+                if keys[self.get_pygame_key_for_key(self.__settings.keybind_up)]:
                     self.__player_puzzle_1.move("up")
-                if keys[pygame.K_s] or keys[pygame.K_DOWN]:
+                if keys[self.get_pygame_key_for_key(self.__settings.keybind_down)]:
                     self.__player_puzzle_1.move("down")
-                if keys[pygame.K_a] or keys[pygame.K_LEFT]:
+                if keys[self.get_pygame_key_for_key(self.__settings.keybind_left)]:
                     self.__player_puzzle_1.move("left")
-                if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
+                if keys[self.get_pygame_key_for_key(self.__settings.keybind_right)]:
                     self.__player_puzzle_1.move("right")
                 if keys[pygame.K_n]:
                     self.__game_map_puzzle_1.hitbox_generator.reset_hitboxes()
@@ -257,9 +299,10 @@ class InstanceMain():
         Return to the main menu
         """
         self.__playing = False # pylint: disable=attribute-defined-outside-init
-        self.__game_map_puzzle_1.hitbox_generator.set_collidability(False)
-        self.__game_map_puzzle_1.hitbox_generator.reset_hitboxes()
+        self.__game_map_main.set_visibility(False)
         self.__titlescreen_ui.set_visibility(True)
+        self.__playing_map_music = False
+        pygame.mixer.music.stop()
 
     def puzzle_1_return_to_main_menu(self):
         """
@@ -269,6 +312,8 @@ class InstanceMain():
         self.__game_map_puzzle_1.hitbox_generator.set_collidability(False)
         self.__game_map_puzzle_1.hitbox_generator.reset_hitboxes()
         self.__titlescreen_ui.set_visibility(True)
+        self.__playing_puzzle_1_music = False
+        pygame.mixer.music.stop()
 
     def puzzle_2_return_to_main_menu(self):
         """
@@ -278,12 +323,153 @@ class InstanceMain():
         self.__game_map_puzzle_2.hitbox_generator.set_clickability(False)
         self.__game_map_puzzle_2.hitbox_generator.reset_hitboxes()
         self.__titlescreen_ui.set_visibility(True)
+        self.__playing_puzzle_2_music = False
+        pygame.mixer.music.stop()
 
     def check_playing_anything(self):
         """
         Check if playing anything
         """
         return self.__playing or self.__playing_puzzle_1 or self.__playing_puzzle_2
+
+    def show_name_input_screen(self):
+        """
+        Show the name input
+        """
+        input_active = True
+        player_name = ""
+        input_box = pygame.Rect(100, 150, 140, 32)
+        color_inactive = pygame.Color('lightskyblue3')
+        color_active = pygame.Color('dodgerblue2')
+        color = color_inactive
+        font = pygame.font.Font(None, 32)
+        while input_active:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    exit()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if input_box.collidepoint(event.pos):
+                        input_active = not input_active
+                    else:
+                        input_active = False
+                    color = color_active if input_active else color_inactive
+                if event.type == pygame.KEYDOWN:
+                    if input_active:
+                        if event.key == pygame.K_RETURN:
+                            self.__save_data.set_player_name(player_name)
+                            return
+                        elif event.key == pygame.K_BACKSPACE:
+                            player_name = player_name[:-1]
+                        else:
+                            player_name += event.unicode
+            self.__screen.fill((30, 30, 30))
+            instruction_text = "Please enter a player name and press Enter to continue"
+            txt_instruction = font.render(instruction_text, True, pygame.Color('white'))
+            self.__screen.blit(txt_instruction, (100, 100))  # Adjust position as needed
+            txt_surface = font.render(player_name, True, color)
+            width = max(200, txt_surface.get_width()+10)
+            input_box.w = width
+            self.__screen.blit(txt_surface, (input_box.x+5, input_box.y+5))
+            pygame.draw.rect(self.__screen, color, input_box, 2)
+            pygame.display.flip()
+            self.__clock.tick(30)
+        self.__show_intro_screen = True
+        self.__titlescreen_ui.set_visibility(False)
+
+    def get_pygame_key_for_key(self, key: str):
+        """
+        Match the string name of a key with pygame's key constants
+        """
+        key_map = {
+            "space": pygame.K_SPACE,
+            "q": pygame.K_q,
+            "w": pygame.K_w,
+            "e": pygame.K_e,
+            "r": pygame.K_r,
+            "t": pygame.K_t,
+            "y": pygame.K_y,
+            "u": pygame.K_u,
+            "i": pygame.K_i,
+            "o": pygame.K_o,
+            "p": pygame.K_p,
+            "a": pygame.K_a,
+            "s": pygame.K_s,
+            "d": pygame.K_d,
+            "f": pygame.K_f,
+            "g": pygame.K_g,
+            "h": pygame.K_h,
+            "j": pygame.K_j,
+            "k": pygame.K_k,
+            "l": pygame.K_l,
+            "z": pygame.K_z,
+            "x": pygame.K_x,
+            "c": pygame.K_c,
+            "v": pygame.K_v,
+            "b": pygame.K_b,
+            "n": pygame.K_n,
+            "m": pygame.K_m,
+            "up": pygame.K_UP,
+            "down": pygame.K_DOWN,
+            "left": pygame.K_LEFT,
+            "right": pygame.K_RIGHT,
+            "left shift": pygame.K_LSHIFT,
+            "right shift": pygame.K_RSHIFT,
+            "left ctrl": pygame.K_LCTRL,
+            "right ctrl": pygame.K_RCTRL,
+            "left alt": pygame.K_LALT,
+            "right alt": pygame.K_RALT,
+            "tab": pygame.K_TAB,
+            "backspace": pygame.K_BACKSPACE,
+            "return": pygame.K_RETURN,
+            "escape": pygame.K_ESCAPE,
+            "insert": pygame.K_INSERT,
+            "delete": pygame.K_DELETE,
+            "home": pygame.K_HOME,
+            "end": pygame.K_END,
+            "page up": pygame.K_PAGEUP,
+            "page down": pygame.K_PAGEDOWN,
+            "print screen": pygame.K_PRINTSCREEN,
+            "scroll lock": pygame.K_SCROLLLOCK,
+            "pause": pygame.K_PAUSE,
+            "f1": pygame.K_F1,
+            "f2": pygame.K_F2,
+            "f3": pygame.K_F3,
+            "f4": pygame.K_F4,
+            "f5": pygame.K_F5,
+            "f6": pygame.K_F6,
+            "f7": pygame.K_F7,
+            "f8": pygame.K_F8,
+            "f9": pygame.K_F9,
+            "f10": pygame.K_F10,
+            "f11": pygame.K_F11,
+            "f12": pygame.K_F12,
+            "f13": pygame.K_F13,
+            "f14": pygame.K_F14,
+            "f15": pygame.K_F15,
+            "1": pygame.K_1,
+            "2": pygame.K_2,
+            "3": pygame.K_3,
+            "4": pygame.K_4,
+            "5": pygame.K_5,
+            "6": pygame.K_6,
+            "7": pygame.K_7,
+            "8": pygame.K_8,
+            "9": pygame.K_9,
+            "0": pygame.K_0,
+            "-": pygame.K_MINUS,
+            "=": pygame.K_EQUALS,
+            "[": pygame.K_LEFTBRACKET,
+            "]": pygame.K_RIGHTBRACKET,
+            ";": pygame.K_SEMICOLON,
+            "'": pygame.K_QUOTE,
+            "/": pygame.K_SLASH,
+            "\\": pygame.K_BACKSLASH,
+            ",": pygame.K_COMMA,
+            ".": pygame.K_PERIOD,
+            "`": pygame.K_BACKQUOTE
+        }
+        return key_map.get(key.lower(), None)
 
     def graceful_exit(self):
         """

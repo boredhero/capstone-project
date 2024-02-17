@@ -4,7 +4,6 @@ from enum import Enum
 import pygame
 import pygame.font
 from pygame.sprite import Sprite
-from pygame.rect import Rect # pylint: disable=unused-import
 
 from config import SettingsConfig
 from misc import GameColors, Singleton
@@ -19,6 +18,7 @@ class GameState(Enum):
     PLAY_PUZZLE_1 = 5
     PLAY_PUZZLE_2 = 6
     MLA_WORKS_CITED = 7
+    INPUT_NAME = 8
 
 class CurrentGameState(metaclass=Singleton):
     """
@@ -53,7 +53,7 @@ def create_surface_with_text(text: str, font_size: int, text_rgb: Tuple, bg_rgb:
     settings = SettingsConfig()
     pygame.font.init()
     if settings.fancy_fonts:
-        font = pygame.font.Font('fonts/porter-sans/porter-sans-inline-block.ttf', font_size)
+        font = pygame.font.Font('assets/fonts/porter-sans/porter-sans-inline-block.ttf', font_size)
     else:
         font = pygame.font.SysFont("Arial", font_size)
     surface = font.render(text, True, text_rgb, bg_rgb)
@@ -211,7 +211,7 @@ class TitleScreenUIElements():
         """
         self.visibility = True
         self.__settings = SettingsConfig()
-        self.__quit_button_y_pos = 550
+        self.__quit_button_y_pos = 600
         if self.__settings.debug:
             self.__quit_button_y_pos = 650
         self.__title = UIElement(
