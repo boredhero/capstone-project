@@ -88,6 +88,18 @@ def get_credits_and_attributions_text():
     Porter Sans Inline Block (SIL Open Font License)\n
     System Default Fonts (Various)\n
 
+    Music:\n
+
+    "Gymnopedie No. 1" Kevin MacLeod (incompetech.com)\n 
+    Licensed under Creative Commons: BY Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/\n
+
+    "Prelude in E Minor, Op. 28, Nr. 4 for piano." Frederic Chopin. Porticodoro / SmartCGArt Media Productions.\n
+    Licensed under Creative Commons: BY Attribution 3.0 License http://creativecommons.org/licenses/by/3.0/\n
+
+    "Violin Partita No.2 in D minor, BWV 1004 Chaconne (No.5) (Bach, Johann Sebastian)" Performed by Ray Chen (violin)\n
+    https://imslp.org/wiki/Violin_Partita_No.2_in_D_minor%2C_BWV_1004_(Bach%2C_Johann_Sebastian)\n
+    Licensed under Creative Commons: BY-ND 4.0 DEED https://creativecommons.org/licenses/by-nd/4.0/deed.en\n
+    
     Images Used (License):\n
     
     All images taken by author or belong to the public domain; and are Fair Use - Transformative (MIT)\n
