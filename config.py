@@ -42,7 +42,6 @@ class SettingsConfig(metaclass=Singleton):
         self.debug = self.__settings.get("debug")
         self.fancy_fonts = self.__settings.get("fancy_fonts")
         self.grayscale_mode = self.__settings.get("grayscale_mode")
-        self.keybind_jump = self.__settings.get("keybind_jump")
         self.keybind_up = self.__settings.get("keybind_up")
         self.keybind_down = self.__settings.get("keybind_down")
         self.keybind_right = self.__settings.get("keybind_right")
@@ -113,7 +112,6 @@ class SettingsConfig(metaclass=Singleton):
             "debug": False,
             "fancy_fonts": True,
             "grayscale_mode": False,
-            "keybind_jump": "space",
             "keybind_up": "w",
             "keybind_down": "s",
             "keybind_right": "d",
