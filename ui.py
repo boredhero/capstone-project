@@ -53,7 +53,7 @@ def create_surface_with_text(text: str, font_size: int, text_rgb: Tuple, bg_rgb:
     settings = SettingsConfig()
     pygame.font.init()
     if settings.fancy_fonts:
-        font = pygame.font.Font('fonts/porter-sans/porter-sans-inline-block.ttf', font_size)
+        font = pygame.font.Font('assets/fonts/porter-sans/porter-sans-inline-block.ttf', font_size)
     else:
         font = pygame.font.SysFont("Arial", font_size)
     surface = font.render(text, True, text_rgb, bg_rgb)

@@ -38,6 +38,7 @@ class InstanceMain():
         pygame.display.set_caption(f"{self.__config.title} v{self.__config.version}")
         self.__clock = pygame.time.Clock()
         pygame.init()
+        pygame.mixer.init()
         self.init_ui()
         self.init_puzzles()
         self.main_game_loop()
@@ -88,6 +89,9 @@ class InstanceMain():
         self.__show_text_screen_2 = False
         self.__show_credits = False
         self.__show_mla_works_cited = False
+        self.__playing_map_music = False
+        self.__playing_puzzle_1_music = False
+        self.__playing_puzzle_2_music = False
 
     def main_game_loop(self):
         """
@@ -212,6 +216,21 @@ class InstanceMain():
                         self.__titlescreen_ui.set_visibility(True)
                         self.__show_mla_works_cited = False
                 mouse_up = False
+            if self.__playing and not self.__playing_map_music:
+                pygame.mixer.music.load("assets/music/gymnopedie_no_1.mp3")
+                pygame.mixer.music.play(-1)
+                pygame.mixer.music.set_volume(0.1)
+                self.__playing_map_music = True
+            if self.__playing_puzzle_1 and not self.__playing_puzzle_1_music:
+                pygame.mixer.music.load("assets/music/chopin_prelude_op_28_no_4.ogg")
+                pygame.mixer.music.play(-1)
+                pygame.mixer.music.set_volume(0.1)
+                self.__playing_puzzle_1_music = True
+            if self.__playing_puzzle_2 and not self.__playing_puzzle_2_music:
+                pygame.mixer.music.load("assets/music/violin_partita_no_2_in_d_minor_bwv_1004.mp3")
+                pygame.mixer.music.play(-1)
+                pygame.mixer.music.set_volume(0.1)
+                self.__playing_puzzle_2_music = True
             if self.__playing:
                 keys = pygame.key.get_pressed()
                 if keys[self.get_pygame_key_for_key(self.__settings.keybind_up)]:
@@ -282,6 +301,8 @@ class InstanceMain():
         self.__playing = False # pylint: disable=attribute-defined-outside-init
         self.__game_map_main.set_visibility(False)
         self.__titlescreen_ui.set_visibility(True)
+        self.__playing_map_music = False
+        pygame.mixer.music.stop()
 
     def puzzle_1_return_to_main_menu(self):
         """
@@ -291,6 +312,8 @@ class InstanceMain():
         self.__game_map_puzzle_1.hitbox_generator.set_collidability(False)
         self.__game_map_puzzle_1.hitbox_generator.reset_hitboxes()
         self.__titlescreen_ui.set_visibility(True)
+        self.__playing_puzzle_1_music = False
+        pygame.mixer.music.stop()
 
     def puzzle_2_return_to_main_menu(self):
         """
@@ -300,6 +323,8 @@ class InstanceMain():
         self.__game_map_puzzle_2.hitbox_generator.set_clickability(False)
         self.__game_map_puzzle_2.hitbox_generator.reset_hitboxes()
         self.__titlescreen_ui.set_visibility(True)
+        self.__playing_puzzle_2_music = False
+        pygame.mixer.music.stop()
 
     def check_playing_anything(self):
         """
