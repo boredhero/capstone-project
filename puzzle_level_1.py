@@ -1,4 +1,4 @@
-import random
+import math, random
 from typing import Tuple
 
 import pygame
@@ -102,6 +102,7 @@ class PuzzleHitbox1:
         self.position = pos
         self.color = (25, 0, 252)
         self.original_color = (25, 0, 252)
+        self.width = 40
         if self.__settings.grayscale_mode:
             self.color = (41, 41, 41)
             self.original_color = (41, 41, 41)
@@ -160,8 +161,8 @@ class PuzzleHitbox1:
                         color = (0, 231, 252)
             # Use the current color if a specific color is not provided
             final_color = self.color if color is None else color
-            pygame.draw.circle(screen, (0, 0, 0), self.position, 40)
-            pygame.draw.circle(screen, final_color, self.position, 30)
+            pygame.draw.circle(screen, (0, 0, 0), self.position, self.width)
+            pygame.draw.circle(screen, final_color, self.position, self.width-10)
 
     def set_visibility(self, visibility: bool):
         """
@@ -182,6 +183,7 @@ class PuzzleHitboxGenerator1:
         Puzzle Hitbox Generator
         """
         self.__settings = SettingsConfig()
+        self.__glogger = GameLogger()
         self.already_drawn = False
         self.visibility = True
         self.collidability = False
@@ -233,6 +235,29 @@ class PuzzleHitboxGenerator1:
         Set PuzzleHitbox visibility
         """
         self.visibility = visibility
+
+    def calculate_hitbox_distance(self, hitbox_1: PuzzleHitbox1, hitbox_2: PuzzleHitbox1) -> float:
+        """
+        Calculate the distance between the two hitboxes
+        """
+        self.__glogger.info("Fitts score", "Calculating hitbox distance")
+        dx = hitbox_1.position[0] - hitbox_2.position[0]
+        dy = hitbox_1.position[1] - hitbox_2.position[1]
+        return (dx**2 + dy**2)**0.5
+
+    def calculate_fitts_law_score(self, hitbox_1: PuzzleHitbox1, hitbox_2: PuzzleHitbox1, player_speed: float) -> float:
+        """
+        Calculate the Fitts Law difficulty score between two hitboxes
+        """
+        self.__glogger.info("Fitts score", "Calculating Fitts score")
+        hitbox_width = hitbox_1.width
+        distance = self.calculate_hitbox_distance(hitbox_1, hitbox_2)
+        fitts_a = 0.1 # This is a constant based on the start/stop time of the player. This needs to be determined experimentally, but for imma use 0.1 lol
+        fitts_b = player_speed # Player speed
+        fitts_id = math.log2((distance/hitbox_width) + 1) # Difficulty
+        fitts_mt = fitts_a + (fitts_b * fitts_id) # Movement time approximation
+        self.__glogger.info(f"Fitts score: {fitts_mt} Distance: {distance}, Width: {hitbox_width}, ID: {fitts_id}, MT: {fitts_mt}")
+        return fitts_mt
 
     def create_hitboxes(self):
         """
