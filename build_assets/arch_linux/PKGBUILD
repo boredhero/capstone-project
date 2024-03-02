@@ -2,7 +2,10 @@ pkgname=instance
 pkgver=0.5.0
 pkgrel=1
 pkgdesc="Instance is a game about the subjective experiences of mental health issues, a DNID Capstone Project"
-arch=("x86_64", 'aarch64')
+arch=(
+    'x86_64'
+    'aarch64'
+)
 url="https://github.com/boredhero/instance"
 license=('GPL-3.0-or-later')
 depends=('pacman>5')
@@ -13,6 +16,19 @@ conflicts=('instance')
 md5sums=('SKIP')
 
 package() {
-    _output = "${srcdir}/${pkgname}_${pkgver}_${CARCH}"
-    install -Dm755 "${_output}
+    # Assuming the tar.gz contains an 'instance' directory at its root
+    _installdir="/opt/${pkgname}"
+
+    # Create the target directory
+    install -dm755 "${pkgdir}${_installdir}"
+
+    # Since we're not extracting with makepkg, manually extract to the target directory
+    tar -xzf "${srcdir}/${pkgname}-${pkgver}.tar.gz" -C "${pkgdir}${_installdir}" --strip-components 1
+
+    # Alternatively, if you're copying directly and not using a tar.gz, adjust the paths as necessary
+    # cp -a "${srcdir}/instance/." "${pkgdir}${_installdir}/"
+    # cp -a "${srcdir}/assets/" "${pkgdir}${_installdir}/"
+
+    # If instance is an executable and not a directory, you might need a line like below:
+    # install -Dm755 "${srcdir}/instance" "${pkgdir}${_installdir}/instance"
 }

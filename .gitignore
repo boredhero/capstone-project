@@ -3,6 +3,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Buildfiles
+build_outputs/
+build_outputs/*
+
 # Logging
 logs/
 /logs
