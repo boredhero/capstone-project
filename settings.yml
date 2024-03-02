@@ -8,7 +8,7 @@ keybind_right: d
 keybind_up: w
 max_fps: 60
 puzzle_1_difficulty: 10
-puzzle_1_difficulty_fitts: 1
+puzzle_1_difficulty_fitts: 30
 puzzle_1_difficulty_mult: 870
 puzzle_1_difficulty_speed: 7
 puzzle_2_difficulty_number: 20
