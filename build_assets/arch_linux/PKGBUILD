@@ -10,25 +10,24 @@ url="https://github.com/boredhero/instance"
 license=('GPL-3.0-or-later')
 depends=('pacman>5')
 optdepends=('sudo: privilege elevation')
-source=('instance')
+source=('instance' 'assets.tar.gz' '.env' 'README.md' 'LICENSE' 'instance.desktop')
+noextract=()
 provides=('instance')
 conflicts=('instance')
-md5sums=('SKIP')
+md5sums=('SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP')
 
 package() {
-    # Assuming the tar.gz contains an 'instance' directory at its root
-    _installdir="/opt/${pkgname}"
-
-    # Create the target directory
-    install -dm755 "${pkgdir}${_installdir}"
-
-    # Since we're not extracting with makepkg, manually extract to the target directory
-    tar -xzf "${srcdir}/${pkgname}-${pkgver}.tar.gz" -C "${pkgdir}${_installdir}" --strip-components 1
-
-    # Alternatively, if you're copying directly and not using a tar.gz, adjust the paths as necessary
-    # cp -a "${srcdir}/instance/." "${pkgdir}${_installdir}/"
-    # cp -a "${srcdir}/assets/" "${pkgdir}${_installdir}/"
-
-    # If instance is an executable and not a directory, you might need a line like below:
-    # install -Dm755 "${srcdir}/instance" "${pkgdir}${_installdir}/instance"
+    _installdir="${pkgdir}/opt/${pkgname}"
+    _desktopdir="${pkgdir}/usr/share/applications"
+    install -dm755 "${_installdir}"
+    install -dm755 "${_desktopdir}"
+    install -Dm755 "${srcdir}/instance" "${_installdir}/instance"
+    install -Dm644 "${srcdir}/assets.tar.gz" "${_installdir}/assets.tar.gz"
+    install -Dm644 "${srcdir}/.env" "${_installdir}/.env"
+    install -Dm644 "${srcdir}/README.md" "${_installdir}/README.md"
+    install -Dm644 "${srcdir}/LICENSE" "${_installdir}/LICENSE"
+    install -Dm644 "${srcdir}/instance.desktop" "${_desktopdir}/instance.desktop"
+    cd "${_installdir}"
+    tar -xzf assets.tar.gz
+    rm assets.tar.gz
 }

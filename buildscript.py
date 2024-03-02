@@ -63,8 +63,9 @@ class PackageBuilder:
         subprocess.run(["rm", "-rf", "build_outputs/README.md"], check=False)
         subprocess.run(["rm", "-rf", "build_outputs/src"], check=False)
         subprocess.run(["rm", "-rf", "build_outputs/pkg"], check=False)
-        subprocess.run(["rm", "-rf", "build_outputs/assets"], check=False)
+        subprocess.run(["rm", "-rf", "build_outputs/assets.tar.gz"], check=False)
         subprocess.run(["rm", "-rf", "build_outputs/PKGBUILD"], check=False)
+        subprocess.run(["rm", "-rf", "build_outputs/instance.desktop"], check=False)
 
     def __build_package_arch_linux(self):
         """
@@ -79,8 +80,10 @@ class PackageBuilder:
                     subprocess.run(["rm", "-rf", "build_outputs"], check=False)
                     subprocess.run(["mkdir", "build_outputs"], check=False)
                     subprocess.run(["cp", "build_assets/arch_linux/PKGBUILD", "build_outputs/"], check=True)
+                    subprocess.run(["cp", "build_assets/instance.desktop", "build_outputs/"], check=True)
                     subprocess.run(["cp", f"{self.__linux_build_path}", "build_outputs/"], check=True)
-                    subprocess.run(["cp", "-r", "assets", "build_outputs/"], check=True)
+                    subprocess.run(["tar", "-czvf", "assets.tar.gz", "assets"], check=True)
+                    subprocess.run(["mv", "assets.tar.gz", "build_outputs/"], check=True)
                     subprocess.run(["cp", ".env", "build_outputs/"], check=True)
                     subprocess.run(["cp", "README.md", "build_outputs/"], check=True)
                     subprocess.run(["cp", "LICENSE", "build_outputs/"], check=True)

@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=Instance
+Comment=A game about the subjective experiences of mental health issues
+Exec=/opt/instance/instance
+Icon=/opt/instance/assets/branding/icon.png
