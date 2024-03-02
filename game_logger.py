@@ -2,6 +2,8 @@ import logging, logging.config
 import os, traceback
 from typing import Any
 
+import appdirs
+
 from misc import Singleton, get_human_readable_time_with_timezone, get_unix_timestamp
 
 class GameLogger(metaclass=Singleton):
@@ -15,14 +17,15 @@ class GameLogger(metaclass=Singleton):
             self.__start_time = get_unix_timestamp()
             self.__start_time_human_readable = get_human_readable_time_with_timezone(unix_timestamp=self.__start_time)
             self.__log_folder = "logs"
-            if not os.path.exists(self.__log_folder):
-                os.makedirs(self.__log_folder)
+            self.__log_folder = appdirs.user_log_dir(appname="Instance", appauthor="boredhero")
+            os.makedirs(self.__log_folder, exist_ok=True)
+            self.__log_file_path = os.path.join(self.__log_folder, f"{self.__start_time_human_readable}.log")
             logging.basicConfig(
-                level=logging.DEBUG,  # Set the desired logging level (e.g., INFO, DEBUG, ERROR)
+                level=logging.DEBUG,
                 format="[%(asctime)s][%(levelname)s]%(message)s",
                 datefmt="%Y-%m-%d_%H:%M:%S",
                 handlers=[
-                    logging.FileHandler(os.path.join(self.__log_folder, f"{self.__start_time_human_readable}.log")),
+                    logging.FileHandler(self.__log_file_path),
                     logging.StreamHandler(),  # Log to the console
                 ]
             )

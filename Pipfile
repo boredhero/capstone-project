@@ -11,6 +11,7 @@ pyyaml = "*"
 pygame-menu = "*"
 pillow = "*"
 pyinstaller = "*"
+appdirs = "*"
 
 [dev-packages]
 
