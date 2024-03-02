@@ -2,6 +2,7 @@
 import os, traceback
 
 import yaml
+import appdirs
 from dotenv import load_dotenv
 
 from misc import Singleton
@@ -26,7 +27,9 @@ class SettingsConfig(metaclass=Singleton):
         """
         Modifiable config
         """
-        self.config_name = "settings.yml"
+        self.config_dir = appdirs.user_config_dir("Instance", "boredhero")
+        os.makedirs(self.config_dir, exist_ok=True)
+        self.config_name = os.path.join(self.config_dir, "settings.yml")
         self.__settings = {}
         self.__load_settings()
         self.screen_width = self.__settings.get("screen_width")

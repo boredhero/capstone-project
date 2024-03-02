@@ -2,6 +2,8 @@ import os
 
 import yaml
 
+import appdirs
+
 from misc import Singleton
 
 class SaveDataManager(metaclass=Singleton):
@@ -10,7 +12,9 @@ class SaveDataManager(metaclass=Singleton):
         """
         SaveFile Manager
         """
-        self.save_name = "save.yml"
+        self.__save_dir = appdirs.user_data_dir("Instance", "boredhero")
+        os.makedirs(self.__save_dir, exist_ok=True)
+        self.save_name = os.path.join(self.__save_dir, "save.yml")
         self.__save_contents = {}
         self.__load_save()
         self.__player_name = self.__save_contents.get("player_name")
