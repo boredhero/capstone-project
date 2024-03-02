@@ -36,6 +36,7 @@ class SettingsConfig(metaclass=Singleton):
         self.puzzle_1_difficulty = self.__settings.get("puzzle_1_difficulty")
         self.puzzle_1_difficulty_mult = self.__settings.get("puzzle_1_difficulty_mult")
         self.puzzle_1_difficulty_speed = self.__settings.get("puzzle_1_difficulty_speed")
+        self.puzzle_1_difficulty_fitts = self.__settings.get("puzzle_1_difficulty_fitts")
         self.puzzle_2_difficulty_speed = self.__settings.get("puzzle_2_difficulty_speed")
         self.puzzle_2_difficulty_number = self.__settings.get("puzzle_2_difficulty_number")
         self.subtitles = self.__settings.get("subtitles")
@@ -106,6 +107,7 @@ class SettingsConfig(metaclass=Singleton):
             "puzzle_1_difficulty": 10,
             "puzzle_1_difficulty_mult": 870,
             "puzzle_1_difficulty_speed": 7,
+            "puzzle_1_difficulty_fitts": 1.5,
             "puzzle_2_difficulty_speed": 10,
             "puzzle_2_difficulty_number": 20,
             "subtitles": True,
