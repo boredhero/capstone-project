@@ -1,0 +1,18 @@
+pkgname=instance
+pkgver=0.5.0
+pkgrel=1
+pkgdesc="Instance is a game about the subjective experiences of mental health issues, a DNID Capstone Project"
+arch=("x86_64", 'aarch64')
+url="https://github.com/boredhero/instance"
+license=('GPL-3.0-or-later')
+depends=('pacman>5')
+optdepends=('sudo: privilege elevation')
+source=('instance')
+provides=('instance')
+conflicts=('instance')
+md5sums=('SKIP')
+
+package() {
+    _output = "${srcdir}/${pkgname}_${pkgver}_${CARCH}"
+    install -Dm755 "${_output}
+}
