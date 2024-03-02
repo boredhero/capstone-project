@@ -76,8 +76,9 @@ class SettingsMenu:
         self.settings.add.toggle_switch(title="Colorblind Mode (B&W)", default=self.__settingsconfig.grayscale_mode, toggleswitch_id="grayscale_mode")
         self.settings.add.text_input(title="Max FPS: ", default=self.__settingsconfig.max_fps, textinput_id="max_fps", input_type=pm.locals.INPUT_INT, range_values=(30, 144))
         self.settings.add.range_slider(title="Puzzle 1 Difficulty: ", default=int(self.__settingsconfig.puzzle_1_difficulty), range_values=(1, 50), increment=1, rangeslider_id="puzzle_one_diff", value_format=lambda x: str(round(x, None)))
-        self.settings.add.range_slider(title="Puzzle 1 Difficutly (Hitbox Timeout)", default=int(self.__settingsconfig.puzzle_1_difficulty_mult), range_values=(600, 1200), increment=1, rangeslider_id="puzzle_one_diff_mult", value_format=lambda x: str(round(x, None)))
-        self.settings.add.range_slider(title="Puzzle 1 Difficutly (Player Speed)", default=int(self.__settingsconfig.puzzle_1_difficulty_speed), range_values=(5, 20), increment=1, rangeslider_id="puzzle_one_diff_speed", value_format=lambda x: str(round(x, None)))
+        self.settings.add.range_slider(title="Puzzle 1 Difficulty (Hitbox Timeout)", default=int(self.__settingsconfig.puzzle_1_difficulty_mult), range_values=(600, 1200), increment=1, rangeslider_id="puzzle_one_diff_mult", value_format=lambda x: str(round(x, None)))
+        self.settings.add.range_slider(title="Puzzle 1 Difficulty (Player Speed)", default=int(self.__settingsconfig.puzzle_1_difficulty_speed), range_values=(5, 20), increment=1, rangeslider_id="puzzle_one_diff_speed", value_format=lambda x: str(round(x, None)))
+        self.settings.add.range_slider(title="Puzzle 1 Difficulty (Fitts's Law)", default=int(self.__settingsconfig.puzzle_1_difficulty_fitts), range_values=(0.1, 5), increment=0.1, rangeslider_id="puzzle_one_diff_fitts", value_format=lambda x: str(round(x, None)))
         self.settings.add.range_slider(title="Puzzle 2 Difficulty (Speed): ", default=int(self.__settingsconfig.puzzle_2_difficulty_speed), range_values=(1, 50), increment=1, rangeslider_id="puzzle_two_diff_speed", value_format=lambda x: str(round(x, None)))
         self.settings.add.range_slider(title="Puzzle 2 Difficulty (Number): ", default=int(self.__settingsconfig.puzzle_2_difficulty_number), range_values=(1, 50), increment=1, rangeslider_id="puzzle_two_diff_number", value_format=lambda x: str(round(x, None)))
         self.settings.add.button(title=f"Interact Keybind: {self.__keybinds['interact']}", action=self.listen_for_interact_key, button_id='interact_keybind_button', font_color=GameColors.WHITE.value)
@@ -191,6 +192,7 @@ class SettingsMenu:
         puzzle_1_difficulty = None
         puzzle_1_difficulty_mult = None
         puzzle_1_difficulty_speed = None
+        puzzle_1_difficulty_fitts = None
         puzzle_2_difficulty_speed = None
         puzzle_2_difficulty_number = None
         subtitles = None
@@ -241,6 +243,10 @@ class SettingsMenu:
                     puzzle_1_difficulty_speed = int(value)
                     if puzzle_1_difficulty_speed is None:
                         puzzle_1_difficulty_speed = int(self.__settingsconfig.puzzle_1_difficulty_speed)
+                case "puzzle_one_diff_fitts":
+                    puzzle_1_difficulty_fitts = value
+                    if puzzle_1_difficulty_fitts is None:
+                        puzzle_1_difficulty_fitts = self.__settingsconfig.puzzle_1_difficulty_fitts
                 case "puzzle_two_diff_speed":
                     puzzle_2_difficulty_speed = int(value)
                     if puzzle_2_difficulty_speed is None:
@@ -266,6 +272,7 @@ class SettingsMenu:
                 "puzzle_1_difficulty": puzzle_1_difficulty,
                 "puzzle_1_difficulty_mult": puzzle_1_difficulty_mult,
                 "puzzle_1_difficulty_speed": puzzle_1_difficulty_speed,
+                "puzzle_1_difficulty_fitts": puzzle_1_difficulty_fitts,
                 "puzzle_2_difficulty_speed": puzzle_2_difficulty_speed,
                 "puzzle_2_difficulty_number": puzzle_2_difficulty_number,
                 "subtitles": subtitles,
@@ -298,6 +305,7 @@ class SettingsMenu:
             "puzzle_1_difficulty": self.__settingsconfig.puzzle_1_difficulty,
             "puzzle_1_difficulty_mult": self.__settingsconfig.puzzle_1_difficulty_mult,
             "puzzle_1_difficulty_speed": self.__settingsconfig.puzzle_1_difficulty_speed,
+            "puzzle_1_difficulty_fitts": self.__settingsconfig.puzzle_1_difficulty_fitts,
             "puzzle_2_difficulty_speed": self.__settingsconfig.puzzle_2_difficulty_speed,
             "puzzle_2_difficulty_number": self.__settingsconfig.puzzle_2_difficulty_number,
             "subtitles": self.__settingsconfig.subtitles,
