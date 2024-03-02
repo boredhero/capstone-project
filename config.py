@@ -107,7 +107,7 @@ class SettingsConfig(metaclass=Singleton):
             "puzzle_1_difficulty": 10,
             "puzzle_1_difficulty_mult": 870,
             "puzzle_1_difficulty_speed": 7,
-            "puzzle_1_difficulty_fitts": 1.5,
+            "puzzle_1_difficulty_fitts": 30,
             "puzzle_2_difficulty_speed": 10,
             "puzzle_2_difficulty_number": 20,
             "subtitles": True,
