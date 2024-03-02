@@ -40,18 +40,31 @@ class PackageBuilder:
         """
         Handle Linux
         """
-        supported_distributions = ["Arch"]
+        supported_distributions = ["Arch Linux"]
         if self.__linux_distribution not in supported_distributions:
             print(f"Unsupported distribution: {self.__linux_distribution}")
             print(f"Supported distributions at this time are: {supported_distributions}")
             exit(1)
         print(f"Building package for {self.__linux_distribution}")
         match self.__linux_distribution:
-            case "Arch":
+            case "Arch Linux":
                 self.__build_package_arch_linux()
             case _:
                 print(f"Unsupported distribution: {self.__linux_distribution}")
                 exit(1)
+
+    def __build_cleanup_arch_linux(self):
+        """
+        Clean up the build directory for arch linux
+        """
+        subprocess.run(["rm", "-rf", "build_outputs/instance"], check=False)
+        subprocess.run(["rm", "-rf", "build_outputs/.env"], check=False)
+        subprocess.run(["rm", "-rf", "build_outputs/LICENSE"], check=False)
+        subprocess.run(["rm", "-rf", "build_outputs/README.md"], check=False)
+        subprocess.run(["rm", "-rf", "build_outputs/src"], check=False)
+        subprocess.run(["rm", "-rf", "build_outputs/pkg"], check=False)
+        subprocess.run(["rm", "-rf", "build_outputs/assets"], check=False)
+        subprocess.run(["rm", "-rf", "build_outputs/PKGBUILD"], check=False)
 
     def __build_package_arch_linux(self):
         """
@@ -62,13 +75,22 @@ class PackageBuilder:
             self.__run_pyinstaller()
             instance_exists = self.__check_file_exists(self.__linux_build_path)
             if instance_exists:
-                subprocess.run(["cp" f"{self.__linux_build_path}", "build_assets/arch_linux/"], check=True)
-                subprocess.run(["cp", "-r", "assets", "build_assets/arch_linux/"], check=True)
-                subprocess.run(["cp", ".env", "build_assets/arch_linux/"], check=True)
-                subprocess.run(["cp", "README.md", "build_assets/arch_linux/"], check=True)
-                subprocess.run(["cp", "LICENSE", "build_assets/arch_linux/"], check=True)
-                subprocess.run(["makepkg"], check=True)
-                print("Package built successfully")
+                try:
+                    subprocess.run(["rm", "-rf", "build_outputs"], check=False)
+                    subprocess.run(["mkdir", "build_outputs"], check=False)
+                    subprocess.run(["cp", "build_assets/arch_linux/PKGBUILD", "build_outputs/"], check=True)
+                    subprocess.run(["cp", f"{self.__linux_build_path}", "build_outputs/"], check=True)
+                    subprocess.run(["cp", "-r", "assets", "build_outputs/"], check=True)
+                    subprocess.run(["cp", ".env", "build_outputs/"], check=True)
+                    subprocess.run(["cp", "README.md", "build_outputs/"], check=True)
+                    subprocess.run(["cp", "LICENSE", "build_outputs/"], check=True)
+                    subprocess.run(["makepkg"], cwd="build_outputs/", check=True)
+                    self.__build_cleanup_arch_linux()
+                    print("Package built successfully")
+                except Exception as e:
+                    print(f"An error occurred: {e}")
+                    self.__build_cleanup_arch_linux()
+                    exit(1)
         else:
             print("Aborted")
             exit(0)
