@@ -183,7 +183,6 @@ class PuzzleHitboxGenerator1:
         Puzzle Hitbox Generator
         """
         self.__settings = SettingsConfig()
-        self.__glogger = GameLogger()
         self.already_drawn = False
         self.visibility = True
         self.collidability = False
@@ -240,7 +239,6 @@ class PuzzleHitboxGenerator1:
         """
         Calculate the distance between the two hitboxes
         """
-        self.__glogger.info("Fitts score", "Calculating hitbox distance")
         dx = hitbox_1.position[0] - hitbox_2.position[0]
         dy = hitbox_1.position[1] - hitbox_2.position[1]
         return (dx**2 + dy**2)**0.5
@@ -273,7 +271,6 @@ class PuzzleHitboxGenerator1:
                 fitts_law_passes = True
                 if len(self.hitboxes) > 0:
                     fitts_score = self.calculate_fitts_law_score(self.hitboxes[-1], new_hitbox, player_speed)
-                    self.__glogger.info(f"Fitts score: {fitts_score}")
                     if fitts_score > self.__settings.puzzle_1_difficulty_fitts:
                         fitts_law_passes = False
                 hitbox_overlap_passing = self.hitbox_overlap(new_hitbox, hitbox_radius + padding)
