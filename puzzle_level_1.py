@@ -249,20 +249,19 @@ class PuzzleHitboxGenerator1:
         """
         Calculate the Fitts Law difficulty score between two hitboxes
         """
-        self.__glogger.info("Fitts score", "Calculating Fitts score")
         hitbox_width = hitbox_1.width
         distance = self.calculate_hitbox_distance(hitbox_1, hitbox_2)
         fitts_a = 0.1 # This is a constant based on the start/stop time of the player. This needs to be determined experimentally, but for imma use 0.1 lol
         fitts_b = player_speed # Player speed
         fitts_id = math.log2((distance/hitbox_width) + 1) # Difficulty
         fitts_mt = fitts_a + (fitts_b * fitts_id) # Movement time approximation
-        self.__glogger.info(f"Fitts score: {fitts_mt} Distance: {distance}, Width: {hitbox_width}, ID: {fitts_id}, MT: {fitts_mt}")
         return fitts_mt
 
     def create_hitboxes(self):
         """
         Create hitboxes that do not leave bounds of screen!
         """
+        player_speed = self.__settings.puzzle_1_difficulty_speed*self.__settings.screen_size_speed_multiplier
         screen_width, screen_height = self.__settings.screen_width, self.__settings.screen_height
         hitbox_radius = 40  # Hitboxes are a cicle with r=40
         padding = 100  # Minimum space between hitboxes and screen edge
@@ -271,7 +270,14 @@ class PuzzleHitboxGenerator1:
                 x = random.randint(hitbox_radius, screen_width - hitbox_radius)
                 y = random.randint(hitbox_radius, screen_height - hitbox_radius)
                 new_hitbox = PuzzleHitbox1([x, y])
-                if not self.hitbox_overlap(new_hitbox, hitbox_radius + padding):
+                fitts_law_passes = True
+                if len(self.hitboxes) > 0:
+                    fitts_score = self.calculate_fitts_law_score(self.hitboxes[-1], new_hitbox, player_speed)
+                    self.__glogger.info(f"Fitts score: {fitts_score}")
+                    if fitts_score > self.__settings.puzzle_1_difficulty_fitts:
+                        fitts_law_passes = False
+                hitbox_overlap_passing = self.hitbox_overlap(new_hitbox, hitbox_radius + padding)
+                if hitbox_overlap_passing and fitts_law_passes:
                     self.hitboxes.append(new_hitbox)
                     break
 
@@ -286,11 +292,12 @@ class PuzzleHitboxGenerator1:
     def hitbox_overlap(self, new_hitbox, min_distance):
         """
         Check if a hitbox overlaps with existing hitboxes 
+        NOTE: Returns True IF there is NOT an overlap, False if there is an overlap
         """
         for hitbox in self.hitboxes:
             dx = hitbox.position[0] - new_hitbox.position[0]
             dy = hitbox.position[1] - new_hitbox.position[1]
             distance = (dx**2 + dy**2)**0.5
             if distance < min_distance:
-                return True
-        return False
+                return False
+        return True
