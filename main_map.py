@@ -1,3 +1,4 @@
+import importlib, inspect
 from typing import Tuple
 
 import pygame
@@ -5,6 +6,8 @@ from PIL import Image
 
 from game_logger import GameLogger
 from config import SettingsConfig
+from lore_objects import AbstractLoreObject
+from misc import Singleton
 
 class MainGameMap:
 
@@ -100,3 +103,20 @@ class MapPlayer:
         Set Player visibility
         """
         self.visibility = visibility
+
+class MapObjects(metaclass=Singleton):
+
+    def __init__(self):
+        """
+        Handle game objects
+        """
+        self.objects = {}
+
+    def load_modules(self):
+        """
+        Dynamically load objects from lore_objects.py
+        """
+        lore_texts_mod = importlib.import_module("lore_objects")
+        for name, obj in inspect.getmembers(lore_texts_mod): # pylint: disable=unused-variable
+            if inspect.isclass(obj) and issubclass(obj, AbstractLoreObject) and obj is not AbstractLoreObject:
+                self.objects[name] = obj
