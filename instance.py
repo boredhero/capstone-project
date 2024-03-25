@@ -234,13 +234,13 @@ class InstanceMain():
             if self.__playing:
                 keys = pygame.key.get_pressed()
                 if keys[self.get_pygame_key_for_key(self.__settings.keybind_up)]:
-                    self.__player_main_map.move("up", self.__game_map_main.camera_rect)
+                    self.__player_main_map.move("up", self.__game_map_main.camera_rect, self.__game_map_main)
                 elif keys[self.get_pygame_key_for_key(self.__settings.keybind_down)]:
-                    self.__player_main_map.move("down", self.__game_map_main.camera_rect)
+                    self.__player_main_map.move("down", self.__game_map_main.camera_rect, self.__game_map_main)
                 elif keys[self.get_pygame_key_for_key(self.__settings.keybind_left)]:
-                    self.__player_main_map.move("left", self.__game_map_main.camera_rect)
+                    self.__player_main_map.move("left", self.__game_map_main.camera_rect, self.__game_map_main)
                 elif keys[self.get_pygame_key_for_key(self.__settings.keybind_right)]:
-                    self.__player_main_map.move("right", self.__game_map_main.camera_rect)
+                    self.__player_main_map.move("right", self.__game_map_main.camera_rect, self.__game_map_main)
                 self.__game_map_main.draw_map()
                 self.__player_main_map.draw(self.__screen, self.__game_map_main.camera_rect)
                 pygame.display.flip()
@@ -301,18 +301,18 @@ class InstanceMain():
         self.__playing = False # pylint: disable=attribute-defined-outside-init
         self.__game_map_main.set_visibility(False)
         self.__titlescreen_ui.set_visibility(True)
-        self.__playing_map_music = False
+        self.__playing_map_music = False # pylint: disable=attribute-defined-outside-init
         pygame.mixer.music.stop()
 
     def puzzle_1_return_to_main_menu(self):
         """
         Return to the main menu
-        """
+        """# pylint: disable=attribute-defined-outside-init
         self.__playing_puzzle_1 = False # pylint: disable=attribute-defined-outside-init
         self.__game_map_puzzle_1.hitbox_generator.set_collidability(False)
         self.__game_map_puzzle_1.hitbox_generator.reset_hitboxes()
         self.__titlescreen_ui.set_visibility(True)
-        self.__playing_puzzle_1_music = False
+        self.__playing_puzzle_1_music = False # pylint: disable=attribute-defined-outside-init
         pygame.mixer.music.stop()
 
     def puzzle_2_return_to_main_menu(self):
@@ -323,7 +323,7 @@ class InstanceMain():
         self.__game_map_puzzle_2.hitbox_generator.set_clickability(False)
         self.__game_map_puzzle_2.hitbox_generator.reset_hitboxes()
         self.__titlescreen_ui.set_visibility(True)
-        self.__playing_puzzle_2_music = False
+        self.__playing_puzzle_2_music = False # pylint: disable=attribute-defined-outside-init
         pygame.mixer.music.stop()
 
     def check_playing_anything(self):
@@ -374,7 +374,7 @@ class InstanceMain():
             pygame.draw.rect(self.__screen, color, input_box, 2)
             pygame.display.flip()
             self.__clock.tick(30)
-        self.__show_intro_screen = True
+        self.__show_intro_screen = True # pylint: disable=attribute-defined-outside-init
         self.__titlescreen_ui.set_visibility(False)
 
     def get_pygame_key_for_key(self, key: str):
