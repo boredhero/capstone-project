@@ -40,6 +40,12 @@ class MainGameMap:
         self.camera_rect = pygame.Rect(camera_x, camera_y, self.screen.get_width(), self.screen.get_height())
         self.screen.blit(self.map_surface, (0, 0), self.camera_rect)
 
+    def get_pixel_color(self, position: Tuple[int, int]) -> pygame.Color:
+        """
+        Get the color of the pixel at the given position on the map surface
+        """
+        return self.map_surface.get_at(position)
+
     def set_visibility(self, visibility: bool):
         """
         Set map visibility
@@ -69,7 +75,17 @@ class MapPlayer:
             width, height = img.size
         return (width, height)
 
-    def move(self, direction, camera_rect):
+    def is_move_hitting_color(self, position: Tuple[int, int], game_map: MainGameMap) -> bool:
+        """
+        Check if the move to the new position is allowed based on the pixel color.
+        """
+        restricted_color = (255, 0, 0)
+        if 0 <= position[0] < game_map.map_surface.get_width() and 0 <= position[1] < game_map.map_surface.get_height():
+            pixel_color = game_map.get_pixel_color(position)[:3]  # Get RGB components only
+            return pixel_color == restricted_color
+        return False
+
+    def move(self, direction, camera_rect, game_map):
         """
         Move the Player
         """
@@ -84,6 +100,9 @@ class MapPlayer:
             new_position[0] += self.speed
         new_position[0] = max(0, min(new_position[0], self.map_size[0] - 40))
         new_position[1] = max(0, min(new_position[1], self.map_size[1] - 40))
+        color_check_position = (new_position[0] + 20, new_position[1] + 20)
+        if self.is_move_hitting_color(color_check_position, game_map):
+            return
         within_camera_x_bounds = camera_rect.left <= new_position[0] <= camera_rect.right - 40
         within_camera_y_bounds = camera_rect.top <= new_position[1] <= camera_rect.bottom - 40
         if within_camera_x_bounds and within_camera_y_bounds:
