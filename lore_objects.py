@@ -1,3 +1,5 @@
+from save import SaveDataManager
+
 class AbstractLoreObject:
 
     def __init__(self, name: str | None, lore_text: str | None, location: tuple[int, int] | None, owner: str | None):
@@ -31,17 +33,20 @@ class Prescription_1(AbstractLoreObject):
         """
         Prescription 1
         """
+        self.__save_data_manager = SaveDataManager()
         name = "Prescription"
         lore_text = f"""
         CBS PHARMACY
         123 MAIN ST, ANYTOWN USA 12345
         1-800-555-5555
 
-        Patient: {patient_name}
+        Patient: {self.__save_data_manager.get_player_name()}
+        ESCITALOPRAM 10MG TABLET
+        TAKE ONE TABLET BY MOUTH DAILY
 
-        Rx No. 888888
-        Qty. 90 Refills 0
-        Dr. Best, MD
+        Rx No. 1234567
+        Qty. 30
+        Dr. Best, MD - 1 Refills
         """
         location = (0, 0)
         owner = "world"
