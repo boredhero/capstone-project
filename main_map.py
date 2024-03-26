@@ -79,7 +79,7 @@ class MapPlayer:
         """
         Check if the move to the new position is allowed based on the pixel color.
         """
-        restricted_color = (255, 0, 0)
+        restricted_color = (255, 255, 255)
         if 0 <= position[0] < game_map.map_surface.get_width() and 0 <= position[1] < game_map.map_surface.get_height():
             pixel_color = game_map.get_pixel_color(position)[:3]  # Get RGB components only
             return pixel_color == restricted_color
