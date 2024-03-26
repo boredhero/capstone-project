@@ -100,7 +100,7 @@ class MapPlayer:
             new_position[0] += self.speed
         new_position[0] = max(0, min(new_position[0], self.map_size[0] - 40))
         new_position[1] = max(0, min(new_position[1], self.map_size[1] - 40))
-        color_check_position = (new_position[0] + 20, new_position[1] + 20)
+        color_check_position = (new_position[0] + 30, new_position[1] + 30)
         if self.is_move_hitting_color(color_check_position, game_map):
             return
         within_camera_x_bounds = camera_rect.left <= new_position[0] <= camera_rect.right - 40
