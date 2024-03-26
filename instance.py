@@ -62,7 +62,7 @@ class InstanceMain():
         """
         Initialize puzzles
         """
-        main_map_image_path = "assets/backgrounds/missing_texture.png"
+        main_map_image_path = "assets/backgrounds/main_map.png"
         self.__player_puzzle_1 = puzzle_level_1.PlayerPuzzle1([100, 100])  # Player starting position
         self.__player_main_map = main_map.MapPlayer([100, 100], main_map_image_path)
         self.__game_map_puzzle_1 = puzzle_level_1.GameMapPuzzle1(self.__screen, self.__player_puzzle_1)
