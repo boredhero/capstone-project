@@ -9,7 +9,7 @@ python-dotenv = "*"
 pytz = "*"
 pyyaml = "*"
 pygame-menu = "*"
-pillow = "*"
+pillow = ">=10.3.0"
 pyinstaller = "*"
 appdirs = "*"
 
