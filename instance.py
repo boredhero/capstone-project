@@ -252,78 +252,6 @@ class InstanceMain():
                 self.__game_map_main.set_last_lore_found()
                 self.__game_map_main.set_curr_lore(curr_lore+1)
 
-        if self.__show_lore_1:
-            self.__game_map_main.show_text_screen(self.__lore[0].get_lore_text())
-            self.__lore_1 = text_screen.TextScreen(self.__screen, self.__lore[1].get_lore_text(), "Continue")
-            self.__lore_1.draw()
-            if self.__lore_1.handle_event(event): # pylint: disable=undefined-loop-variable
-                self.__show_lore_1 = False
-        if self.__show_lore_2:
-            self.__lore_2 = text_screen.TextScreen(self.__screen, self.__lore[2].get_lore_text(), "Continue")
-            self.__lore_2.draw()
-            if self.__lore_2.handle_event(event): # pylint: disable=undefined-loop-variable
-                self.__show_lore_2 = False
-        if self.__show_lore_3:
-            self.__lore_3 = text_screen.TextScreen(self.__screen, self.__lore[3].get_lore_text(), "Continue")
-            self.__lore_3.draw()
-            if self.__lore_3.handle_event(event):
-                self.__show_lore_3 = False
-        if self.__show_lore_4:
-            self.__lore_4 = text_screen.TextScreen(self.__screen, self.__lore[4].get_lore_text(), "Continue")
-            self.__lore_4.draw()
-            if self.__lore_4.handle_event(event):
-                self.__show_lore_4 = False
-        if self.__show_lore_5:
-            self.__lore_5 = text_screen.TextScreen(self.__screen, self.__lore[5].get_lore_text(), "Continue")
-            self.__lore_5.draw()
-            if self.__lore_5.handle_event(event):
-                self.__show_lore_5 = False
-        if self.__show_lore_6:
-            self.__lore_6 = text_screen.TextScreen(self.__screen, self.__lore[6].get_lore_text(), "Continue")
-            self.__lore_6.draw()
-            if self.__lore_6.handle_event(event):
-                self.__show_lore_6 = False
-        if self.__show_lore_7:
-            self.__lore_7 = text_screen.TextScreen(self.__screen, self.__lore[7].get_lore_text(), "Continue")
-            self.__lore_7.draw()
-            if self.__lore_7.handle_event(event):
-                self.__show_lore_7 = False
-        if self.__show_lore_8:
-            self.__lore_8 = text_screen.TextScreen(self.__screen, self.__lore[8].get_lore_text(), "Continue")
-            self.__lore_8.draw()
-            if self.__lore_8.handle_event(event):
-                self.__show_lore_8 = False
-        if self.__show_lore_9:
-            self.__lore_9 = text_screen.TextScreen(self.__screen, self.__lore[9].get_lore_text(), "Continue")
-            self.__lore_9.draw()
-            if self.__lore_9.handle_event(event):
-                self.__show_lore_9 = False
-        if self.__show_lore_10:
-            self.__lore_10 = text_screen.TextScreen(self.__screen, self.__lore[10].get_lore_text(), "Continue")
-            self.__lore_10.draw()
-            if self.__lore_10.handle_event(event):
-                self.__show_lore_10 = False
-        if self.__show_lore_11:
-            self.__lore_11 = text_screen.TextScreen(self.__screen, self.__lore[11].get_lore_text(), "Continue")
-            self.__lore_11.draw()
-            if self.__lore_11.handle_event(event):
-                self.__show_lore_11 = False
-        if self.__show_lore_12:
-            self.__lore_12 = text_screen.TextScreen(self.__screen, self.__lore[12].get_lore_text(), "Continue")
-            self.__lore_12.draw()
-            if self.__lore_12.handle_event(event):
-                self.__show_lore_12 = False
-        if self.__show_lore_13:
-            self.__lore_13 = text_screen.TextScreen(self.__screen, self.__lore[13].get_lore_text(), "Continue")
-            self.__lore_13.draw()
-            if self.__lore_13.handle_event(event):
-                self.__show_lore_13 = False
-        if self.__show_lore_14:
-            self.__lore_14 = text_screen.TextScreen(self.__screen, self.__lore[14].get_lore_text(), "Continue")
-            self.__lore_14.draw()
-            if self.__lore_14.handle_event(event):
-                self.__show_lore_14 = False
-
 
     def main_game_loop(self):
         """
@@ -350,6 +278,11 @@ class InstanceMain():
                 self.__init__() # pylint: disable=non-parent-init-called, unnecessary-dunder-call
             mouse_up = False
             for event in pygame.event.get():
+                if self.__playing:
+                    #self.__glogger.info("hiiii", name=__name__)
+                    #self.__glogger.info(f"event: {event}", name=__name__)
+                    self.__game_map_main.handle_event(event)
+                    pygame.display.flip()
                 if event.type == pygame.QUIT:
                     self.__running = False
                 if event.type == pygame.MOUSEBUTTONUP and event.button == 1:

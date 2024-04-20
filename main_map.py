@@ -34,6 +34,15 @@ class MainGameMap:
         self.curr_lore = 0
         self.last_lore_found = self.get_unix_timestamp()
 
+    def handle_event(self, event):
+        """
+        Close the text screen ONLY if appropriate
+        """
+        if self.text_screen and self.text_screen.visible:
+            if self.text_screen.handle_event(event):
+                self.hide_text_screen()
+                pygame.display.flip()
+
     def show_text_screen(self, text: str):
         """
         Show an arbitrary text screen
@@ -50,6 +59,7 @@ class MainGameMap:
         """
         if self.text_screen:
             self.text_screen.hide()
+        self.text_screen = None
 
     def get_curr_lore(self) -> int:
         """
@@ -89,6 +99,7 @@ class MainGameMap:
         camera_y = max(0, min(self.player.position[1] - self.screen.get_height() / 2, self.map_surface.get_height() - self.screen.get_height()))
         self.camera_rect = pygame.Rect(camera_x, camera_y, self.screen.get_width(), self.screen.get_height())
         self.screen.blit(self.map_surface, (0, 0), self.camera_rect)
+        #pygame.display.flip()
         if self.text_screen and self.text_screen.visible:
             self.text_screen.draw()
 
@@ -197,6 +208,7 @@ class TextScreen:
         """
         Minimal text screen for this
         """
+        self.__glogger = GameLogger()
         self.screen = screen
         self.text = text
         self.font = pygame.font.Font(None, font_size)
@@ -204,6 +216,10 @@ class TextScreen:
         self.text_color = text_color
         self.text_width = text_width
         self.visible = False
+        self.button_text = "Dismiss"
+        self.button_font = pygame.font.Font(None, 24)
+        self.button = pygame.Rect(0, 0, 100, 40)
+        self.button.center = (self.screen.get_width() // 2, self.screen.get_height() - 50)
 
     def draw(self):
         """
@@ -214,7 +230,7 @@ class TextScreen:
         self.screen.fill(self.background_color)
         words = [word.split(' ') for word in self.text.splitlines()]
         space = self.font.size(' ')[0]
-        max_width, max_height = self.text_width, self.screen.get_height() # pylint: disable = unused-variable
+        max_width = self.text_width
         x, y = 10, 10
         for line in words:
             for word in line:
@@ -227,6 +243,22 @@ class TextScreen:
                 x += word_width + space
             x = 10
             y += word_height
+        pygame.draw.rect(self.screen, (200, 200, 200), self.button)  # Draw button rectangle
+        button_text_surface = self.button_font.render(self.button_text, True, (0, 0, 0))
+        button_text_rect = button_text_surface.get_rect(center=self.button.center)
+        self.screen.blit(button_text_surface, button_text_rect)
+
+    def handle_event(self, event):
+        """
+        handle events
+        """
+        #self.__glogger.debug(f"Event type: {event.type}", name=__name__)
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if self.button.collidepoint(event.pos):
+                self.__glogger.info("Button clicked", name=__name__)
+                self.hide()
+                return True
+        return False
 
     def show(self):
         """
@@ -238,4 +270,6 @@ class TextScreen:
         """
         hide it
         """
+        self.__glogger.info("Hiding text screen", name=__name__)
         self.visible = False
+        self.__glogger.info(f"Text screen visibility: {self.visible}", name=__name__)
