@@ -6,8 +6,7 @@ import ui
 from settings_menu import SettingsMenu, GameInNeedOfReload
 from save import SaveDataManager
 import main_map
-import puzzle_level_1
-import puzzle_level_2
+import puzzle_level_1, puzzle_level_2, puzzle_level_3
 import text_screen
 
 class InstanceMain():
@@ -40,6 +39,7 @@ class InstanceMain():
         pygame.init()
         pygame.mixer.init()
         self.init_ui()
+        self.__glogger.debug(f"PZ3 Diff: {self.__settings.puzzle_3_difficulty_size}")
         self.init_puzzles()
         self.main_game_loop()
 
@@ -68,6 +68,10 @@ class InstanceMain():
         self.__game_map_puzzle_1 = puzzle_level_1.GameMapPuzzle1(self.__screen, self.__player_puzzle_1)
         self.__game_map_puzzle_2 = puzzle_level_2.GameMapPuzzle2(self.__screen)
         self.__game_map_main = main_map.MainGameMap(self.__screen, self.__player_main_map, main_map_image_path)
+        self.__maze = puzzle_level_3.Maze()
+        start_pos = (0, 0)
+        self.__player_puzzle_3 = puzzle_level_3.MazePlayer(start_pos, self.__maze)
+        self.__game_map_puzzle_3 = puzzle_level_3.MazeGame(self.__screen, self.__player_puzzle_3, self.__maze)
 
     def create_private_static_class_variable_defaults(self):
         """
@@ -77,6 +81,7 @@ class InstanceMain():
         self.__playing = False
         self.__playing_puzzle_1 = False
         self.__playing_puzzle_2 = False
+        self.__playing_puzzle_3 = False
         self.__intro_screen = None
         self.__controls_screen = None
         self.__text_screen_1 = None
@@ -87,11 +92,13 @@ class InstanceMain():
         self.__show_controls_screen = False
         self.__show_text_screen_1 = False
         self.__show_text_screen_2 = False
+        self.__show_text_screen_3 = False
         self.__show_credits = False
         self.__show_mla_works_cited = False
         self.__playing_map_music = False
         self.__playing_puzzle_1_music = False
         self.__playing_puzzle_2_music = False
+        self.__playing_puzzle_3_music = False
 
     def main_game_loop(self):
         """
@@ -130,6 +137,8 @@ class InstanceMain():
                             self.puzzle_1_return_to_main_menu()
                         if self.__playing_puzzle_2:
                             self.puzzle_2_return_to_main_menu()
+                        if self.__playing_puzzle_3:
+                            self.puzzle_3_return_to_main_menu()
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:  # Left mouse button
                     mouse_pos = pygame.mouse.get_pos()
                     self.__game_map_puzzle_2.hitbox_generator.check_click(mouse_pos)
@@ -184,6 +193,11 @@ class InstanceMain():
                                 self.__debug_play_puzzles_ui.set_visibility(False)
                                 self.__text_screen_2 = text_screen.TextScreen(self.__screen, text_screen.get_puzzle_2_intro_text(), "Continue")
                                 self.__text_screen_2.draw()
+                            case ui.GameState.PLAY_PUZZLE_3:
+                                self.__show_text_screen_3 = True
+                                self.__debug_play_puzzles_ui.set_visibility(False)
+                                self.__text_screen_3 = text_screen.TextScreen(self.__screen, text_screen.get_puzzle_3_intro_text(), "Continue")
+                                self.__text_screen_3.draw()
                 if self.__show_intro_screen:
                     self.__intro_screen.draw()
                     if self.__intro_screen.handle_event(event): # pylint: disable=undefined-loop-variable
@@ -205,6 +219,11 @@ class InstanceMain():
                     if self.__text_screen_2.handle_event(event): # pylint: disable=undefined-loop-variable
                         self.__show_text_screen_2 = False
                         self.__playing_puzzle_2 = True
+                if self.__show_text_screen_3:
+                    self.__text_screen_3.draw()
+                    if self.__text_screen_3.handle_event(event): # pylint: disable=undefined-loop-variable
+                        self.__show_text_screen_3 = False
+                        self.__playing_puzzle_3 = True
                 if self.__show_credits:
                     self.__credits.draw()
                     if self.__credits.handle_event(event): # pylint: disable=undefined-loop-variable
@@ -275,6 +294,21 @@ class InstanceMain():
                 if self.__game_map_puzzle_2.hitbox_generator.is_the_one_clicked():
                     self.puzzle_2_return_to_main_menu()
                 pygame.display.flip()
+            if self.__playing_puzzle_3:
+                keys = pygame.key.get_pressed()
+                if keys[self.get_pygame_key_for_key(self.__settings.keybind_up)]:
+                    self.__game_map_puzzle_3.update("up")
+                elif keys[self.get_pygame_key_for_key(self.__settings.keybind_down)]:
+                    self.__game_map_puzzle_3.update("down")
+                elif keys[self.get_pygame_key_for_key(self.__settings.keybind_left)]:
+                    self.__game_map_puzzle_3.update("left")
+                elif keys[self.get_pygame_key_for_key(self.__settings.keybind_right)]:
+                    self.__game_map_puzzle_3.update("right")
+                self.__screen.fill((0, 0, 0))
+                self.__game_map_puzzle_3.draw()
+                if self.__player_puzzle_3.has_exit_been_triggered():
+                    self.puzzle_3_return_to_main_menu()
+                pygame.display.flip()
             self.__titlescreen_ui.draw(self.__screen)
             if self.__debug_play_puzzles_ui.visibility:
                 self.__debug_play_puzzles_ui.draw(self.__screen)
@@ -324,6 +358,19 @@ class InstanceMain():
         self.__game_map_puzzle_2.hitbox_generator.reset_hitboxes()
         self.__titlescreen_ui.set_visibility(True)
         self.__playing_puzzle_2_music = False # pylint: disable=attribute-defined-outside-init
+        pygame.mixer.music.stop()
+
+    def puzzle_3_return_to_main_menu(self):
+        """
+        Return to the main menu from puzzle 3
+        """
+        self.__playing_puzzle_3 = False # pylint: disable=attribute-defined-outside-init
+        self.__titlescreen_ui.set_visibility(True)
+        self.__playing_puzzle_3_music = False # pylint: disable=attribute-defined-outside-init
+        self.__maze = puzzle_level_3.Maze()
+        start_pos = (0, 0)
+        self.__player_puzzle_3 = puzzle_level_3.MazePlayer(start_pos, self.__maze)
+        self.__game_map_puzzle_3 = puzzle_level_3.MazeGame(self.__screen, self.__player_puzzle_3, self.__maze)
         pygame.mixer.music.stop()
 
     def check_playing_anything(self):

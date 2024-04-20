@@ -63,6 +63,14 @@ def get_puzzle_2_intro_text():
     puzzle mechanic because I believe it simulates the difficulty of sifting through intrusive looping thoughts to get a word out.\n
     """
 
+def get_puzzle_3_intro_text():
+    """
+    Get the text for the puzzle 3 intro
+    """
+    return """
+    Placeholder - REPLACE ME\n
+    """
+
 def get_credits_and_attributions_text():
     """
     Get the credits and attributions text
