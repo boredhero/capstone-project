@@ -83,13 +83,13 @@ class Journal_Entry_2(AbstractLoreObject):
         """
         name = "Journal"
         lore_text = """
-        01/15/2022
-
-        I had a really bad panic attack today. I was trying to call my doctor's office to schedule an appointment to get my prescription refilled, but once I dialed the number and the receptionist picked up, I couldn't speak. I felt like I was suffocating, and my heart was racing. I ended up having to ask my roommate to make the call for me. I hate feeling so helpless and out of control. I wish I didn't have to rely on medication to function.
-        I thought I was doing better, but I guess I still have a long way to go. I'm trying to remind myself that recovery isn't linear, but it's hard not to feel discouraged. I'm going to try to be kind to myself and remember that it's okay to have bad days.
+        05/14/2022
+        
+        Today, I met someone who I think I could really like. I'm not sure if they like me back, but I'm hopeful. I'm trying to be more open to new people and experiences.
+        That said, I have trouble beliving sometimes that anyone would be interested in me. I'm trying to be more positive, but it's hard.  
         """
-        location = (800, 3800) # Balcony Left Chair
-        starts_puzzle = "puzzle_2"
+        location = (1300, 800) # Living Room Coffee Table
+        starts_puzzle = None
         lore_ordinal = 3
         super().__init__(name, lore_text, location, starts_puzzle, lore_ordinal)
 
@@ -235,12 +235,12 @@ class Journal_Entry_8(AbstractLoreObject):
         """
         name = "Journal"
         lore_text = """
-        05/14/2022
-        
-        Today, I met someone who I think I could really like. I'm not sure if they like me back, but I'm hopeful. I'm trying to be more open to new people and experiences.
-        That said, I have trouble beliving sometimes that anyone would be interested in me. I'm trying to be more positive, but it's hard.  
+        01/15/2022
+
+        I had a really bad panic attack today. I was trying to call my doctor's office to schedule an appointment to get my prescription refilled, but once I dialed the number and the receptionist picked up, I couldn't speak. I felt like I was suffocating, and my heart was racing. I ended up having to ask my roommate to make the call for me. I hate feeling so helpless and out of control. I wish I didn't have to rely on medication to function.
+        I thought I was doing better, but I guess I still have a long way to go. I'm trying to remind myself that recovery isn't linear, but it's hard not to feel discouraged. I'm going to try to be kind to myself and remember that it's okay to have bad days.
         """
-        location = (1300, 800) # Living Room Coffee Table
+        location = (800, 3800) # Balcony Left Chair
         starts_puzzle = None
         lore_ordinal = 11
         super().__init__(name, lore_text, location, starts_puzzle, lore_ordinal)
