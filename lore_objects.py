@@ -121,6 +121,14 @@ class Journal_Entry_4(AbstractLoreObject):
         03/01/2022
 
         I have barely left bed for the past few days. I can't seem to find the energy or motivation to do anything. I know I should be taking my medication, but I can't bring myself to do it. I feel like it's not even worth it. I feel like I'm not worth it. I feel like I'm never going to get better. I feel like I'm never going to be happy. I feel like I'm never going to be okay. I've been missing class for weeks and I can't find the motivation to get leave my room, which is rapidly becoming a mess...
+
+        PUZZLE:     This puzzle is about the experience of trying to get out of bed and do basic daily tasks while struggling with depression.
+        It can be hard to do this for people with depression, as it is hard to gather the motivation to start the day, and it is easy to
+        stay there, skip classes, and not do anything, which can make the depression worse.
+
+        To complete this puzzle, you need to turn all of the circles green by using WASD to move the player around. But be careful, the circles
+        have a timer, and you will need to return to re-activate them if you are not fast enough. I chose this puzzle mechanic because I believe
+        it is a good simulator of how hard it can be to reach the critical mass of motivation to get out of bed and do things.
         """
         location = (1200, 3300) # BR Bed
         starts_puzzle = "puzzle_1"
