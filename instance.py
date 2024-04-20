@@ -46,6 +46,47 @@ class InstanceMain():
         self.init_puzzles()
         self.main_game_loop()
 
+    def save_main_game_state(self):
+        """
+        Save main game state
+        """
+        self.saved_state = {
+            "player_position": self.__player_main_map.position,
+            "lore_status": self.__game_map_main.get_curr_lore(),
+            "circle_coords": self.__game_map_main.get_current_circle_coords()
+        }
+
+    def unload_main_game(self):
+        """
+        Unload main game
+        """
+        self.__game_map_main = None
+        pygame.mixer.music.stop()
+
+    def load_puzzle(self, puzzle_id):
+        """
+        Load a puzzle
+        """
+        if puzzle_id == 1:
+            self.__game_map_puzzle_1 = puzzle_level_1.GameMapPuzzle1(self.__screen, self.__player_puzzle_1)
+        elif puzzle_id == 2:
+            self.__game_map_puzzle_2 = puzzle_level_2.GameMapPuzzle2(self.__screen)
+        elif puzzle_id == 3:
+            self.__game_map_puzzle_3 = puzzle_level_3.MazeGame(self.__screen, self.__player_puzzle_3, self.__maze)
+
+    def restore_main_game(self):
+        """
+        Restore main game from freezed state
+        """
+        main_map_image_path = "assets/backgrounds/main_map.png"
+        self.__player_main_map.position = self.saved_state["player_position"]
+        self.__game_map_main = main_map.MainGameMap(self.__screen, self.__player_main_map, main_map_image_path)
+        self.__game_map_main.set_curr_lore(self.saved_state["lore_status"])
+        self.__game_map_main.set_current_circle_coords(self.saved_state["circle_coords"])
+        pygame.mixer.music.load("main_theme.mp3")  # Reload main game music
+        pygame.mixer.music.play(-1)
+
+
     def init_logger(self):
         """
         Initialize Logger
@@ -180,6 +221,9 @@ class InstanceMain():
                         self.__glogger.info("Lore 5 found", name=__name__)
                         self.__game_map_main.show_text_screen(self.lore_5.get_lore_text())
                         # TODO: Start Puzzle 1
+                        self.__playing = False
+                        self.__playing_map_music = False
+                        self.__playing_puzzle_1 = True
                         self.__game_map_main.set_has_player_collided_with_lore(False)
                         self.__game_map_main.move_circle(self.lore_6.get_location())
                     case 5:
@@ -211,6 +255,9 @@ class InstanceMain():
                         self.__glogger.info("Lore 11 found", name=__name__)
                         self.__game_map_main.show_text_screen(self.lore_11.get_lore_text())
                         # TODO: Start Puzzle 2
+                        self.__playing = False
+                        self.__playing_map_music = False
+                        self.__playing_puzzle_2 = True
                         self.__game_map_main.set_has_player_collided_with_lore(False)
                         self.__game_map_main.move_circle(self.lore_12.get_location())
                     case 11:
@@ -227,6 +274,9 @@ class InstanceMain():
                         self.__glogger.info("Lore 14 found", name=__name__)
                         self.__game_map_main.show_text_screen(self.lore_14.get_lore_text())
                         # TODO: Start Puzzle 3
+                        self.__playing = False
+                        self.__playing_map_music = False
+                        self.__playing_puzzle_3 = True
                         self.__game_map_main.set_has_player_collided_with_lore(False)
                         self.__game_map_main.move_circle((8000, 8000))
                     case _:
@@ -393,7 +443,7 @@ class InstanceMain():
                 pygame.mixer.music.set_volume(0.1)
                 self.__playing_puzzle_2_music = True
             if self.__playing_puzzle_3 and not self.__playing_puzzle_3_music:
-                pygame.mixer.music.load("assets/music/chopin_prelude_op_28_no_4.ogg")
+                pygame.mixer.music.load("assets/music/IMSLP77318-PMLP07506-gnossiennes_1.mp3")
                 pygame.mixer.music.play(-1)
                 pygame.mixer.music.set_volume(0.1)
                 self.__playing_puzzle_3_music = True
@@ -424,7 +474,8 @@ class InstanceMain():
                 if keys[pygame.K_n]:
                     self.__game_map_puzzle_1.hitbox_generator.reset_hitboxes()
                 if self.__game_map_puzzle_1.all_hitboxes_collided():
-                    self.puzzle_1_return_to_main_menu()
+                    #self.puzzle_1_return_to_main_menu()
+                    self.puzzle_1_return_to_main_map()
                 self.__game_map_puzzle_1.draw_map()
                 self.__game_map_puzzle_1.hitbox_generator.set_collidability(True)
                 self.__game_map_puzzle_1.draw_hitboxes()
@@ -440,7 +491,7 @@ class InstanceMain():
                 self.__game_map_puzzle_2.draw_message_box("What is your doctor's name so I can schedule an appointment?", self.__screen)
                 self.__game_map_puzzle_2.hitbox_generator.set_clickability(True)
                 if self.__game_map_puzzle_2.hitbox_generator.is_the_one_clicked():
-                    self.puzzle_2_return_to_main_menu()
+                    self.puzzle_2_return_to_main_map()
                 pygame.display.flip()
             if self.__playing_puzzle_3:
                 keys = pygame.key.get_pressed()
@@ -497,6 +548,17 @@ class InstanceMain():
         self.__playing_puzzle_1_music = False # pylint: disable=attribute-defined-outside-init
         pygame.mixer.music.stop()
 
+    def puzzle_1_return_to_main_map(self):
+        """
+        Return to the main map from puzzle 1
+        """# pylint: disable=attribute-defined-outside-init
+        self.__playing_puzzle_1 = False # pylint: disable=attribute-defined-outside-init
+        self.__game_map_puzzle_1.hitbox_generator.set_collidability(False)
+        self.__game_map_puzzle_1.hitbox_generator.reset_hitboxes()
+        self.__playing_puzzle_1_music = False # pylint: disable=attribute-defined-outside-init
+        pygame.mixer.music.stop()
+        self.__playing = True
+
     def puzzle_2_return_to_main_menu(self):
         """
         Return to the main menu
@@ -507,6 +569,17 @@ class InstanceMain():
         self.__titlescreen_ui.set_visibility(True)
         self.__playing_puzzle_2_music = False # pylint: disable=attribute-defined-outside-init
         pygame.mixer.music.stop()
+
+    def puzzle_2_return_to_main_map(self):
+        """
+        Return to the main map from puzzle 2
+        """
+        self.__playing_puzzle_2 = False # pylint: disable=attribute-defined-outside-init
+        self.__game_map_puzzle_2.hitbox_generator.set_clickability(False)
+        self.__game_map_puzzle_2.hitbox_generator.reset_hitboxes()
+        self.__playing_puzzle_2_music = False # pylint: disable=attribute-defined-outside-init
+        pygame.mixer.music.stop()
+        self.__playing = True
 
     def puzzle_3_return_to_main_menu(self):
         """
@@ -520,6 +593,19 @@ class InstanceMain():
         self.__player_puzzle_3 = puzzle_level_3.MazePlayer(start_pos, self.__maze)
         self.__game_map_puzzle_3 = puzzle_level_3.MazeGame(self.__screen, self.__player_puzzle_3, self.__maze)
         pygame.mixer.music.stop()
+
+    def puzzle_3_return_to_main_map(self):
+        """
+        Return to the main map from puzzle 3
+        """
+        self.__playing_puzzle_3 = False # pylint: disable=attribute-defined-outside-init
+        self.__playing_puzzle_3_music = False # pylint: disable=attribute-defined-outside-init
+        self.__maze = puzzle_level_3.Maze()
+        start_pos = (0, 0)
+        self.__player_puzzle_3 = puzzle_level_3.MazePlayer(start_pos, self.__maze)
+        self.__game_map_puzzle_3 = puzzle_level_3.MazeGame(self.__screen, self.__player_puzzle_3, self.__maze)
+        pygame.mixer.music.stop()
+        self.__playing = True
 
     def check_playing_anything(self):
         """
