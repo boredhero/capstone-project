@@ -107,6 +107,9 @@ def get_credits_and_attributions_text():
     "Violin Partita No.2 in D minor, BWV 1004 Chaconne (No.5) (Bach, Johann Sebastian)" Performed by Ray Chen (violin)\n
     https://imslp.org/wiki/Violin_Partita_No.2_in_D_minor%2C_BWV_1004_(Bach%2C_Johann_Sebastian)\n
     Licensed under Creative Commons: BY-ND 4.0 DEED https://creativecommons.org/licenses/by-nd/4.0/deed.en\n
+
+    "Gnossienne Nos 1, 2, 3" Erik Satie. Performed by Carl Banner. Washington Muisica Viva.\n
+    Licensed under Creative Commons: BY-NC-ND 3.0 Deed https://creativecommons.org/licenses/by-nc-nd/3.0/\n
     
     Images Used (License):\n
     
