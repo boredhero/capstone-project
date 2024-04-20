@@ -129,7 +129,7 @@ class MazePlayer:
         new_y = self.position[1] + dy
         if self.can_move_to(new_x, new_y):
             self.position = (new_x, new_y)
-            self.__glogger.debug(f"Player moved to ({new_x}, {new_y})", name=__name__)
+            #self.__glogger.debug(f"Player moved to ({new_x}, {new_y})", name=__name__)
             if self.position == self.maze.exit_point:
                 self.__glogger.debug("Player reached the exit!", name=__name__)
                 self.__exit_triggered = True
