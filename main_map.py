@@ -2,6 +2,7 @@ import importlib, inspect, time
 from typing import Tuple
 
 import pygame
+from pygame.locals import * # pylint: disable=wildcard-import,unused-wildcard-import
 from PIL import Image
 
 from game_logger import GameLogger
@@ -20,6 +21,7 @@ class MainGameMap:
         self.visibility = True
         self.screen = screen
         self.player = player
+        self.text_screen = None
         self.__cb = "color" # pylint: disable=unused-private-member
         if self.__settings.grayscale_mode:
             self.__cb = "bw" # pylint: disable=unused-private-member
@@ -31,6 +33,23 @@ class MainGameMap:
         self.camera_rect = pygame.Rect(0, 0, screen.get_width(), screen.get_height())
         self.curr_lore = 0
         self.last_lore_found = self.get_unix_timestamp()
+
+    def show_text_screen(self, text: str):
+        """
+        Show an arbitrary text screen
+        """
+        if not self.text_screen:
+            self.text_screen = TextScreen(self.screen, text)
+        else:
+            self.text_screen.text = text
+        self.text_screen.show()
+
+    def hide_text_screen(self):
+        """
+        Hide the text screen.
+        """
+        if self.text_screen:
+            self.text_screen.hide()
 
     def get_curr_lore(self) -> int:
         """
@@ -70,6 +89,8 @@ class MainGameMap:
         camera_y = max(0, min(self.player.position[1] - self.screen.get_height() / 2, self.map_surface.get_height() - self.screen.get_height()))
         self.camera_rect = pygame.Rect(camera_x, camera_y, self.screen.get_width(), self.screen.get_height())
         self.screen.blit(self.map_surface, (0, 0), self.camera_rect)
+        if self.text_screen and self.text_screen.visible:
+            self.text_screen.draw()
 
     def get_pixel_color(self, position: Tuple[int, int]) -> pygame.Color:
         """
@@ -169,3 +190,52 @@ class MapObjects(metaclass=Singleton):
         for name, obj in inspect.getmembers(lore_texts_mod): # pylint: disable=unused-variable
             if inspect.isclass(obj) and issubclass(obj, AbstractLoreObject) and obj is not AbstractLoreObject:
                 self.objects[name] = obj
+
+class TextScreen:
+
+    def __init__(self, screen, text, font_size=32, background_color=(0, 0, 0), text_color=(255, 255, 255), text_width=400):
+        """
+        Minimal text screen for this
+        """
+        self.screen = screen
+        self.text = text
+        self.font = pygame.font.Font(None, font_size)
+        self.background_color = background_color
+        self.text_color = text_color
+        self.text_width = text_width
+        self.visible = False
+
+    def draw(self):
+        """
+        draw it, wrap the text
+        """
+        if not self.visible:
+            return
+        self.screen.fill(self.background_color)
+        words = [word.split(' ') for word in self.text.splitlines()]
+        space = self.font.size(' ')[0]
+        max_width, max_height = self.text_width, self.screen.get_height() # pylint: disable = unused-variable
+        x, y = 10, 10
+        for line in words:
+            for word in line:
+                word_surface = self.font.render(word, True, self.text_color)
+                word_width, word_height = word_surface.get_size()
+                if x + word_width >= max_width:
+                    x = 10
+                    y += word_height
+                self.screen.blit(word_surface, (x, y))
+                x += word_width + space
+            x = 10
+            y += word_height
+
+    def show(self):
+        """
+        show it
+        """
+        self.visible = True
+
+    def hide(self):
+        """
+        hide it
+        """
+        self.visible = False
