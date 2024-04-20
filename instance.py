@@ -174,12 +174,12 @@ class InstanceMain():
                     case 3:
                         self.__glogger.info("Lore 4 found", name=__name__)
                         self.__game_map_main.show_text_screen(self.lore_4.get_lore_text())
-                        # TODO: Start Puzzle 1
                         self.__game_map_main.set_has_player_collided_with_lore(False)
                         self.__game_map_main.move_circle(self.lore_5.get_location())
                     case 4:
                         self.__glogger.info("Lore 5 found", name=__name__)
                         self.__game_map_main.show_text_screen(self.lore_5.get_lore_text())
+                        # TODO: Start Puzzle 1
                         self.__game_map_main.set_has_player_collided_with_lore(False)
                         self.__game_map_main.move_circle(self.lore_6.get_location())
                     case 5:
