@@ -262,10 +262,38 @@ class Journal_Entry_8(AbstractLoreObject):
 
         I had a really bad panic attack today. I was trying to call my doctor's office to schedule an appointment to get my prescription refilled, but once I dialed the number and the receptionist picked up, I couldn't speak. I felt like I was suffocating, and my heart was racing. I ended up having to ask my roommate to make the call for me. I hate feeling so helpless and out of control. I wish I didn't have to rely on medication to function.
         I thought I was doing better, but I guess I still have a long way to go. I'm trying to remind myself that recovery isn't linear, but it's hard not to feel discouraged. I'm going to try to be kind to myself and remember that it's okay to have bad days.
+
+        PUZZLE:
+
+        This puzzle is about how difficult it can be to navigate basic life tasks while struggling with social anxiety. Even a simple task such
+        as calling the doctor to make an appointment can be a daunting task for someone with social anxiety. It can be hard to remember what to
+        say, and the resulting perceived embarrassment can be a huge deterrent to making the call. I often forget what I want to say when I make
+        calls, and I have to write down a script to read from. Intrusive negative thoughts can result in a thought loop, causing you to freeze up
+        and become unable to talk.
+
+        To be able to complete this puzzle, you'll be shown a question that you need to answer. You'll be presented choices, but they will move
+        around the screen, and you will need to try to click the right one to answer the question correctly. There will be one right answer,
+        and a lot of incorrect ones, or intrusive thoughts that make it harder to track the right thought and answer the question. I chose this
+        puzzle mechanic because I believe it simulates the difficulty of sifting through intrusive looping thoughts to get a word out.
         """
         location = (800, 3800) # Balcony Left Chair
         starts_puzzle = None
         lore_ordinal = 12
+        super().__init__(name, lore_text, location, starts_puzzle, lore_ordinal)
+
+class Puzzle_2_Shim(AbstractLoreObject):
+
+    def __init__(self):
+        """
+        Puzzle 2 Shim
+        """
+        name = "Puzzle Complete"
+        lore_text = """
+        You have completed the puzzle. You have successfully managed to get through a panic attack and get the help you needed.
+        """
+        location = (860, 3860)
+        starts_puzzle = None
+        lore_ordinal = 13
         super().__init__(name, lore_text, location, starts_puzzle, lore_ordinal)
 
 class Journal_Entry_9(AbstractLoreObject):
@@ -283,7 +311,7 @@ class Journal_Entry_9(AbstractLoreObject):
         """
         location = (500, 3200) # BR Desk
         starts_puzzle = None
-        lore_ordinal = 13
+        lore_ordinal = 14
         super().__init__(name, lore_text, location, starts_puzzle, lore_ordinal)
 
 class Journal_Entry_10(AbstractLoreObject):
@@ -304,7 +332,7 @@ class Journal_Entry_10(AbstractLoreObject):
         """
         location = location = (1000, 2000) # Hallway (Midpoint roughly)
         starts_puzzle = None
-        lore_ordinal = 14
+        lore_ordinal = 15
         super().__init__(name, lore_text, location, starts_puzzle, lore_ordinal)
 
 class Journal_Entry_11(AbstractLoreObject):
@@ -327,8 +355,28 @@ class Journal_Entry_11(AbstractLoreObject):
         I hate her, but she's still my mother, and she still took care of me, and still needs me in her old age. Deep down, I think I wish that she
         would just die so that I can be free; but I also know that I would be devastated if she did. I hate myself for feeling this way.
         I'm not sure how much longer I can take this. I'm not sure how much longer I can take her. I'm not sure how much longer I can take myself.
+
+        PUZZLE:
+
+        This puzzle is meant to simulate the experience of having a stressful conversation where you have to navigate a minefield of triggers and
+        intrusive thoughts. You will be presented with a maze, and you will need to navigate it to get to the end goal (the green square).
         """
         location = (1350, 2800) # BR Sound System
         starts_puzzle = "puzzle_3"
-        lore_ordinal = 15
+        lore_ordinal = 16
+        super().__init__(name, lore_text, location, starts_puzzle, lore_ordinal)
+
+class Puzzle_3_Shim(AbstractLoreObject):
+
+    def __init__(self):
+        """
+        Puzzle 3 Shim
+        """
+        name = "Puzzle Complete"
+        lore_text = """
+        You have completed the puzzle. You have successfully navigated the stressful conversation with your mother.
+        """
+        location = (1410, 2860)
+        starts_puzzle = None
+        lore_ordinal = 17
         super().__init__(name, lore_text, location, starts_puzzle, lore_ordinal)

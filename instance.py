@@ -185,9 +185,11 @@ class InstanceMain():
         self.lore_10 = lore_objects.Journal_Entry_6()
         self.lore_11 = lore_objects.Journal_Entry_7()
         self.lore_12 = lore_objects.Journal_Entry_8()
-        self.lore_13 = lore_objects.Journal_Entry_9()
-        self.lore_14 = lore_objects.Journal_Entry_10()
-        self.lore_15 = lore_objects.Journal_Entry_11()
+        self.lore_13 = lore_objects.Puzzle_2_Shim()
+        self.lore_14 = lore_objects.Journal_Entry_9()
+        self.lore_15 = lore_objects.Journal_Entry_10()
+        self.lore_16 = lore_objects.Journal_Entry_11()
+        self.lore_17 = lore_objects.Puzzle_3_Shim()
         self.__displayed_all_lore = False
 
     def handle_display_lore_actually(self, event): # pylint: disable=unused-argument
@@ -231,55 +233,63 @@ class InstanceMain():
                         self.__playing_puzzle_1 = True
                         self.__game_map_main.set_has_player_collided_with_lore(False)
                         self.__game_map_main.move_circle(self.lore_7.get_location())
-                    case 5:
+                    case 6:
                         self.__glogger.info("Lore 7 found", name=__name__)
                         self.__game_map_main.show_text_screen(self.lore_7.get_lore_text())
                         self.__game_map_main.set_has_player_collided_with_lore(False)
                         self.__game_map_main.move_circle(self.lore_8.get_location())
-                    case 6:
+                    case 7:
                         self.__glogger.info("Lore 8 found", name=__name__)
                         self.__game_map_main.show_text_screen(self.lore_8.get_lore_text())
                         self.__game_map_main.set_has_player_collided_with_lore(False)
                         self.__game_map_main.move_circle(self.lore_9.get_location())
-                    case 7:
+                    case 8:
                         self.__glogger.info("Lore 9 found", name=__name__)
                         self.__game_map_main.show_text_screen(self.lore_9.get_lore_text())
                         self.__game_map_main.set_has_player_collided_with_lore(False)
                         self.__game_map_main.move_circle(self.lore_10.get_location())
-                    case 8:
+                    case 9:
                         self.__glogger.info("Lore 10 found", name=__name__)
                         self.__game_map_main.show_text_screen(self.lore_10.get_lore_text())
                         self.__game_map_main.set_has_player_collided_with_lore(False)
                         self.__game_map_main.move_circle(self.lore_11.get_location())
-                    case 9:
+                    case 10:
                         self.__glogger.info("Lore 11 found", name=__name__)
                         self.__game_map_main.show_text_screen(self.lore_11.get_lore_text())
                         self.__game_map_main.set_has_player_collided_with_lore(False)
                         self.__game_map_main.move_circle(self.lore_12.get_location())
-                    case 10:
+                    case 11:
                         self.__glogger.info("Lore 12 found", name=__name__)
                         self.__game_map_main.show_text_screen(self.lore_12.get_lore_text())
-                        # TODO: Start Puzzle 2
-                        self.__playing = False
+                        self.__game_map_main.set_has_player_collided_with_lore(False)
+                        self.__game_map_main.move_circle(self.lore_13.get_location())
+                    case 12:
+                        self.__glogger.info("Puzzle 2 shim found", name=__name__)
+                        self.__game_map_main.show_text_screen(self.lore_13.get_lore_text())
+                        self.__playing = False # Puzzle 2
                         self.__playing_map_music = False
                         self.__playing_puzzle_2 = True
                         self.__game_map_main.set_has_player_collided_with_lore(False)
-                        self.__game_map_main.move_circle(self.lore_13.get_location())
-                    case 11:
-                        self.__glogger.info("Lore 13 found", name=__name__)
-                        self.__game_map_main.show_text_screen(self.lore_13.get_lore_text())
-                        self.__game_map_main.set_has_player_collided_with_lore(False)
                         self.__game_map_main.move_circle(self.lore_14.get_location())
-                    case 12:
+                    case 13:
                         self.__glogger.info("Lore 14 found", name=__name__)
                         self.__game_map_main.show_text_screen(self.lore_14.get_lore_text())
                         self.__game_map_main.set_has_player_collided_with_lore(False)
                         self.__game_map_main.move_circle(self.lore_15.get_location())
-                    case 13:
+                    case 14:
                         self.__glogger.info("Lore 15 found", name=__name__)
                         self.__game_map_main.show_text_screen(self.lore_15.get_lore_text())
-                        # TODO: Start Puzzle 3
-                        self.__playing = False
+                        self.__game_map_main.set_has_player_collided_with_lore(False)
+                        self.__game_map_main.move_circle(self.lore_16.get_location())
+                    case 15:
+                        self.__glogger.info("Lore 16 found", name=__name__)
+                        self.__game_map_main.show_text_screen(self.lore_16.get_lore_text())
+                        self.__game_map_main.set_has_player_collided_with_lore(False)
+                        self.__game_map_main.move_circle(self.lore_17.get_location())
+                    case 16:
+                        self.__glogger.info("Puzzle 3 shim found", name=__name__)
+                        self.__game_map_main.show_text_screen(self.lore_17.get_lore_text())
+                        self.__playing = False # Puzzle 3
                         self.__playing_map_music = False
                         self.__playing_puzzle_3 = True
                         self.__game_map_main.set_has_player_collided_with_lore(False)
