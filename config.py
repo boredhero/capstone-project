@@ -31,7 +31,8 @@ class SettingsConfig(metaclass=Singleton):
         os.makedirs(self.config_dir, exist_ok=True)
         self.config_name = os.path.join(self.config_dir, "settings.yml")
         self.__settings = {}
-        self.__load_settings()
+        self.load_settings()
+        print(f"Settings loaded: {self.__settings}")
         self.screen_width = self.__settings.get("screen_width")
         self.screen_height = self.__settings.get("screen_height")
         self.window_mode = self.__settings.get("window_mode")
@@ -42,6 +43,7 @@ class SettingsConfig(metaclass=Singleton):
         self.puzzle_1_difficulty_fitts = self.__settings.get("puzzle_1_difficulty_fitts")
         self.puzzle_2_difficulty_speed = self.__settings.get("puzzle_2_difficulty_speed")
         self.puzzle_2_difficulty_number = self.__settings.get("puzzle_2_difficulty_number")
+        self.puzzle_3_difficulty_size = self.__settings.get("puzzle_3_difficulty_size")
         self.subtitles = self.__settings.get("subtitles")
         self.debug = self.__settings.get("debug")
         self.fancy_fonts = self.__settings.get("fancy_fonts")
@@ -64,7 +66,7 @@ class SettingsConfig(metaclass=Singleton):
             case _:
                 self.screen_size_speed_multipliere = 1
 
-    def __load_settings(self):
+    def load_settings(self):
         """
         Load settings
         """
@@ -89,7 +91,7 @@ class SettingsConfig(metaclass=Singleton):
         """
         Get the settings after reloading the config from disk (slower)
         """
-        self.__load_settings()
+        self.load_settings()
         return self.__settings
 
     def get_settings_no_refresh(self):
@@ -113,6 +115,7 @@ class SettingsConfig(metaclass=Singleton):
             "puzzle_1_difficulty_fitts": 30,
             "puzzle_2_difficulty_speed": 10,
             "puzzle_2_difficulty_number": 20,
+            "puzzle_3_difficulty_size": 40,
             "subtitles": True,
             "debug": False,
             "fancy_fonts": True,

@@ -17,6 +17,7 @@ class GameState(Enum):
     DEBUG_PLAY_PUZZLE = 4
     PLAY_PUZZLE_1 = 5
     PLAY_PUZZLE_2 = 6
+    PLAY_PUZZLE_3 = 9
     MLA_WORKS_CITED = 7
     INPUT_NAME = 8
 
@@ -133,6 +134,7 @@ class LevelSelectorUIElements():
         title_y = screen_height // 3
         puzzle_1_y = title_y + 100  # Adjust as needed
         puzzle_2_y = puzzle_1_y + 50  # Adjust as needed
+        puzzle_3_y = puzzle_2_y + 50  # Adjust as needed
         self.visibility = None
         self.__title = UIElement(
             center_position=(screen_width // 2, title_y),
@@ -157,7 +159,15 @@ class LevelSelectorUIElements():
             text="Puzzle 2 (Social Anxiety - Intrusive Thoughts)",
             action=GameState.PLAY_PUZZLE_2
         )
-        self.__buttons = [self.__puzzle_1, self.__puzzle_2]
+        self.__puzzle_3 = UIElement(
+            center_position=(screen_width // 2, puzzle_3_y),
+            font_size=30,
+            bg_rgb=GameColors.BLACK.value,
+            text_rgb=GameColors.WHITE.value,
+            text="Puzzle 3",
+            action=GameState.PLAY_PUZZLE_3
+        )
+        self.__buttons = [self.__puzzle_1, self.__puzzle_2, self.__puzzle_3]
 
     @property
     def buttons(self):

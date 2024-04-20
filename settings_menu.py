@@ -81,6 +81,8 @@ class SettingsMenu:
         self.settings.add.range_slider(title="Puzzle 1 Difficulty (Fitts's Law)", default=int(self.__settingsconfig.puzzle_1_difficulty_fitts), range_values=(25, 40), increment=0.5, rangeslider_id="puzzle_one_diff_fitts", value_format=lambda x: str(round(x, None)))
         self.settings.add.range_slider(title="Puzzle 2 Difficulty (Speed): ", default=int(self.__settingsconfig.puzzle_2_difficulty_speed), range_values=(1, 50), increment=1, rangeslider_id="puzzle_two_diff_speed", value_format=lambda x: str(round(x, None)))
         self.settings.add.range_slider(title="Puzzle 2 Difficulty (Number): ", default=int(self.__settingsconfig.puzzle_2_difficulty_number), range_values=(1, 50), increment=1, rangeslider_id="puzzle_two_diff_number", value_format=lambda x: str(round(x, None)))
+        self.settings.add.range_slider(title="Puzzle 3 Difficulty (Size): ", default=int(self.__settingsconfig.puzzle_3_difficulty_size), range_values=(20, 80),
+        increment=1, rangeslider_id="puzzle_three_diff_size", value_format=lambda x: str(round(x, None)))
         self.settings.add.button(title=f"Interact Keybind: {self.__keybinds['interact']}", action=self.listen_for_interact_key, button_id='interact_keybind_button', font_color=GameColors.WHITE.value)
         self.settings.add.button(title=f"Up Keybind: {self.__keybinds['up']}", action=self.listen_for_up_key, button_id='up_keybind_button', font_color=GameColors.WHITE.value)
         self.settings.add.button(title=f"Down Keybind: {self.__keybinds['down']}", action=self.listen_for_down_key, button_id='down_keybind_button', font_color=GameColors.WHITE.value)
@@ -195,6 +197,7 @@ class SettingsMenu:
         puzzle_1_difficulty_fitts = None
         puzzle_2_difficulty_speed = None
         puzzle_2_difficulty_number = None
+        puzzle_3_difficulty_size = None
         subtitles = None
         debug = None
         fancy_fonts = None
@@ -255,6 +258,10 @@ class SettingsMenu:
                     puzzle_2_difficulty_number = int(value)
                     if puzzle_2_difficulty_number is None:
                         puzzle_2_difficulty_number = int(self.__settingsconfig.puzzle_2_difficulty_number)
+                case "puzzle_three_diff_size":
+                    puzzle_3_difficulty_size = int(value)
+                    if puzzle_3_difficulty_size is None:
+                        puzzle_3_difficulty_size = int(self.__settingsconfig.puzzle_3_difficulty_size)
                 case "max_fps":
                     max_fps = value
                     if int(max_fps) < 30:
@@ -275,6 +282,7 @@ class SettingsMenu:
                 "puzzle_1_difficulty_fitts": puzzle_1_difficulty_fitts,
                 "puzzle_2_difficulty_speed": puzzle_2_difficulty_speed,
                 "puzzle_2_difficulty_number": puzzle_2_difficulty_number,
+                "puzzle_3_difficulty_size": puzzle_3_difficulty_size,
                 "subtitles": subtitles,
                 "debug": debug,
                 "fancy_fonts": fancy_fonts,
@@ -308,6 +316,7 @@ class SettingsMenu:
             "puzzle_1_difficulty_fitts": self.__settingsconfig.puzzle_1_difficulty_fitts,
             "puzzle_2_difficulty_speed": self.__settingsconfig.puzzle_2_difficulty_speed,
             "puzzle_2_difficulty_number": self.__settingsconfig.puzzle_2_difficulty_number,
+            "puzzle_3_difficulty_size": self.__settingsconfig.puzzle_3_difficulty_size,
             "subtitles": self.__settingsconfig.subtitles,
             "fancy_fonts": self.__settingsconfig.fancy_fonts,
             "grayscale_mode": self.__settingsconfig.grayscale_mode,
