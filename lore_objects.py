@@ -61,7 +61,7 @@ class Prescription_1(AbstractLoreObject):
         location = (0, 0)
         owner = "world"
         starts_puzzle = None
-        lore_ordinal = 0
+        lore_ordinal = 1
         super().__init__(name, lore_text, location, owner, starts_puzzle, lore_ordinal)
 
 class Journal_Entry_1(AbstractLoreObject):
@@ -79,7 +79,7 @@ class Journal_Entry_1(AbstractLoreObject):
         location = (0, 0)
         owner = "world"
         starts_puzzle = None
-        lore_ordinal = 1
+        lore_ordinal = 2
         super().__init__(name, lore_text, location, owner, starts_puzzle, lore_ordinal)
 
 class Journal_Entry_2(AbstractLoreObject):
@@ -98,7 +98,7 @@ class Journal_Entry_2(AbstractLoreObject):
         location = (0, 0)
         owner = "world"
         starts_puzzle = "puzzle_2"
-        lore_ordinal = 2
+        lore_ordinal = 3
         super().__init__(name, lore_text, location, owner, starts_puzzle, lore_ordinal)
 
 class Journal_Entry_3(AbstractLoreObject):
@@ -116,7 +116,7 @@ class Journal_Entry_3(AbstractLoreObject):
         location = (0, 0)
         owner = "world"
         starts_puzzle = None
-        lore_ordinal = 3
+        lore_ordinal = 4
         super().__init__(name, lore_text, location, owner, starts_puzzle, lore_ordinal)
 
 class Journal_Entry_4(AbstractLoreObject):
@@ -134,7 +134,7 @@ class Journal_Entry_4(AbstractLoreObject):
         location = (0, 0)
         owner = "world"
         starts_puzzle = "puzzle_1"
-        lore_ordinal = 4
+        lore_ordinal = 5
         super().__init__(name, lore_text, location, owner, starts_puzzle, lore_ordinal)
 
 class HospitalWristBand(AbstractLoreObject):
@@ -152,7 +152,7 @@ class HospitalWristBand(AbstractLoreObject):
         location = (0, 0)
         owner = "world"
         starts_puzzle = None
-        lore_ordinal = 5
+        lore_ordinal = 6
         super().__init__(name, lore_text, location, owner, starts_puzzle, lore_ordinal)
 
 class Prescription_2(AbstractLoreObject):
@@ -179,7 +179,7 @@ class Prescription_2(AbstractLoreObject):
         location = (0, 0)
         owner = "world"
         starts_puzzle = None
-        lore_ordinal = 6
+        lore_ordinal = 7
         super().__init__(name, lore_text, location, owner, starts_puzzle, lore_ordinal)
 
 class Journal_Entry_5(AbstractLoreObject):
@@ -199,7 +199,7 @@ class Journal_Entry_5(AbstractLoreObject):
         location = (0, 0)
         owner = "world"
         starts_puzzle = None
-        lore_ordinal = 7
+        lore_ordinal = 8
         super().__init__(name, lore_text, location, owner, starts_puzzle, lore_ordinal)
 
 class Journal_Entry_6(AbstractLoreObject):
@@ -219,7 +219,7 @@ class Journal_Entry_6(AbstractLoreObject):
         location = (0, 0)
         owner = "world"
         starts_puzzle = None
-        lore_ordinal = 8
+        lore_ordinal = 9
         super().__init__(name, lore_text, location, owner, starts_puzzle, lore_ordinal)
 
 class Journal_Entry_7(AbstractLoreObject):
@@ -238,7 +238,7 @@ class Journal_Entry_7(AbstractLoreObject):
         location = (0, 0)
         owner = "world"
         starts_puzzle = None
-        lore_ordinal = 9
+        lore_ordinal = 10
         super().__init__(name, lore_text, location, owner, starts_puzzle, lore_ordinal)
 
 class Journal_Entry_8(AbstractLoreObject):
@@ -257,7 +257,7 @@ class Journal_Entry_8(AbstractLoreObject):
         location = (0, 0)
         owner = "world"
         starts_puzzle = None
-        lore_ordinal = 10
+        lore_ordinal = 11
         super().__init__(name, lore_text, location, owner, starts_puzzle, lore_ordinal)
 
 class Journal_Entry_9(AbstractLoreObject):
@@ -276,7 +276,7 @@ class Journal_Entry_9(AbstractLoreObject):
         location = (0, 0)
         owner = "world"
         starts_puzzle = None
-        lore_ordinal = 11
+        lore_ordinal = 12
         super().__init__(name, lore_text, location, owner, starts_puzzle, lore_ordinal)
 
 class Journal_Entry_10(AbstractLoreObject):
@@ -298,7 +298,7 @@ class Journal_Entry_10(AbstractLoreObject):
         location = (0, 0)
         owner = "world"
         starts_puzzle = None
-        lore_ordinal = 12
+        lore_ordinal = 13
         super().__init__(name, lore_text, location, owner, starts_puzzle, lore_ordinal)
 
 class Journal_Entry_11(AbstractLoreObject):
@@ -323,5 +323,5 @@ class Journal_Entry_11(AbstractLoreObject):
         location = (0, 0)
         owner = "world"
         starts_puzzle = "puzzle_3"
-        lore_ordinal = 13
+        lore_ordinal = 14
         super().__init__(name, lore_text, location, owner, starts_puzzle, lore_ordinal)

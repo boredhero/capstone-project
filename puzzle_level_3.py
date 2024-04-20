@@ -18,7 +18,7 @@ class Maze:
         self.maze = [[0 for _ in range(self.size)] for _ in range(self.size)]
         self.exit_point = (self.size - 1, self.size - 1)
         self.generate_maze(0, 0)
-        self.print_maze()
+        #self.print_maze()
 
     def generate_maze(self, cx: int, cy: int, visited: Set[Tuple[int, int]] = None) -> None:
         """

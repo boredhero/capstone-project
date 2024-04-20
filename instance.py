@@ -1,3 +1,5 @@
+import time
+
 import pygame
 
 from game_logger import GameLogger
@@ -8,6 +10,7 @@ from save import SaveDataManager
 import main_map
 import puzzle_level_1, puzzle_level_2, puzzle_level_3
 import text_screen
+import lore_objects
 
 class InstanceMain():
 
@@ -99,6 +102,213 @@ class InstanceMain():
         self.__playing_puzzle_1_music = False
         self.__playing_puzzle_2_music = False
         self.__playing_puzzle_3_music = False
+        self.lore_conditions_init()
+
+    def has_been_x_time_since_utx(self, utx: int, x_mins: int | None = None, x_secs: int | None = None) -> bool:
+        """
+        Has it been at least X minutes OR X seconds since the given unix timestamp? 
+        """
+        current_timestamp = time.time()
+        if x_mins is None and x_secs is None:
+            self.__glogger.warning("No time specified", name=__name__)
+            return False
+        if x_mins is not None and x_secs is not None:
+            self.__glogger.warning("Both minutes and seconds specified, defaulting to minutes", name=__name__)
+        if x_mins is not None:
+            target_timestamp = utx + x_mins * 60
+            ret = current_timestamp >= target_timestamp
+            if ret is True:
+                self.__glogger.info(f"I was called (mins), returning {ret}", name=__name__)
+            return ret
+        if x_secs is not None:
+            target_timestamp = utx + x_secs
+            ret = current_timestamp >= target_timestamp
+            if ret is True:
+                self.__glogger.info(f"I was called (secs), returning {ret}", name=__name__)
+            return ret
+
+    def lore_conditions_init(self):
+        """
+        Initialize lore conditions
+        """
+        # This is really ugly, I know, but I'm out of time and I have other classes I need to pass to graduate this semester too :/
+        self.__lore = [
+            lore_objects.Prescription_1(),
+            lore_objects.Prescription_2(),
+            lore_objects.Journal_Entry_1(),
+            lore_objects.Journal_Entry_2(),
+            lore_objects.Journal_Entry_3(),
+            lore_objects.Journal_Entry_4(),
+            lore_objects.Journal_Entry_5(),
+            lore_objects.Journal_Entry_6(),
+            lore_objects.Journal_Entry_7(),
+            lore_objects.Journal_Entry_8(),
+            lore_objects.Journal_Entry_9(),
+            lore_objects.Journal_Entry_10(),
+            lore_objects.Journal_Entry_11(),
+            lore_objects.HospitalWristBand()
+        ]
+        self.__lore.sort(key=lambda lore: lore.get_lore_ordinal()) # Sort by the lore ordinal
+        self.__lore_1 = None
+        self.__lore_2 = None
+        self.__lore_3 = None
+        self.__lore_4 = None
+        self.__lore_5 = None
+        self.__lore_6 = None
+        self.__lore_7 = None
+        self.__lore_8 = None
+        self.__lore_9 = None
+        self.__lore_10 = None
+        self.__lore_11 = None
+        self.__lore_12 = None
+        self.__lore_13 = None
+        self.__lore_14 = None
+        self.__show_lore_1 = False
+        self.__show_lore_2 = False
+        self.__show_lore_3 = False
+        self.__show_lore_4 = False
+        self.__show_lore_5 = False
+        self.__show_lore_6 = False
+        self.__show_lore_7 = False
+        self.__show_lore_8 = False
+        self.__show_lore_9 = False
+        self.__show_lore_10 = False
+        self.__show_lore_11 = False
+        self.__show_lore_12 = False
+        self.__show_lore_13 = False
+        self.__show_lore_14 = False
+        self.__displayed_all_lore = False
+
+    def handle_display_lore_actually(self, event):
+        """
+        Actually handle displaying the lore
+        """
+        if self.__playing is True:
+            curr_lore = self.__game_map_main.get_curr_lore()
+            last_lore_time = self.__game_map_main.get_last_lore_found()
+            if self.has_been_x_time_since_utx(last_lore_time, 1):
+                self.__glogger.info(f"Last lore time: {last_lore_time} curr_lore: {curr_lore}", name=__name__)
+                match curr_lore:
+                    case 0:
+                        self.__show_lore_1 = True
+                        self.__glogger.info("Lore 1 found", name=__name__)
+                    case 1:
+                        self.__show_lore_2 = True
+                        self.__glogger.info("Lore 2 found", name=__name__)
+                    case 2:
+                        self.__show_lore_3 = True
+                        self.__glogger.info("Lore 3 found", name=__name__)
+                    case 3:
+                        self.__show_lore_4 = True
+                        self.__glogger.info("Lore 4 found", name=__name__)
+                    case 4:
+                        self.__show_lore_5 = True
+                        self.__glogger.info("Lore 5 found", name=__name__)
+                    case 5:
+                        self.__show_lore_6 = True
+                        self.__glogger.info("Lore 6 found", name=__name__)
+                    case 6:
+                        self.__show_lore_7 = True
+                        self.__glogger.info("Lore 7 found", name=__name__)
+                    case 7:
+                        self.__show_lore_8 = True
+                        self.__glogger.info("Lore 8 found", name=__name__)
+                    case 8:
+                        self.__show_lore_9 = True
+                        self.__glogger.info("Lore 9 found", name=__name__)
+                    case 9:
+                        self.__show_lore_10 = True
+                        self.__glogger.info("Lore 10 found", name=__name__)
+                    case 10:
+                        self.__show_lore_11 = True
+                        self.__glogger.info("Lore 11 found", name=__name__)
+                    case 11:
+                        self.__show_lore_12 = True
+                        self.__glogger.info("Lore 12 found", name=__name__)
+                    case 12:
+                        self.__show_lore_13 = True
+                        self.__glogger.info("Lore 13 found", name=__name__)
+                    case 13:
+                        self.__show_lore_14 = True
+                        self.__glogger.info("Lore 14 found", name=__name__)
+                    case _:
+                        if self.__displayed_all_lore is False:
+                            self.__displayed_all_lore = True
+                            self.__glogger.debug("No more lore to display", name=__name__)
+                self.__game_map_main.set_last_lore_found()
+                self.__game_map_main.set_curr_lore(curr_lore+1)
+
+        if self.__show_lore_1:
+            self.__lore_1 = text_screen.TextScreen(self.__screen, self.__lore[1].get_lore_text(), "Continue")
+            self.__lore_1.draw()
+            if self.__lore_1.handle_event(event): # pylint: disable=undefined-loop-variable
+                self.__show_lore_1 = False
+        if self.__show_lore_2:
+            self.__lore_2 = text_screen.TextScreen(self.__screen, self.__lore[2].get_lore_text(), "Continue")
+            self.__lore_2.draw()
+            if self.__lore_2.handle_event(event): # pylint: disable=undefined-loop-variable
+                self.__show_lore_2 = False
+        if self.__show_lore_3:
+            self.__lore_3 = text_screen.TextScreen(self.__screen, self.__lore[3].get_lore_text(), "Continue")
+            self.__lore_3.draw()
+            if self.__lore_3.handle_event(event):
+                self.__show_lore_3 = False
+        if self.__show_lore_4:
+            self.__lore_4 = text_screen.TextScreen(self.__screen, self.__lore[4].get_lore_text(), "Continue")
+            self.__lore_4.draw()
+            if self.__lore_4.handle_event(event):
+                self.__show_lore_4 = False
+        if self.__show_lore_5:
+            self.__lore_5 = text_screen.TextScreen(self.__screen, self.__lore[5].get_lore_text(), "Continue")
+            self.__lore_5.draw()
+            if self.__lore_5.handle_event(event):
+                self.__show_lore_5 = False
+        if self.__show_lore_6:
+            self.__lore_6 = text_screen.TextScreen(self.__screen, self.__lore[6].get_lore_text(), "Continue")
+            self.__lore_6.draw()
+            if self.__lore_6.handle_event(event):
+                self.__show_lore_6 = False
+        if self.__show_lore_7:
+            self.__lore_7 = text_screen.TextScreen(self.__screen, self.__lore[7].get_lore_text(), "Continue")
+            self.__lore_7.draw()
+            if self.__lore_7.handle_event(event):
+                self.__show_lore_7 = False
+        if self.__show_lore_8:
+            self.__lore_8 = text_screen.TextScreen(self.__screen, self.__lore[8].get_lore_text(), "Continue")
+            self.__lore_8.draw()
+            if self.__lore_8.handle_event(event):
+                self.__show_lore_8 = False
+        if self.__show_lore_9:
+            self.__lore_9 = text_screen.TextScreen(self.__screen, self.__lore[9].get_lore_text(), "Continue")
+            self.__lore_9.draw()
+            if self.__lore_9.handle_event(event):
+                self.__show_lore_9 = False
+        if self.__show_lore_10:
+            self.__lore_10 = text_screen.TextScreen(self.__screen, self.__lore[10].get_lore_text(), "Continue")
+            self.__lore_10.draw()
+            if self.__lore_10.handle_event(event):
+                self.__show_lore_10 = False
+        if self.__show_lore_11:
+            self.__lore_11 = text_screen.TextScreen(self.__screen, self.__lore[11].get_lore_text(), "Continue")
+            self.__lore_11.draw()
+            if self.__lore_11.handle_event(event):
+                self.__show_lore_11 = False
+        if self.__show_lore_12:
+            self.__lore_12 = text_screen.TextScreen(self.__screen, self.__lore[12].get_lore_text(), "Continue")
+            self.__lore_12.draw()
+            if self.__lore_12.handle_event(event):
+                self.__show_lore_12 = False
+        if self.__show_lore_13:
+            self.__lore_13 = text_screen.TextScreen(self.__screen, self.__lore[13].get_lore_text(), "Continue")
+            self.__lore_13.draw()
+            if self.__lore_13.handle_event(event):
+                self.__show_lore_13 = False
+        if self.__show_lore_14:
+            self.__lore_14 = text_screen.TextScreen(self.__screen, self.__lore[14].get_lore_text(), "Continue")
+            self.__lore_14.draw()
+            if self.__lore_14.handle_event(event):
+                self.__show_lore_14 = False
+
 
     def main_game_loop(self):
         """
@@ -235,6 +445,7 @@ class InstanceMain():
                         self.__titlescreen_ui.set_visibility(True)
                         self.__show_mla_works_cited = False
                 mouse_up = False
+            self.handle_display_lore_actually(event) # pylint: disable=undefined-loop-variable
             if self.__playing and not self.__playing_map_music:
                 pygame.mixer.music.load("assets/music/gymnopedie_no_1.mp3")
                 pygame.mixer.music.play(-1)

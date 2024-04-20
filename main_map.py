@@ -1,4 +1,4 @@
-import importlib, inspect
+import importlib, inspect, time
 from typing import Tuple
 
 import pygame
@@ -23,13 +23,44 @@ class MainGameMap:
         self.__cb = "color" # pylint: disable=unused-private-member
         if self.__settings.grayscale_mode:
             self.__cb = "bw" # pylint: disable=unused-private-member
-        # TODO: Add the full map image
         self.image_path = map_image_path
         self.image = pygame.image.load(self.image_path)
         self.map_surface = pygame.Surface(self.image.get_size(), flags=pygame.HWSURFACE)
         self.map_surface.blit(self.image, (0, 0))
         self.screen_rect = self.screen.get_rect()
         self.camera_rect = pygame.Rect(0, 0, screen.get_width(), screen.get_height())
+        self.curr_lore = 0
+        self.last_lore_found = self.get_unix_timestamp()
+
+    def get_curr_lore(self) -> int:
+        """
+        Get the current lore object
+        """
+        return self.curr_lore
+
+    def set_curr_lore(self, lore: int):
+        """
+        Set the current lore object
+        """
+        self.curr_lore = lore
+
+    def get_unix_timestamp(self) -> int:
+        """
+        Get the current Unix timestamp
+        """
+        return int(time.time())
+
+    def get_last_lore_found(self) -> int:
+        """
+        Get the last time a lore object was found
+        """
+        return self.last_lore_found
+
+    def set_last_lore_found(self):
+        """
+        Set the last time a lore object was found
+        """
+        self.last_lore_found = self.get_unix_timestamp()
 
     def draw_map(self):
         """
@@ -53,7 +84,6 @@ class MainGameMap:
         self.visibility = visibility
 
 class MapPlayer:
-
 
     def __init__(self, start_pos: Tuple, map_image_path: str):
         """
