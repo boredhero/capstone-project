@@ -250,6 +250,11 @@ class InstanceMain():
                 pygame.mixer.music.play(-1)
                 pygame.mixer.music.set_volume(0.1)
                 self.__playing_puzzle_2_music = True
+            if self.__playing_puzzle_3 and not self.__playing_puzzle_3_music:
+                pygame.mixer.music.load("assets/music/chopin_prelude_op_28_no_4.ogg")
+                pygame.mixer.music.play(-1)
+                pygame.mixer.music.set_volume(0.1)
+                self.__playing_puzzle_3_music = True
             if self.__playing:
                 keys = pygame.key.get_pressed()
                 if keys[self.get_pygame_key_for_key(self.__settings.keybind_up)]:
