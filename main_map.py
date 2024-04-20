@@ -33,6 +33,61 @@ class MainGameMap:
         self.camera_rect = pygame.Rect(0, 0, screen.get_width(), screen.get_height())
         self.curr_lore = 0
         self.last_lore_found = self.get_unix_timestamp()
+        self.has_player_collided_with_lore = False
+        self.current_circle_coords = (1000, 1000)
+        self.circle_color = (255, 255, 0)  # Yellow
+        self.circle_diameter = 20
+
+    def draw_circle(self):
+        """
+        Draw the circle on the map at its current coordinates
+        """
+        circle_radius = self.circle_diameter // 2
+        pygame.draw.circle(self.map_surface, self.circle_color, self.current_circle_coords, circle_radius)
+
+    def move_circle(self, new_coords: Tuple[int, int]):
+        """
+        Update the circle's position
+        """
+        self.current_circle_coords = new_coords
+
+    def get_current_circle_coords (self) -> Tuple[int, int]:
+        """
+        Get the current circle coordinates
+        """
+        return self.current_circle_coords
+
+    def set_current_circle_coords (self, coords: Tuple[int, int]):
+        """
+        Set the current circle coordinates
+        """
+        self.current_circle_coords = coords
+
+    def check_collision(self):
+        """
+        Check if the player has collided with the circle
+        """
+        player_pos = self.player.position
+        circle_radius = self.circle_diameter // 2
+        circle_rect = pygame.Rect(self.current_circle_coords[0] - circle_radius,
+                                  self.current_circle_coords[1] - circle_radius,
+                                  self.circle_diameter, self.circle_diameter)
+        player_rect = pygame.Rect(player_pos[0], player_pos[1], 40, 40)
+        if player_rect.colliderect(circle_rect):
+            self.has_player_collided_with_lore = True
+
+
+    def get_has_player_collided_with_lore(self) -> bool:
+        """
+        Get whether the player has collided with a lore object
+        """
+        return self.has_player_collided_with_lore
+
+    def set_has_player_collided_with_lore(self, collided: bool):
+        """
+        Set whether the player has collided with a lore object
+        """
+        self.has_player_collided_with_lore = collided
 
     def handle_event(self, event):
         """
@@ -99,9 +154,12 @@ class MainGameMap:
         camera_y = max(0, min(self.player.position[1] - self.screen.get_height() / 2, self.map_surface.get_height() - self.screen.get_height()))
         self.camera_rect = pygame.Rect(camera_x, camera_y, self.screen.get_width(), self.screen.get_height())
         self.screen.blit(self.map_surface, (0, 0), self.camera_rect)
+        self.draw_circle()
         #pygame.display.flip()
         if self.text_screen and self.text_screen.visible:
             self.text_screen.draw()
+        if self.has_player_collided_with_lore:
+            self.__glogger.info("Collision Detected!", name=__name__)
 
     def get_pixel_color(self, position: Tuple[int, int]) -> pygame.Color:
         """
