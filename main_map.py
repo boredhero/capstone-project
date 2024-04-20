@@ -37,13 +37,17 @@ class MainGameMap:
         self.current_circle_coords = (1000, 1000)
         self.circle_color = (255, 255, 0)  # Yellow
         self.circle_diameter = 20
+        self.dynamic_surface = pygame.Surface(self.screen.get_size(), flags=pygame.SRCALPHA)
 
     def draw_circle(self):
         """
         Draw the circle on the map at its current coordinates
         """
         circle_radius = self.circle_diameter // 2
-        pygame.draw.circle(self.map_surface, self.circle_color, self.current_circle_coords, circle_radius)
+        adjusted_x = self.current_circle_coords[0] - self.camera_rect.x
+        adjusted_y = self.current_circle_coords[1] - self.camera_rect.y
+        if 0 <= adjusted_x <= self.camera_rect.width and 0 <= adjusted_y <= self.camera_rect.height:
+            pygame.draw.circle(self.dynamic_surface, self.circle_color, (adjusted_x, adjusted_y), circle_radius)
 
     def move_circle(self, new_coords: Tuple[int, int]):
         """
@@ -154,7 +158,9 @@ class MainGameMap:
         camera_y = max(0, min(self.player.position[1] - self.screen.get_height() / 2, self.map_surface.get_height() - self.screen.get_height()))
         self.camera_rect = pygame.Rect(camera_x, camera_y, self.screen.get_width(), self.screen.get_height())
         self.screen.blit(self.map_surface, (0, 0), self.camera_rect)
+        self.dynamic_surface.fill((0, 0, 0, 0))
         self.draw_circle()
+        self.screen.blit(self.dynamic_surface, (0, 0))
         #pygame.display.flip()
         if self.text_screen and self.text_screen.visible:
             self.text_screen.draw()
