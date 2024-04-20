@@ -182,33 +182,53 @@ class InstanceMain():
                     case 4:
                         self.__glogger.info("Lore 5 found", name=__name__)
                         self.__game_map_main.show_text_screen(self.__lore[4].get_lore_text())
+                        self.__game_map_main.set_has_player_collided_with_lore(False)
+                        self.__game_map_main.move_circle(self.__lore[4].get_location())
                     case 5:
                         self.__glogger.info("Lore 6 found", name=__name__)
                         self.__game_map_main.show_text_screen(self.__lore[5].get_lore_text())
+                        self.__game_map_main.set_has_player_collided_with_lore(False)
+                        self.__game_map_main.move_circle(self.__lore[5].get_location())
                     case 6:
                         self.__glogger.info("Lore 7 found", name=__name__)
                         self.__game_map_main.show_text_screen(self.__lore[6].get_lore_text())
+                        self.__game_map_main.set_has_player_collided_with_lore(False)
+                        self.__game_map_main.move_circle(self.__lore[6].get_location())
                     case 7:
                         self.__glogger.info("Lore 8 found", name=__name__)
                         self.__game_map_main.show_text_screen(self.__lore[7].get_lore_text())
+                        self.__game_map_main.set_has_player_collided_with_lore(False)
+                        self.__game_map_main.move_circle(self.__lore[7].get_location())
                     case 8:
                         self.__glogger.info("Lore 9 found", name=__name__)
                         self.__game_map_main.show_text_screen(self.__lore[8].get_lore_text())
+                        self.__game_map_main.set_has_player_collided_with_lore(False)
+                        self.__game_map_main.move_circle(self.__lore[8].get_location())
                     case 9:
                         self.__glogger.info("Lore 10 found", name=__name__)
                         self.__game_map_main.show_text_screen(self.__lore[9].get_lore_text())
+                        self.__game_map_main.set_has_player_collided_with_lore(False)
+                        self.__game_map_main.move_circle(self.__lore[9].get_location())
                     case 10:
                         self.__glogger.info("Lore 11 found", name=__name__)
                         self.__game_map_main.show_text_screen(self.__lore[10].get_lore_text())
+                        self.__game_map_main.set_has_player_collided_with_lore(False)
+                        self.__game_map_main.move_circle(self.__lore[10].get_location())
                     case 11:
                         self.__glogger.info("Lore 12 found", name=__name__)
                         self.__game_map_main.show_text_screen(self.__lore[11].get_lore_text())
+                        self.__game_map_main.set_has_player_collided_with_lore(False)
+                        self.__game_map_main.move_circle(self.__lore[11].get_location())
                     case 12:
                         self.__glogger.info("Lore 13 found", name=__name__)
                         self.__game_map_main.show_text_screen(self.__lore[12].get_lore_text())
+                        self.__game_map_main.set_has_player_collided_with_lore(False)
+                        self.__game_map_main.move_circle(self.__lore[12].get_location())
                     case 13:
                         self.__glogger.info("Lore 14 found", name=__name__)
                         self.__game_map_main.show_text_screen(self.__lore[13].get_lore_text())
+                        self.__game_map_main.set_has_player_collided_with_lore(False)
+                        self.__game_map_main.move_circle(self.__lore[13].get_location())
                     case _:
                         if self.__displayed_all_lore is False:
                             self.__displayed_all_lore = True
