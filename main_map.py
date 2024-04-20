@@ -1,4 +1,4 @@
-import importlib, inspect, time
+import time
 from typing import Tuple
 
 import pygame
@@ -7,8 +7,7 @@ from PIL import Image
 
 from game_logger import GameLogger
 from config import SettingsConfig
-from lore_objects import AbstractLoreObject
-from misc import Singleton
+from lore_objects import Prescription_1
 
 class MainGameMap:
 
@@ -34,7 +33,7 @@ class MainGameMap:
         self.curr_lore = 0
         self.last_lore_found = self.get_unix_timestamp()
         self.has_player_collided_with_lore = False
-        self.current_circle_coords = (1000, 1000)
+        self.current_circle_coords = Prescription_1().get_location()
         self.circle_color = (255, 255, 0)  # Yellow
         self.circle_diameter = 20
         self.dynamic_surface = pygame.Surface(self.screen.get_size(), flags=pygame.SRCALPHA)
@@ -248,23 +247,6 @@ class MapPlayer:
         Set Player visibility
         """
         self.visibility = visibility
-
-class MapObjects(metaclass=Singleton):
-
-    def __init__(self):
-        """
-        Handle game objects
-        """
-        self.objects = {}
-
-    def load_modules(self):
-        """
-        Dynamically load objects from lore_objects.py
-        """
-        lore_texts_mod = importlib.import_module("lore_objects")
-        for name, obj in inspect.getmembers(lore_texts_mod): # pylint: disable=unused-variable
-            if inspect.isclass(obj) and issubclass(obj, AbstractLoreObject) and obj is not AbstractLoreObject:
-                self.objects[name] = obj
 
 class TextScreen:
 
