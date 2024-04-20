@@ -186,6 +186,86 @@ class InstanceMain():
         if self.__playing is True:
             curr_lore = self.__game_map_main.get_curr_lore()
             last_lore_time = self.__game_map_main.get_last_lore_found()
+            if self.__game_map_main.get_has_player_collided_with_lore():
+                match curr_lore:
+                    case 0:
+                        self.__show_lore_1 = True
+                        self.__glogger.info("Lore 1 found", name=__name__)
+                        self.__game_map_main.show_text_screen(self.__lore[0].get_lore_text())
+                        self.__game_map_main.set_has_player_collided_with_lore(False)
+                        self.__game_map_main.move_circle(self.__lore[0].get_location())
+                    case 1:
+                        self.__show_lore_2 = True
+                        self.__glogger.info("Lore 2 found", name=__name__)
+                        self.__game_map_main.show_text_screen(self.__lore[1].get_lore_text())
+                        self.__game_map_main.set_has_player_collided_with_lore(False)
+                        self.__game_map_main.move_circle(self.__lore[1].get_location())
+                    case 2:
+                        self.__show_lore_3 = True
+                        self.__glogger.info("Lore 3 found", name=__name__)
+                        self.__game_map_main.show_text_screen(self.__lore[2].get_lore_text())
+                        self.__game_map_main.set_has_player_collided_with_lore(False)
+                        self.__game_map_main.move_circle(self.__lore[2].get_location())
+                    case 3:
+                        self.__show_lore_4 = True
+                        self.__glogger.info("Lore 4 found", name=__name__)
+                        self.__game_map_main.show_text_screen(self.__lore[3].get_lore_text())
+                        self.__game_map_main.set_has_player_collided_with_lore(False)
+                        self.__game_map_main.move_circle(self.__lore[3].get_location())
+                    case 4:
+                        self.__show_lore_5 = True
+                        self.__glogger.info("Lore 5 found", name=__name__)
+                        self.__game_map_main.show_text_screen(self.__lore[4].get_lore_text())
+                    case 5:
+                        self.__show_lore_6 = True
+                        self.__glogger.info("Lore 6 found", name=__name__)
+                        self.__game_map_main.show_text_screen(self.__lore[5].get_lore_text())
+                    case 6:
+                        self.__show_lore_7 = True
+                        self.__glogger.info("Lore 7 found", name=__name__)
+                        self.__game_map_main.show_text_screen(self.__lore[6].get_lore_text())
+                    case 7:
+                        self.__show_lore_8 = True
+                        self.__glogger.info("Lore 8 found", name=__name__)
+                        self.__game_map_main.show_text_screen(self.__lore[7].get_lore_text())
+                    case 8:
+                        self.__show_lore_9 = True
+                        self.__glogger.info("Lore 9 found", name=__name__)
+                        self.__game_map_main.show_text_screen(self.__lore[8].get_lore_text())
+                    case 9:
+                        self.__show_lore_10 = True
+                        self.__glogger.info("Lore 10 found", name=__name__)
+                        self.__game_map_main.show_text_screen(self.__lore[9].get_lore_text())
+                    case 10:
+                        self.__show_lore_11 = True
+                        self.__glogger.info("Lore 11 found", name=__name__)
+                        self.__game_map_main.show_text_screen(self.__lore[10].get_lore_text())
+                    case 11:
+                        self.__show_lore_12 = True
+                        self.__glogger.info("Lore 12 found", name=__name__)
+                        self.__game_map_main.show_text_screen(self.__lore[11].get_lore_text())
+                    case 12:
+                        self.__show_lore_13 = True
+                        self.__glogger.info("Lore 13 found", name=__name__)
+                        self.__game_map_main.show_text_screen(self.__lore[12].get_lore_text())
+                    case 13:
+                        self.__show_lore_14 = True
+                        self.__glogger.info("Lore 14 found", name=__name__)
+                        self.__game_map_main.show_text_screen(self.__lore[13].get_lore_text())
+                    case _:
+                        if self.__displayed_all_lore is False:
+                            self.__displayed_all_lore = True
+                            self.__glogger.debug("No more lore to display", name=__name__)
+                self.__game_map_main.set_last_lore_found()
+                self.__game_map_main.set_curr_lore(curr_lore+1)
+
+    def handle_display_lore_actually_orig(self, event):
+        """
+        Actually handle displaying the lore
+        """
+        if self.__playing is True:
+            curr_lore = self.__game_map_main.get_curr_lore()
+            last_lore_time = self.__game_map_main.get_last_lore_found()
             if self.has_been_x_time_since_utx(last_lore_time, x_secs = 10):
                 self.__glogger.info(f"Last lore time: {last_lore_time} curr_lore: {curr_lore}", name=__name__)
                 match curr_lore:
@@ -425,6 +505,7 @@ class InstanceMain():
                 elif keys[self.get_pygame_key_for_key(self.__settings.keybind_right)]:
                     self.__player_main_map.move("right", self.__game_map_main.camera_rect, self.__game_map_main)
                 self.__game_map_main.draw_map()
+                self.__game_map_main.check_collision()
                 self.__player_main_map.draw(self.__screen, self.__game_map_main.camera_rect)
                 pygame.display.flip()
             if self.__playing_puzzle_1:

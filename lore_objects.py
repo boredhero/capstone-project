@@ -58,7 +58,7 @@ class Prescription_1(AbstractLoreObject):
         Qty. 30
         Dr. Best, MD - 1 Refills
         """
-        location = (0, 0)
+        location = (1000, 1000)
         owner = "world"
         starts_puzzle = None
         lore_ordinal = 1
@@ -76,7 +76,7 @@ class Journal_Entry_1(AbstractLoreObject):
 
         I can't believe it's been a year since I started taking my medication. I feel like a completely different person. I'm not sure if it's the medication or the therapy, but I feel like I'm finally starting to get my life back on track. I still have bad days, but they're not as frequent or as intense as they used to be. I'm hopeful that things will continue to improve in the new year.
         """
-        location = (0, 0)
+        location = (2000, 2000)
         owner = "world"
         starts_puzzle = None
         lore_ordinal = 2
