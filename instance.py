@@ -174,6 +174,7 @@ class InstanceMain():
                     case 3:
                         self.__glogger.info("Lore 4 found", name=__name__)
                         self.__game_map_main.show_text_screen(self.lore_4.get_lore_text())
+                        # TODO: Start Puzzle 1
                         self.__game_map_main.set_has_player_collided_with_lore(False)
                         self.__game_map_main.move_circle(self.lore_5.get_location())
                     case 4:
@@ -209,6 +210,7 @@ class InstanceMain():
                     case 10:
                         self.__glogger.info("Lore 11 found", name=__name__)
                         self.__game_map_main.show_text_screen(self.lore_11.get_lore_text())
+                        # TODO: Start Puzzle 2
                         self.__game_map_main.set_has_player_collided_with_lore(False)
                         self.__game_map_main.move_circle(self.lore_12.get_location())
                     case 11:
@@ -224,6 +226,7 @@ class InstanceMain():
                     case 13:
                         self.__glogger.info("Lore 14 found", name=__name__)
                         self.__game_map_main.show_text_screen(self.lore_14.get_lore_text())
+                        # TODO: Start Puzzle 3
                         self.__game_map_main.set_has_player_collided_with_lore(False)
                         self.__game_map_main.move_circle((8000, 8000))
                     case _:
