@@ -135,6 +135,21 @@ class Journal_Entry_4(AbstractLoreObject):
         lore_ordinal = 5
         super().__init__(name, lore_text, location, starts_puzzle, lore_ordinal)
 
+class Puzzle_1_Shim(AbstractLoreObject):
+
+    def __init__(self):
+        """
+        Puzzle 1 Shim
+        """
+        name = "Puzzle Complete"
+        lore_text = """
+        You have completed the puzzle. You have successfully gotten out of bed and completed the task of getting out of bed and doing basic daily tasks while struggling with depression.
+        """
+        location = (1260, 3360)
+        starts_puzzle = None
+        lore_ordinal = 6
+        super().__init__(name, lore_text, location, starts_puzzle, lore_ordinal)
+
 class HospitalWristBand(AbstractLoreObject):
 
     def __init__(self):
@@ -150,7 +165,7 @@ class HospitalWristBand(AbstractLoreObject):
         """
         location = (1500, 1500) # Bathroom shower
         starts_puzzle = None
-        lore_ordinal = 6
+        lore_ordinal = 7
         super().__init__(name, lore_text, location, starts_puzzle, lore_ordinal)
 
 class Prescription_2(AbstractLoreObject):
@@ -176,7 +191,7 @@ class Prescription_2(AbstractLoreObject):
         """
         location = (1500, 2000) # Roommate
         starts_puzzle = None
-        lore_ordinal = 7
+        lore_ordinal = 8
         super().__init__(name, lore_text, location, starts_puzzle, lore_ordinal)
 
 class Journal_Entry_5(AbstractLoreObject):
@@ -195,7 +210,7 @@ class Journal_Entry_5(AbstractLoreObject):
         """
         location = (200, 3000) # Plant Room
         starts_puzzle = None
-        lore_ordinal = 8
+        lore_ordinal = 9
         super().__init__(name, lore_text, location, starts_puzzle, lore_ordinal)
 
 class Journal_Entry_6(AbstractLoreObject):
@@ -214,7 +229,7 @@ class Journal_Entry_6(AbstractLoreObject):
         """
         location = (500, 500) # Kitchen dining table
         starts_puzzle = None
-        lore_ordinal = 9
+        lore_ordinal = 10
         super().__init__(name, lore_text, location, starts_puzzle, lore_ordinal)
 
 class Journal_Entry_7(AbstractLoreObject):
@@ -232,7 +247,7 @@ class Journal_Entry_7(AbstractLoreObject):
         """
         location = (500, 3700) # Balcony
         starts_puzzle = None
-        lore_ordinal = 10
+        lore_ordinal = 11
         super().__init__(name, lore_text, location, starts_puzzle, lore_ordinal)
 
 class Journal_Entry_8(AbstractLoreObject):
@@ -250,7 +265,7 @@ class Journal_Entry_8(AbstractLoreObject):
         """
         location = (800, 3800) # Balcony Left Chair
         starts_puzzle = None
-        lore_ordinal = 11
+        lore_ordinal = 12
         super().__init__(name, lore_text, location, starts_puzzle, lore_ordinal)
 
 class Journal_Entry_9(AbstractLoreObject):
@@ -268,7 +283,7 @@ class Journal_Entry_9(AbstractLoreObject):
         """
         location = (500, 3200) # BR Desk
         starts_puzzle = None
-        lore_ordinal = 12
+        lore_ordinal = 13
         super().__init__(name, lore_text, location, starts_puzzle, lore_ordinal)
 
 class Journal_Entry_10(AbstractLoreObject):
@@ -289,7 +304,7 @@ class Journal_Entry_10(AbstractLoreObject):
         """
         location = location = (1000, 2000) # Hallway (Midpoint roughly)
         starts_puzzle = None
-        lore_ordinal = 13
+        lore_ordinal = 14
         super().__init__(name, lore_text, location, starts_puzzle, lore_ordinal)
 
 class Journal_Entry_11(AbstractLoreObject):
@@ -315,5 +330,5 @@ class Journal_Entry_11(AbstractLoreObject):
         """
         location = (1350, 2800) # BR Sound System
         starts_puzzle = "puzzle_3"
-        lore_ordinal = 14
+        lore_ordinal = 15
         super().__init__(name, lore_text, location, starts_puzzle, lore_ordinal)
